@@ -13,9 +13,9 @@
 
 ## 1.1 Infomrmazioni sul progetto
 
-Docente Responsabile: Fabrizio Valsangiacomo
-Apprendista: Giulio Bosco
-Data inizio progetto: 05.09.2019
+Docente Responsabile: Fabrizio Valsangiacomo  
+Apprendista: Giulio Bosco  
+Data inizio progetto: 05.09.2019  
 Data consegna progetto: 20.12.2019
 
 ## 1.2 Abstract
