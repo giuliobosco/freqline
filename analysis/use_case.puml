@@ -1,0 +1,33 @@
+@startuml
+
+:Admin User: as AdminUser
+:Normal User: as NormalUser
+
+User <|-- AdminUser
+User <|-- NormalUser
+
+(Mobile Phone - Normal user views) as NormalPhone
+(Mobile Phone - Admin user views) as AdminPhone
+(Desktop - Normal user views) as NormalDesktop
+(Desktop - Admin user views) as AdminDesktop
+(Edit DB) as edb
+(Change frequences generator status) as chstatus
+(frequences generator status) as status
+
+NormalUser ---> NormalPhone : Turn On/Off frequences generator
+NormalUser ---> NormalDesktop
+AdminUser ---> AdminPhone : Change frequences\nManage users\nTurn On/Off frequences generator
+AdminUser ---> AdminDesktop
+
+NormalPhone ---> chstatus
+NormalDesktop ---> chstatus
+AdminPhone ---> chstatus
+AdminDesktop ---> chstatus
+AdminPhone ---> edb
+AdminDesktop ---> edb
+
+chstatus ---> status : On/Off
+edb ---> status : frequences\nregulation
+
+
+@enduml
