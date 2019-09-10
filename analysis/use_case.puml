@@ -11,8 +11,9 @@ User <|-- NormalUser
 (Desktop - Normal user views) as NormalDesktop
 (Desktop - Admin user views) as AdminDesktop
 (Edit DB) as edb
-(Change frequences generator status) as chstatus
+(Controller) as chstatus
 (frequences generator status) as status
+(frequences generator remote) as remote
 
 NormalUser ---> NormalPhone : Turn On/Off frequences generator
 NormalUser ---> NormalDesktop
@@ -29,5 +30,9 @@ AdminDesktop ---> edb
 chstatus ---> status : On/Off
 edb ---> status : frequences\nregulation
 
+User ---> chstatus : change status\nwith high noise
+User ---> remote
+
+remote ---> chstatus
 
 @enduml
