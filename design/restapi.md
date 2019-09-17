@@ -60,23 +60,30 @@ Negativa:
 
 Per ogni API di gestione, vi sono dei metodi ricorrenti:
 
-- getAll
-- get
-- add
-- update
-- remove
-- search
+- getAll    (GET request `/users`)
+- get       (GET request with id `/users/1`)
+- add       (PUT request `/users`)
+- update    (PUT request with id `/users/1`)
+- remove    (DELETE request `/users/1`)
 
-le richieste venono strutturate, come segue:
+Prima delle api, bisogna inserire la stringa di richiesta come segue:
 
 ```
-http://host:port/api/v0/folder/<api_name>/<action>[/<parameter>]
+http://host:port/api/v0/folder
 ```
+
+Quando non vi si anno i permessi per la richiesta effettuata viene ritornato lo stato http:
+`403 FORBIDDEN`.  
+Se la richiesta &egrave; di tipo richiesta di dati (come `getAll` o `get`) la risposta deve essere
+`200 OK`.  Se l'elemento richiesto non esiste la risposta sar&agrave; `400 BAD REQUEST`.  
+Se la richiesta &egrave; di tipo invio di dati e viene eseguita correttamente la risposta
+sar&agrave; `201 CREATED`. Se nella richiesta vi sono i dati la risposta sar&agrave;
+`204 NO CONTENT`. Se invece i dati non sono validi `400 BAD REQUEST`.
 
 ### getAll
 
 La API `getAll`, non ha parametri, ma pu&ograve; ritornare errore nel caso in
-cui non si abbiano i permessi per richiedere quei dati.
+cui non si abbiano i permessi per richiedere quei dati (403 FORBIDDEN).
 
 ### get
 
@@ -102,7 +109,3 @@ quei dati, oppure i dati non sono valevoli.
 La API `remove` serve per eliminare un dato, la quale necessita come parametro
 l'id dell'elemento da eliminare. Pu&ograve; ritornare errore nel caso in cui non
 si abbiano i permessi per richiedere quei dati, oppure i dati non sono valevoli.
-
-### search
-
-La API `search`, serve per cercare le parole passate come argomenti nella tabella specificata.
