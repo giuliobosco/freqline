@@ -2,89 +2,91 @@
 skinparam classAttributeIconSize 0
 
 package ch.giuliobosco.freqline {
-    package dao {
-        abstract Dao <<inteface>> {
-            T getById(int id)
-            List<T> getAll()
-            boolean add(T t)
-            boolean update(T t)
-            boolean delete(T t)
-        }
+package dao {
+    abstract Dao <<inteface>> {
+        T getById(int id)
+        List<T> getAll()
+        boolean add(T t)
+        boolean update(T t)
+        boolean delete(T t)
+    }
+}
+
+package model {
+    class Base {
+        -int DEFAULT_ID = 0;
+        -Date NOW;
+        -int id
+        -int createdBy
+        -Date createdDate
+        -int updatedBy
+        -Date updatedDate
+        -int deletedBy
+        -Date deletedDate
+        +Base(int id, int createdBy, Date createdDate, int updatedBy, Date updatedDate, int deletedBy, Date deletedDate)
+        +Base(int id, int createdBy, Date createdDate, int updatedBy, Date updatedDate)
+        +Base(int createdBy)
+        +int getId()
+        +int getCreatedBy()
+        +Date getCreatedDate()
+        +int getUpdatedBy()
+        +Date getUpdatedDate()
+        +int getDeletedBy()
+        +Date getDeletedDate()
     }
 
-    package model {
-        class Base {
-            -int DEFAULT_ID = 0;
-            -Date NOW;
-            -int id
-            -int createdBy
-            -Date createdDate
-            -int updatedBy
-            -Date updatedDate
-            -int deletedBy
-            -Date deletedDate
-            +Base(int id, int createdBy, Date createdDate, int updatedBy, Date updatedDate, int deletedBy, Date deletedDate)
-            +Base(int id, int createdBy, Date createdDate, int updatedBy, Date updatedDate)
-            +Base(int createdBy)
-            +int getId()
-            +int getCreatedBy()
-            +Date getCreatedDate()
-            +int getUpdatedBy()
-            +Date getUpdatedDate()
-            +int getDeletedBy()
-            +Date getDeletedDate()
-        }
+    class Element {
+        -String name;
+        +Element(int id, int createdBy, Date createdDate, int updatedBy, Date updatedDate, int deletedBy, Date deletedDate, String name)
+        +Element(int id, int createdBy, Date createdDate, int updatedBy, Date updatedDate, String name)
+        +Element(int createdBy, String name)
+        +void setName(String name)
+        +String getName()
+    }
+    Base <|-- Element
+}
 
-        class Element {
-            -String name;
-            +Element(int id, int createdBy, Date createdDate, int updatedBy, Date updatedDate, int deletedBy, Date deletedDate, String name)
-            +Element(int id, int createdBy, Date createdDate, int updatedBy, Date updatedDate, String name)
-            +Element(int createdBy, String name)
-        }
-        Base <|-- Element
+package conndao {
+    class ConnElementDao {
+        - DataConnection connection
+        + ConnElementDao(DataConnection connection)
+        - createElement(DataResult dataResult)
+        + Element getById(int id)
+        + List<Element> getAll()
+        + boolean add(Element element)
+        + boolean update(Element element)
+        + boolean delete(Element element)
+    }
+    Dao <|-- ConnElementDao
+}
+
+package modeljson {
+    abstract BaseJson <<interface>> {
+        Base base
+        BaseJson(Base base)
+        JSONObject getJson()
+        String getJsonString()
+    }
+    BaseJson o-- Base : base
+
+    class ElementJson {
+
+    }
+    BaseJson <|.. ElementJson
+}
+
+package api {
+    abstract ApiServlet <<interface>> {
+        #void doGet(HttpServletRequest request, HttpServletResponse response)
+        #void doPost(HttpServletRequest request, HttpServletResponse response)
+        #void doPut(HttpServletRequest request, HttpServletResponse response)
+        #void doDelete(HttpServletRequest request, HttpServletResponse response)
     }
 
-    package conndao {
-        class ConnElementDao {
-            - DataConnection connection
-            + ConnElementDao(DataConnection connection)
-            - createElement(DataResult dataResult)
-            + Element getById(int id)
-            + List<Element> getAll()
-            + boolean add(Element element)
-            + boolean update(Element element)
-            + boolean delete(Element element)
-        }
-        Dao <|-- ConnElementDao
+    class ElementServlet {
+
     }
-
-    package modeljson {
-        abstract BaseJson <<interface>> {
-            Base base
-            BaseJson(Base base)
-            JSONObject getJson()
-            String getJsonString()
-        }
-        BaseJson o-- Base : base
-
-        class ElementJson {
-
-        }
-        BaseJson <|.. ElementJson
-    }
-
-    package api {
-        abstract ApiServlet <<interface>> {
-            #doGet(HttpServletRequest request, HttpServletResponse response)
-            #doPost(HttpServletRequest request, HttpServletResponse response)
-            #doPut(HttpServletRequest request, HttpServletResponse response)
-            #doDelete(HttpServletRequest request, HttpServletResponse response)
-        }
-
-        class ElementServlet {
-
-        }
-        ApiServlet <|.. ElementServlet
-    }
+    ApiServlet <|.. ElementServlet
+}
 }
 @enduml
