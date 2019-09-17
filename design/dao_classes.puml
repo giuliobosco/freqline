@@ -76,17 +76,17 @@ package modeljson {
 }
 
 package api {
-    abstract ApiServlet <<interface>> {
+    abstract RestApiServlet <<interface>> {
         #void doGet(HttpServletRequest request, HttpServletResponse response)
         #void doPost(HttpServletRequest request, HttpServletResponse response)
         #void doPut(HttpServletRequest request, HttpServletResponse response)
         #void doDelete(HttpServletRequest request, HttpServletResponse response)
     }
 
-    class ElementServlet {
+    class ElementRestServlet {
 
     }
-    ApiServlet <|.. ElementServlet
+    RestApiServlet <|.. ElementRestServlet
 }
 }
 @enduml
