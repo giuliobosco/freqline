@@ -1,92 +1,118 @@
 @startuml
 skinparam classAttributeIconSize 0
 
-package ch.giuliobosco.freqline {
-package dao {
-    abstract Dao <<inteface>> {
-        T getById(int id)
-        List<T> getAll()
-        boolean add(T t)
-        boolean update(T t)
-        boolean delete(T t)
+package java.util {
+    class Exception {
+
     }
 }
 
+package ch.giuliobosco.freqline {
+package dao {
+    class DaoException {
+        - long serialVersionUID = 1L;
+        + DaoException()
+        + DaoException(String message)
+        + DaoException(String message, Throwable cause)
+    }
+    Exception <|-- DaoException
+}
+
 package model {
-    class Base {
-        -int DEFAULT_ID = 0;
-        -Date NOW;
-        -int id
-        -int createdBy
-        -Date createdDate
-        -int updatedBy
-        -Date updatedDate
-        -int deletedBy
-        -Date deletedDate
-        +Base(int id, int createdBy, Date createdDate, int updatedBy, Date updatedDate, int deletedBy, Date deletedDate)
-        +Base(int id, int createdBy, Date createdDate, int updatedBy, Date updatedDate)
-        +Base(int createdBy)
-        +int getId()
-        +int getCreatedBy()
-        +Date getCreatedDate()
-        +int getUpdatedBy()
-        +Date getUpdatedDate()
-        +int getDeletedBy()
-        +Date getDeletedDate()
+    abstract Base {
+        - int SQL_INT_NULL = 0
+        - int DEFAULT_ID = 0
+        - Date NOW = new Date(System.currentTimeMillis())
+        - int id
+        - int createdBy
+        - Date createdDate
+        - int updatedBy
+        - Date updatedDate
+        - int deletedBy
+        - Date deletedDate
+        + Base(int id, int createdBy, Date createdDate, int updatedBy, Date updatedDate, int deletedBy, Date deletedDate)
+        + Base(int id, int createdBy, Date createdDate, int updatedBy, Date updatedDate)
+        + Base(int createdBy)
+        + int getId()
+        + int getCreatedBy()
+        + Date getCreatedDate()
+        + int getUpdatedBy()
+        + Date getUpdatedDate()
+        + void setDeletedBy(int deletedBy)
+        + int getDeletedBy()
+        + Date getDeletedDate()
+        + void setDeletedDate(Date deletedDate)
     }
 
     class Element {
-        -String name;
-        +Element(int id, int createdBy, Date createdDate, int updatedBy, Date updatedDate, int deletedBy, Date deletedDate, String name)
-        +Element(int id, int createdBy, Date createdDate, int updatedBy, Date updatedDate, String name)
-        +Element(int createdBy, String name)
-        +void setName(String name)
-        +String getName()
+        - String name;
+        + Element(int id, int createdBy, Date createdDate, int updatedBy, Date updatedDate, int deletedBy, Date deletedDate, String name)
+        + Element(int id, int createdBy, Date createdDate, int updatedBy, Date updatedDate, String name)
+        + Element(int createdBy, String name)
+        + void setName(String name)
+        + String getName()
     }
     Base <|-- Element
 }
 
-package conndao {
-    class ConnElementDao {
-        - DataConnection connection
-        + ConnElementDao(DataConnection connection)
-        - createElement(DataResult dataResult)
-        + Element getById(int id)
-        + List<Element> getAll()
-        + boolean add(Element element)
-        + boolean update(Element element)
-        + boolean delete(Element element)
+package dbdao {
+    abstract DbDao {
+        # {static} Logger LOGGER
+        - Connection connection
+        + DbDao(Connection connection)
+        # Connection getConnection()
+        # Date getDate(ResultSet resultSet, String column)
+        # Timestamp getTimestamp(Date date)
+        # void mutedClose(Connection connection, PreparedStatement statement, ResulSet resultSet)
+        # {abstract} Base create(DataResult dataResult)
+        # {abstract} PreparedStatement getByIdStatement(int id)
+        # {abstract} PreparedStatement getAllStatement()
+        # {abstract} PreparedStatement getAddStatement(Base base)
+        # {abstract} PreparedStatement getUpdateStatement(Base base)
+        # {abstract} PreparedStatement getDeleteStatement(Base base)
+        + Optional<Base> getById(int id)
+        + Stream<Base> getAll()
+        + boolean add(Base base)
+        + boolean update(Base base)
+        + boolean delete(Base base)
     }
-    Dao <|-- ConnElementDao
+
+    class DbElementDao {
+        - {static} String GET_ALL_QUERY
+        - {static} String GET_BY_ID_QUERY
+        - {static} String ADD_QUERY
+        - {static} String UPDATE_QUERY
+        - {static} String DELETE_QUERY
+        + DbElementDao(Connection connection)
+        # Base create(DataResult dataResult)
+        # PreparedStatement getByIdStatement(int id)
+        # PreparedStatement getAllStatement()
+        # PreparedStatement getAddStatement(Base base)
+        # PreparedStatement getUpdateStatement(Base base)
+        # PreparedStatement getDeleteStatement(Base base)
+    }
+    DbDao <|-- DbElementDao
 }
 
 package modeljson {
-    abstract BaseJson <<interface>> {
-        Base base
-        BaseJson(Base base)
-        JSONObject getJson()
-        String getJsonString()
+    abstract BaseJson {
+        - JSONObject json
+        + BaseJson(Base base)
+        + BaseJson(JSONObject json)
+        + BaseJSon(String json)
+        + JSONObject getJson()
+        + void setJsonBase(Base base)
+        # Base getBase()
     }
-    BaseJson o-- Base : base
 
     class ElementJson {
-
+        + ElementJson(Element element)
+        + ElementJson(Base base)
+        + setJsonElement(Element element)
+        + Element getElement()
     }
     BaseJson <|.. ElementJson
 }
 
-package api {
-    abstract RestApiServlet <<interface>> {
-        #void doGet(HttpServletRequest request, HttpServletResponse response)
-        #void doPost(HttpServletRequest request, HttpServletResponse response)
-        #void doPut(HttpServletRequest request, HttpServletResponse response)
-        #void doDelete(HttpServletRequest request, HttpServletResponse response)
-    }
-
-    class ElementRestServlet {
-
-    }
-    RestApiServlet <|.. ElementRestServlet
-}
 }
 @enduml
