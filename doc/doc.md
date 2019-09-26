@@ -64,7 +64,7 @@ Il generatore deve poter essere acceso e spento tramite un telecomando, tramite 
 	<tr><td>002</td><td>Gestione permessi utenti</td></tr>
 </table>
 
-## 1.6 Pianificazione 
+## 1.6 Pianificazione
 
 ## 1.7 Analisi dei mezzi
 
@@ -83,6 +83,47 @@ Il generatore deve poter essere acceso e spento tramite un telecomando, tramite 
 
 ### 2.1 Architettura del progetto
 
+Il progetto &egrave; sviluppato su diversi elementi:
+
+1. Database
+2. WebAPP
+3. Arduino
+
+Per quanto riguarda la web app, sar&agrave; sviluppata con le Rest API, per la comunicazione fra il
+front-end ed il back-end. Ho preso questa decisione, perch&egrave; utilizzarle &egrave; una best
+practices, del trend attuale dello sviluppo web.
+
+Le RestAPI servono per uniformare il formato dei dati, per facilitare l'uniformit&agrave; e l'integrazione delle varie applicazioni web disponibili. Un gran punto di forza di &egrave; quello di poter eseguire delle richieste al server o  aggiornare i dati senza ricaricare la pagina.<br>
+Le RestAPI, non sono altro che i dati del back-end scritti in formato JSON. Come per esempio:
+
+```
+{
+	"users": [
+		{
+			"username": "giulio.bosco",
+			"firstname": "Giulio",
+			"lastname": "Bosco"
+		},
+		{
+			"username": "fabrizio.valsangiacomo",
+			"firstname": "Fabrizio",
+			"lastname": "Valsangiacomo"
+		}
+	]
+}
+```
+
+Tutto il back-end sar&agrave; sviluppato in Java, ecco il diagramma delle classi.
+
+![dao uml](img/dao_classes.png)
+
+Per lo sviluppo del software, e le connessioni al database, ho deciso di basarmi sul modello DAO
+(Data Access Object).  
+Prima cosa che viene fatta durante lo sviluppo, &egrave; la scrittura delle classi che rappresentano
+le varie tabelle del database. Dopo di che si implementano le classi che si collegano al database.
+Poi delle classi che trasformano i modelli delle tabelle in JSON, nascondendo le informazioni che
+non devono essere accessibili tramite le API.  
+
 ### 2.2 Design delle interfacce
 
 ### 2.3 Architettura del Database
@@ -96,7 +137,7 @@ Lista delle tabelle:
 - groups
 - permissions
 
-Dopo di che ho pensato potesse essere una buona idea tenere traccia delle operazioni eseguite sul database. Questo perch&eacute; &egrave; dal lato della piattaforma WEB, il progetto &egrave; piccolo. Quindi potrei investire del tempo nello sviluppare questa parte del progetto, che potrebbe comunque essere riutilizzata in qualunque progetto. 
+Dopo di che ho pensato potesse essere una buona idea tenere traccia delle operazioni eseguite sul database. Questo perch&eacute; &egrave; dal lato della piattaforma WEB, il progetto &egrave; piccolo. Quindi potrei investire del tempo nello sviluppare questa parte del progetto, che potrebbe comunque essere riutilizzata in qualunque progetto.
 
 Per eseguire i log delle azioni effettuate sulle banche dati, vi sono diversi modi:
 
@@ -126,5 +167,3 @@ Dopo di che vi sono le tabelle users, groups, e permissions, che servono per ges
 ![Database advanced schema](img/db.jpg)
 
 In questo schema si possono notare molte pi&ugrave; tabelle e pi&ugrave; attributi, per ogni tabella che vi era nello schema antecedente, 6 attributi, che servono per salvare la data e l'autore delle azioni principali che si possono fare sul database (create, update, delete). In oltre vi &egrave; un altra tabella, nella quale si inseriscono gli audit, cio&eacute; gli stessi parametri, con in pi&ugrave; l'azione eseguita ed un id per ogni audit. Le relazioni fra le tabelle di audit e la tabella `audit_aciton` non sono rappresentate, come le relazioni fra tutti i campi discussi prima e la tabella `users`, questo per permettere una miglior leggibilit&agrave; dello schema.
-
-
