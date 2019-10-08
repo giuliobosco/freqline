@@ -461,7 +461,7 @@ CREATE TABLE `freqline`.`mic_audit` (
 # -----------------------------------------------
 # -----------------------------------------------
 
-ALTER TABLE `freqline`.`users`
+ALTER TABLE `freqline`.`user`
     ADD FOREIGN KEY (`favorite_generator`) REFERENCES `freqline`.`generator` (`id`)
     ON DELETE NO ACTION
     ON UPDATE CASCADE;
