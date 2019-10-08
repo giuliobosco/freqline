@@ -10,7 +10,7 @@ CREATE TRIGGER `freqline`.`insert_group_permission_audit`
     SELECT `id` FROM `freqline`.`audit_action` WHERE `audit_action`.`name` = 'created'
         INTO `v_action`;
 
-    INSERT INTO ``freqline``.`group_permission_audit` (`action`,
+    INSERT INTO `freqline`.`group_permission_audit` (`action`,
                                              `audit_id`,
                                              `audit_created_by`,
                                              `audit_created_date`,
