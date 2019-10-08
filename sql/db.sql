@@ -404,7 +404,7 @@ CREATE TABLE `freqline`.`mic` (
     `id`           INT AUTO_INCREMENT,
 
     `created_by`   INT         NOT NULL,
-    `created_dat` TIMESTAMP   NOT NULL,
+    `created_date` TIMESTAMP   NOT NULL,
     `updated_by`   INT         NOT NULL,
     `updated_date` TIMESTAMP   NOT NULL,
     `deleted_by`   INT,
