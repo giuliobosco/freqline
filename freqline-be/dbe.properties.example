@@ -1,0 +1,12 @@
+#Thu Oct 17 16:20:13 CEST 2019
+db.legacyDatetime=false
+db.useSsl=false
+db.username=root
+db.password=123qwe
+db.database=dbe
+db.port=3306
+db.jdbcTimezoneShift=true
+db.serverTimezone=UTC
+db.host=localhost
+db.useUnicode=true
+db.zeroDateTimeBehavoir=CONVERT_TO_NULL
