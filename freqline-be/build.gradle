@@ -12,11 +12,19 @@ plugins {
 
     // Apply the application plugin to add support for building an application
     id 'application'
+	id 'war'
+    id 'org.gretty' version '2.2.0'
 }
+
+group 'freqline-be'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
 
 repositories {
     // Use jcenter for resolving your dependencies.
     // You can declare any Maven/Ivy/file repository here.
+	mavenCentral()
     jcenter()
 }
 
@@ -24,9 +32,10 @@ dependencies {
     // This dependency is found on compile classpath of this component and consumers.
     implementation 'com.google.guava:guava:27.0.1-jre'
 
+	providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
+	compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.11'
+    compile 'org.json:json:20171018'
 }
 
-// Define the main class for the application
-mainClassName = 'ch.giuliobosco.freqline.App'
