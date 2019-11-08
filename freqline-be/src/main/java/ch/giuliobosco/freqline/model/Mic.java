@@ -64,7 +64,7 @@ public class Mic extends Base {
     // -------------------------------------------------------------------------------- Constructors
 
     /**
-     * Create the generator with all parameters.
+     * Create the mic with all parameters.
      *
      * @param id          Id of the user.
      * @param createdBy   User created by.
@@ -76,8 +76,8 @@ public class Mic extends Base {
      * @param generator   Generator of the mic.
      * @param decibel     Decibel level of the mic.
      * @param timer       Timer for stop the generator.
-     * @param ip          Ip of the generator.
-     * @param keyC        Key of communication of the generator.
+     * @param ip          Ip of the mic.
+     * @param keyC        Key of communication of the mic.
      */
     public Mic(int id, int createdBy, Date createdDate, int updatedBy, Date updatedDate, int deletedBy, Date deletedDate, Generator generator, int decibel, Timestamp timer, String ip, String keyC) {
         super(id, createdBy, createdDate, updatedBy, updatedDate, deletedBy, deletedDate);
@@ -90,7 +90,7 @@ public class Mic extends Base {
     }
 
     /**
-     * Create the generator with all parameters, without the deleted by and deleted date.
+     * Create the mic with all parameters, without the deleted by and deleted date.
      * If they are not instanced in the database, will not be instanced in the object.
      *
      * @param id          Id of the user.
@@ -101,15 +101,15 @@ public class Mic extends Base {
      * @param generator   Generator of the mic.
      * @param decibel     Decibel level of the mic.
      * @param timer       Timer for stop the generator.
-     * @param ip          Ip of the generator.
-     * @param keyC        Key of communication of the generator.
+     * @param ip          Ip of the mic.
+     * @param keyC        Key of communication of the mic.
      */
     public Mic(int id, int createdBy, Date createdDate, int updatedBy, Date updatedDate, Generator generator, int decibel, Timestamp timer, String ip, String keyC) {
         this(id, createdBy, createdDate, updatedBy, updatedDate, SQL_INT_NULL, null, generator, decibel, timer, ip, keyC);
     }
 
     /**
-     * Create the generator, create model to write on DB.
+     * Create the mic, create model to write on DB.
      * Create an instance of User, with createdBy (same ad updatedBy) actual date for
      * createdDate and updatedDate. The id is 0, but it will be assigned by the DBMS.
      *
@@ -117,23 +117,23 @@ public class Mic extends Base {
      * @param generator Generator of the mic.
      * @param decibel   Decibel level of the mic.
      * @param timer     Timer for stop the generator.
-     * @param ip        Ip of the generator.
-     * @param keyC      Key of communication of the generator.
+     * @param ip        Ip of the mic.
+     * @param keyC      Key of communication of the mic.
      */
     public Mic(int createdBy, Generator generator, int decibel, Timestamp timer, String ip, String keyC) {
         this(SQL_INT_NULL, createdBy, now(), createdBy, now(), generator, decibel, timer, ip, keyC);
     }
 
     /**
-     * Create the generator from a Base object and the decibel, the timer, the ip and the key of
+     * Create the mic from a Base object and the decibel, the timer, the ip and the key of
      * communication.
      *
      * @param base      Base data for create the user.
      * @param generator Generator of the mic.
      * @param decibel   Decibel level of the mic.
      * @param timer     Timer for stop the generator.
-     * @param ip        Ip of the generator.
-     * @param keyC      Key of communication of the generator.
+     * @param ip        Ip of the mic.
+     * @param keyC      Key of communication of the mic.
      */
     public Mic(Base base, Generator generator, int decibel, Timestamp timer, String ip, String keyC) {
         super(base);
@@ -202,36 +202,36 @@ public class Mic extends Base {
     }
 
     /**
-     * Get the ip of the generator.
+     * Get the ip of the mic.
      *
-     * @return Ip of the generator.
+     * @return Ip of the mic.
      */
     public String getIp() {
         return ip;
     }
 
     /**
-     * Set the ip of the generator.
+     * Set the ip of the mic.
      *
-     * @param ip Ip of the generator.
+     * @param ip Ip of the mic.
      */
     public void setIp(String ip) {
         this.ip = ip;
     }
 
     /**
-     * Get the key of communication of the generator.
+     * Get the key of communication of the mic.
      *
-     * @return Key of communication of the generator.
+     * @return Key of communication of the mic.
      */
     public String getKeyC() {
         return keyC;
     }
 
     /**
-     * Set the key of communication of the generator.
+     * Set the key of communication of the mic.
      *
-     * @param keyC Key of communication of the generator.
+     * @param keyC Key of communication of the mic.
      */
     public void setKeyC(String keyC) {
         this.keyC = keyC;
