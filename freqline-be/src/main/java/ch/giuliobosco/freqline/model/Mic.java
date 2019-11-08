@@ -47,7 +47,7 @@ public class Mic extends Base {
     private int decibel;
 
     /**
-     * Timer for stop the generator.
+     * Decibel level of the mic.
      */
     private Timestamp timer;
 
