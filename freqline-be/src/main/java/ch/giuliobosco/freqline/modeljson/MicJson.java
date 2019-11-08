@@ -34,7 +34,7 @@ import java.sql.Timestamp;
 
 /**
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0 (2019-11-08 - 2019-11-08)
+ * @version 1.0.1 (2019-11-08 - 2019-11-08)
  */
 public class MicJson extends BaseJson {
     // ------------------------------------------------------------------------------------ Costants
@@ -42,27 +42,27 @@ public class MicJson extends BaseJson {
     /**
      * Generator of the mic.
      */
-    private String GENERATOR = "generator";
+    private static final String GENERATOR = "generator";
 
     /**
      * Decibel level of the mic.
      */
-    private String DECIBEL = "decibel";
+    private static final String DECIBEL = "decibel";
 
     /**
      * Decibel level of the mic.
      */
-    private String TIMER = "timer";
+    private static final String TIMER = "timer";
 
     /**
      * Ip of the generator.
      */
-    private String IP = "ip";
+    private static final String IP = "ip";
 
     /**
      * Key of communication of the generator.
      */
-    private String KEY_C = "keyC";
+    private static final String KEY_C = "keyC";
 
     // ---------------------------------------------------------------------------------- Attributes
 
