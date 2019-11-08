@@ -30,6 +30,7 @@ import ch.giuliobosco.freqline.dao.DaoException;
 import ch.giuliobosco.freqline.dbdao.DbDao;
 import ch.giuliobosco.freqline.model.Base;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Optional;
 
@@ -38,7 +39,7 @@ import java.util.Optional;
  * Transform Base object to JSON and reverse.
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0.3 (2019-09-18 - 2019-11-08)
+ * @version 1.0.4 (2019-09-18 - 2019-11-08)
  */
 public abstract class BaseJson {
     // ------------------------------------------------------------------------------------ Costants
@@ -227,6 +228,21 @@ public abstract class BaseJson {
             return getJson().getBoolean(key);
         } catch (JSONException ignored) {
             return false;
+        }
+    }
+
+    /**
+     * Get timestamp from JSON.
+     * The value of key must be a long value, converted in timestamp.
+     *
+     * @param key String key.
+     * @return Boolean of the key.
+     */
+    protected Timestamp getTimestamp(String key) {
+        try {
+            return new Timestamp(getJson().getLong(key));
+        } catch (JSONException ignored) {
+            return null;
         }
     }
 
