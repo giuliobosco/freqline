@@ -38,7 +38,7 @@ import java.util.Optional;
  * Transform Base object to JSON and reverse.
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0.2 (2019-09-18 - 2019-10-10)
+ * @version 1.0.3 (2019-09-18 - 2019-11-08)
  */
 public abstract class BaseJson {
     // ------------------------------------------------------------------------------------ Costants
@@ -213,6 +213,20 @@ public abstract class BaseJson {
             return getJson().getString(key);
         } catch (JSONException ignored) {
             return null;
+        }
+    }
+
+    /**
+     * Get boolean from JSON.
+     *
+     * @param key String key.
+     * @return Boolean of the key.
+     */
+    protected boolean getBoolean(String key) {
+        try {
+            return getJson().getBoolean(key);
+        } catch (JSONException ignored) {
+            return false;
         }
     }
 
