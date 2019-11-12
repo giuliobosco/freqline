@@ -32,7 +32,7 @@ import java.sql.SQLException;
  * Initialize a base connection.
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0.3 (2019-09-16 - 2019-10-17)
+ * @version 1.0.4 (2019-09-16 - 2019-11-12)
  */
 public class JapiConnector extends JdbcConnector {
 
@@ -40,26 +40,6 @@ public class JapiConnector extends JdbcConnector {
      * Properties file path.
      */
     private static final String PROPERTIES_FILE_PATH = "dbe.properties";
-
-    /**
-     * Hostname for connection.
-     */
-    private static final String HOSTNAME = "localhost";
-
-    /**
-     * Username for connection.
-     */
-    private static final String USERNAME = "root";
-
-    /**
-     * Password for connection.
-     */
-    private static final String PASSWORD = "1234qwer";
-
-    /**
-     * Database for connection.
-     */
-    public static final String DATABASE = "dbe";
 
     /**
      * Use ssl for connection.
@@ -81,7 +61,11 @@ public class JapiConnector extends JdbcConnector {
      * @return Jdbc connector.
      */
     public static JdbcConnector initialize() {
-        return new JdbcConnector(USERNAME, PASSWORD, HOSTNAME, DATABASE, SSL);
+        try {
+            return new JdbcConnector(PROPERTIES_FILE_PATH);
+        } catch (IOException ioe) {
+            throw new RuntimeException(ioe.getMessage());
+        }
     }
 
     /**
