@@ -35,7 +35,7 @@ import java.sql.SQLException;
  * Id of user.
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0.1 (2019-10-26 - 2019-10-26)
+ * @version 1.0.2 (2019-10-26 - 2019-11-12)
  */
 public class UserIdQuery {
     // ------------------------------------------------------------------------------------ Costants
@@ -43,7 +43,7 @@ public class UserIdQuery {
     /**
      * Id of user query.
      */
-    private static final String QUERY = "SELECT id FROM dbe.user WHERE username=?";
+    private static final String QUERY = "SELECT id FROM freqline.user WHERE username=?";
 
     /**
      * Username of user query index.

@@ -40,7 +40,7 @@ import java.util.List;
  * Permissions of user.
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0.1 (2019-10-26 - 2019-11-05)
+ * @version 1.0.2 (2019-10-26 - 2019-11-12)
  */
 public class PermissionsUserQuery {
     // ------------------------------------------------------------------------------------ Costants
@@ -48,7 +48,7 @@ public class PermissionsUserQuery {
     /**
      * Permission of user query.
      */
-    private static final String QUERY = "SELECT p.string FROM dbe.permission p JOIN dbe.group_permission gp ON p.id = gp.permission JOIN `group` g ON gp.`group` = g.id JOIN user_group ug ON g.id = ug.`group` WHERE ug.user = ?;";
+    private static final String QUERY = "SELECT p.string FROM freqline.permission p JOIN freqline.group_permission gp ON p.id = gp.permission JOIN `group` g ON gp.`group` = g.id JOIN user_group ug ON g.id = ug.`group` WHERE ug.user = ?;";
 
     /**
      * Permission of user id index.
