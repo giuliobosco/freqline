@@ -35,7 +35,7 @@ import java.sql.ResultSet;
  * Generator to MySQL in DAO Pattern.
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0 (2019-11-12 - 2019-11-12)
+ * @version 1.0.1 (2019-11-12 - 2019-11-14)
  */
 public class DbGeneratorDao extends DbDao {
 
@@ -99,8 +99,8 @@ public class DbGeneratorDao extends DbDao {
 
         statement.setString(7, g.getName());
         statement.setInt(8, g.getFrequence());
-        statement.setBoolean(10, g.isStatus());
-        statement.setString(11, g.getIp());
-        statement.setString(12, g.getKeyC());
+        statement.setBoolean(9, g.isStatus());
+        statement.setString(10, g.getIp());
+        statement.setString(11, g.getKeyC());
     }
 }
