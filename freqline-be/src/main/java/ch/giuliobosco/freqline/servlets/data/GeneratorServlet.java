@@ -39,7 +39,7 @@ import java.util.Map;
  * Generator Restful API servlet.
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0 (2019-11-12 - 2019-11-12)
+ * @version 1.0.1 (2019-11-12 - 2019-11-14)
  */
 @WebServlet(name = "GeneratorServlet", urlPatterns = {"data/generator/*"}, loadOnStartup = 1)
 public class GeneratorServlet extends BaseDataServlet {
@@ -93,7 +93,7 @@ public class GeneratorServlet extends BaseDataServlet {
         String frequenceString = firstValue(params, GeneratorJson.FREQUENCE);
         String statusString = firstValue(params, GeneratorJson.STATUS);
         String ip = firstValue(params, GeneratorJson.IP);
-        String keyC = firstValue(params, GeneratorJson.KEY_C);
+        String keyC = firstValue(params, "key_c");
 
         int frequence;
         boolean status;
