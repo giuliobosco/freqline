@@ -42,7 +42,7 @@ import java.util.Map;
  * Mic Restful API Servlet.
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0 (2019-11-12 - 2019-11-12)
+ * @version 1.0.1 (2019-11-12 - 2019-11-14)
  */
 @WebServlet(name = "GroupPermissionServlet", urlPatterns = {"data/mic/*"}, loadOnStartup = 1)
 public class MicServlet extends BaseDataServlet {
@@ -97,7 +97,7 @@ public class MicServlet extends BaseDataServlet {
         String decibelString = firstValue(params, "decibel");
         String timerString = firstValue(params, "timer");
         String ip = firstValue(params, "ip");
-        String keyC = firstValue(params, "keyC");
+        String keyC = firstValue(params, "key_c");
 
         if (generator == null) {
             return null;

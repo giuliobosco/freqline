@@ -41,7 +41,7 @@ import java.util.Map;
  * Remote Restful API Servlet.
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0 (2019-11-12 - 2019-11-12)
+ * @version 1.0.1 (2019-11-12 - 2019-11-14)
  */
 @WebServlet(name = "RemoteServlet", urlPatterns = {"data/remote/*"}, loadOnStartup = 1)
 public class RemoteServlet extends BaseDataServlet {
@@ -95,7 +95,7 @@ public class RemoteServlet extends BaseDataServlet {
         Generator generator = (Generator) getBase(params, generatorDao, "generator");
         String command = firstValue(params, "command");
         String ip = firstValue(params, "ip");
-        String keyC = firstValue(params, "keyC");
+        String keyC = firstValue(params, "key_c");
 
         if (generator == null) {
             return null;
