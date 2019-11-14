@@ -206,7 +206,6 @@ public abstract class BaseDataServlet extends BaseServlet {
         SessionManager sm = new SessionManager(request.getSession());
         try {
             initConnector();
-            System.out.println("s: " + sm.isValidSession());
             boolean hasP = hasRequiredPermission(sm.getUserId(), requiredPostPermission());
             if (sm.isValidSession() && hasP) {
                 String[] requiredAttributes = getRequiredPostParameters();
