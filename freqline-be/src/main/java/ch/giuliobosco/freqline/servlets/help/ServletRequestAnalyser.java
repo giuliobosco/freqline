@@ -38,7 +38,7 @@ import java.util.Map;
  * From: https://github.com/giuliobosco/progetto1/blob/master/src/analyzer/RequestAnalysis.java
  *
  * @author giuliobosco
- * @version 2.0.1 (2018-10-30 - 2019-10-22)
+ * @version 2.0.2 (2018-10-30 - 2019-11-17)
  */
 public class ServletRequestAnalyser {
     // -------------------------------------------------------------------------------------------------------- Costants
@@ -150,6 +150,22 @@ public class ServletRequestAnalyser {
      */
     public Map<String, String[]> getParameters() {
         return this.parameters;
+    }
+
+    /**
+     * Get the parameter at the key.
+     *
+     * @param key Key of parameter.
+     * @return First element of parameters array if exists.
+     */
+    public String getParameter(String key) {
+        String[] strings = getParameters().get(key);
+
+        if (strings == null || strings.length == 0) {
+            return null;
+        }
+
+        return strings[0];
     }
 
     // ---------------------------------------------------------------------------------------------------- Constructors
