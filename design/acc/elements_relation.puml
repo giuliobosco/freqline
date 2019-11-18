@@ -1,10 +1,13 @@
-@startuml
+@startuml elsements_relation
 
 Arduino -> Server : http(keyC, action, content)
 Server -> Database : isValid(keyC)
 
 alt isValid(keyC) == true
     Database --> Server : key ok
+    
+    Server -> Database : getFrequence(keyC)
+    Database --> Server : frequence
 
     alt action == conf
         Server -> Database : getConf(keyC)
@@ -18,22 +21,22 @@ alt isValid(keyC) == true
         alt status == 1
             Server -> Database : getMicTimer(keyC)
             Database --> Server : micTimer
-            Server --> Arduino : ok(!status, micTimer)
+            Server --> Arduino : ok(!status, frequence, micTimer)
         else status == 0
-            Server --> Arduino : ok(!status)
+            Server --> Arduino : ok(!status, frequence)
         end
     else action == remote
         alt content == toggle
             Server -> Database : getGeneratorStatus(keyC)
             Database --> Server : status
             Server -> Database : setGeneratorStatus(keyC, !status)
-            Server --> Arduino : ok(!status)
+            Server --> Arduino : ok(!status, frequence)
         else content == 1
             Server -> Database : setGeneratorStatus(keyC, 1)
-            Server --> Arduino : ok(1)
+            Server --> Arduino : ok(1, frequence)
         else content == 0
             Server -> Database : setGeneratorStatus(keyC, 0)
-            Server --> Arduino : ok(0)
+            Server --> Arduino : ok(0, frequence)
         end
     end
 else else
