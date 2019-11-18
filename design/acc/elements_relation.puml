@@ -1,0 +1,44 @@
+@startuml
+
+Arduino -> Server : http(keyC, action, content)
+Server -> Database : isValid(keyC)
+
+alt isValid(keyC) == true
+    Database --> Server : key ok
+
+    alt action == conf
+        Server -> Database : getConf(keyC)
+        Database --> Server : conf
+        Server --> Arduino : ok(conf)
+    else action == mic
+        Server -> Database : getGeneratorStatus(keyC)
+        Database --> Server : status
+
+        Server -> Database : setGeneratorStatus(keyC, !status)
+        alt status == 1
+            Server -> Database : getMicTimer(keyC)
+            Database --> Server : micTimer
+            Server --> Arduino : ok(!status, micTimer)
+        else status == 0
+            Server --> Arduino : ok(!status)
+        end
+    else action == remote
+        alt content == toggle
+            Server -> Database : getGeneratorStatus(keyC)
+            Database --> Server : status
+            Server -> Database : setGeneratorStatus(keyC, !status)
+            Server --> Arduino : ok(!status)
+        else content == 1
+            Server -> Database : setGeneratorStatus(keyC, 1)
+            Server --> Arduino : ok(1)
+        else content == 0
+            Server -> Database : setGeneratorStatus(keyC, 0)
+            Server --> Arduino : ok(0)
+        end
+    end
+else else
+    Database --> Server : wrong key
+    Server --> Arduino : error
+end
+
+@enduml
