@@ -1,4 +1,4 @@
-@startuml elsements_relation
+@startuml acc communication between arduino and server
 
 Arduino -> Server : http(keyC, action, content)
 Server -> Database : isValid(keyC)
@@ -19,11 +19,11 @@ alt isValid(keyC) == true
 
         Server -> Database : setGeneratorStatus(keyC, !status)
         alt status == 1
+            Server --> Arduino : ok(!status, frequence)
+        else status == 0
             Server -> Database : getMicTimer(keyC)
             Database --> Server : micTimer
             Server --> Arduino : ok(!status, frequence, micTimer)
-        else status == 0
-            Server --> Arduino : ok(!status, frequence)
         end
     else action == remote
         alt content == toggle
