@@ -1,0 +1,18 @@
+@startuml communication web set frequence
+
+actor User
+entity Server
+database Database
+
+User -> Server : setFrequence(frequence)
+Server -> Database : getPermissionsFor(user)
+Database --> Server : permissionsFor
+
+alt permissionsFor.contains(user)
+    Server -> Database : setFrequence(frequence)
+    Server --> User : ok
+else 
+    Server --> User : error
+end
+
+@enduml

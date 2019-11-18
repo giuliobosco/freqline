@@ -1,0 +1,22 @@
+@startuml communicaiton web generator on
+
+actor User
+entity Server
+database Database
+
+User -> Server : generatorOn()
+Server -> Database : getPermissionsFor(user)
+Database --> Server : permissionsFor
+
+alt permissionsFor.contains(user)
+    Server -> Database : getFavoriteGenerator(user.id)
+    Database --> Server : favoriteGenerator
+    Server -> Server : buildRequest(favoriteGenerator)
+    Server -> Arduino : request(request)
+    Arduino --> Server : ok
+    Server -> User : ok
+else  
+    Server --> User : error
+end
+
+@enduml
