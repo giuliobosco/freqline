@@ -35,7 +35,7 @@ import java.sql.SQLException;
  * Send message to Generator (ACC Protocol).
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0 (2019-11-18 - 2019-11-18)
+ * @version 1.0.1 (2019-11-18 - 2019-11-19)
  */
 public class AccGenerator {
 
@@ -54,7 +54,7 @@ public class AccGenerator {
 
         GeneratorStatusQuery.setStatus(connection, keyC, true);
 
-        String url = buildUrl(ip, keyC, true);
+        String url = buildUrl(connection, ip, keyC, true);
 
         request(url);
     }
@@ -72,7 +72,7 @@ public class AccGenerator {
 
         String ip = GeneratorStatusQuery.getIp(connection, keyC);
 
-        String url = buildUrl(ip, keyC, false);
+        String url = buildUrl(connection, ip, keyC, false);
 
         request(url);
     }
@@ -91,7 +91,7 @@ public class AccGenerator {
 
         String ip = GeneratorStatusQuery.getIp(connection, keyC);
 
-        String url = buildUrl(ip, keyC, timer);
+        String url = buildUrl(connection, ip, keyC, timer);
 
         request(url);
     }
@@ -115,8 +115,9 @@ public class AccGenerator {
      * @param on      True for turn on  the generator, false for turn it off.
      * @return Url for request.
      */
-    private static String buildUrl(String address, String keyC, boolean on) {
-        return "http://" + address + "/acc?key_c=" + keyC + "&generator=" + (on ? "1" : "0");
+    private static String buildUrl(Connection connection, String address, String keyC, boolean on) throws SQLException {
+        int frequence = getFrequence(connection, keyC);
+        return "http://" + address + "/acc?key_c=" + keyC + "&generator=" + (on ? "1" : "0") + "&frequence=" + frequence;
     }
 
     /**
@@ -127,7 +128,18 @@ public class AccGenerator {
      * @param timer   Timer to shutdown the generator.
      * @return Url for request.
      */
-    private static String buildUrl(String address, String keyC, long timer) {
-        return buildUrl(address, keyC, true) + "&timer=" + timer;
+    private static String buildUrl(Connection connection, String address, String keyC, long timer) throws SQLException {
+        return buildUrl(connection, address, keyC, true) + "&timer=" + timer;
+    }
+
+    /**
+     * Ge the frequence of the generator.
+     *
+     * @param connection Connection to MySQL database.
+     * @param keyC       Key of communication.
+     * @return Frequence of the genrator.
+     */
+    private static int getFrequence(Connection connection, String keyC) throws SQLException {
+        return GeneratorStatusQuery.getGeneratorFrequence(connection, keyC);
     }
 }
