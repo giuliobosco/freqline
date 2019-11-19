@@ -25,7 +25,7 @@
 package ch.giuliobosco.freqline.acc;
 
 import ch.giuliobosco.freqline.help.HttpRequestor;
-import ch.giuliobosco.freqline.queries.GeneratorStatusQuery;
+import ch.giuliobosco.freqline.queries.GeneratorQuery;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -50,9 +50,9 @@ public class AccGenerator {
      * @throws IOException  Error while sending message to generator.
      */
     public static void turnGeneratorOn(Connection connection, String keyC) throws SQLException, IOException {
-        String ip = GeneratorStatusQuery.getIp(connection, keyC);
+        String ip = GeneratorQuery.getIp(connection, keyC);
 
-        GeneratorStatusQuery.setStatus(connection, keyC, true);
+        GeneratorQuery.setStatus(connection, keyC, true);
 
         String url = buildUrl(connection, ip, keyC, true);
 
@@ -68,9 +68,9 @@ public class AccGenerator {
      * @throws IOException  Error while sending message to generator.
      */
     public static void turnGeneratorOff(Connection connection, String keyC) throws SQLException, IOException {
-        GeneratorStatusQuery.setStatus(connection, keyC, false);
+        GeneratorQuery.setStatus(connection, keyC, false);
 
-        String ip = GeneratorStatusQuery.getIp(connection, keyC);
+        String ip = GeneratorQuery.getIp(connection, keyC);
 
         String url = buildUrl(connection, ip, keyC, false);
 
@@ -87,9 +87,9 @@ public class AccGenerator {
      * @throws IOException  Error while sending message to generator.
      */
     public static void turnGeneratorOn(Connection connection, String keyC, long timer) throws SQLException, IOException {
-        GeneratorStatusQuery.setStatus(connection, keyC, true);
+        GeneratorQuery.setStatus(connection, keyC, true);
 
-        String ip = GeneratorStatusQuery.getIp(connection, keyC);
+        String ip = GeneratorQuery.getIp(connection, keyC);
 
         String url = buildUrl(connection, ip, keyC, timer);
 
@@ -140,6 +140,6 @@ public class AccGenerator {
      * @return Frequence of the genrator.
      */
     private static int getFrequence(Connection connection, String keyC) throws SQLException {
-        return GeneratorStatusQuery.getGeneratorFrequence(connection, keyC);
+        return GeneratorQuery.getGeneratorFrequence(connection, keyC);
     }
 }

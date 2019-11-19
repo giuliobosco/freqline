@@ -29,7 +29,7 @@ import ch.giuliobosco.freqline.help.validators.StringValidator;
 import ch.giuliobosco.freqline.jdbc.JapiConnector;
 import ch.giuliobosco.freqline.jdbc.JdbcConnector;
 import ch.giuliobosco.freqline.queries.AccCheckQueries;
-import ch.giuliobosco.freqline.queries.GeneratorStatusQuery;
+import ch.giuliobosco.freqline.queries.GeneratorQuery;
 import ch.giuliobosco.freqline.servlets.BaseServlet;
 import ch.giuliobosco.freqline.servlets.help.ServletRequestAnalyser;
 import org.json.JSONObject;
@@ -248,12 +248,12 @@ public class AccServlet extends BaseServlet {
      * @throws IOException  I/O Error.
      */
     private void mic(HttpServletResponse response) throws SQLException, IOException {
-        boolean status = GeneratorStatusQuery.getGeneratorStatus(getConnection(), getKeyC());
+        boolean status = GeneratorQuery.getGeneratorStatus(getConnection(), getKeyC());
 
         if (status) {
             AccGenerator.turnGeneratorOff(getConnection(), getKeyC());
         } else {
-            long timer = GeneratorStatusQuery.getMicTimer(getConnection(), getKeyC());
+            long timer = GeneratorQuery.getMicTimer(getConnection(), getKeyC());
             AccGenerator.turnGeneratorOn(getConnection(), getKeyC(), timer);
         }
     }
@@ -283,7 +283,7 @@ public class AccServlet extends BaseServlet {
      * @throws IOException  I/O Error.
      */
     private void remoteToggle(HttpServletResponse response) throws SQLException, IOException {
-        boolean status = GeneratorStatusQuery.getGeneratorStatus(getConnection(), getKeyC());
+        boolean status = GeneratorQuery.getGeneratorStatus(getConnection(), getKeyC());
 
         if (status) {
             AccGenerator.turnGeneratorOff(getConnection(), getKeyC());

@@ -30,7 +30,7 @@ import ch.giuliobosco.freqline.help.ArrayHelper;
 import ch.giuliobosco.freqline.help.validators.StringValidator;
 import ch.giuliobosco.freqline.jdbc.JapiConnector;
 import ch.giuliobosco.freqline.jdbc.JdbcConnector;
-import ch.giuliobosco.freqline.queries.GeneratorStatusQuery;
+import ch.giuliobosco.freqline.queries.GeneratorQuery;
 import ch.giuliobosco.freqline.queries.PermissionsUserQuery;
 import ch.giuliobosco.freqline.servlets.BaseServlet;
 import ch.giuliobosco.freqline.servlets.help.ServletRequestAnalyser;
@@ -134,7 +134,7 @@ public class GeneratorStatusServlet extends BaseServlet {
      * @throws IOException  Error while sending request to Generator.
      */
     private void executePost(HttpServletResponse response, Connection connection, int userId, ServletRequestAnalyser sra) throws SQLException, IOException {
-        String keyC = GeneratorStatusQuery.getKeyByUserId(connection, userId);
+        String keyC = GeneratorQuery.getKeyByUserId(connection, userId);
 
         if (keyC == null) {
             ok(response, "NO ACTION");

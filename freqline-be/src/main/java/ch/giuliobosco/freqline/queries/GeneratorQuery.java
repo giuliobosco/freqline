@@ -32,7 +32,7 @@ import java.sql.*;
  * @author giuliobosco (giuliobva@gmail.com)
  * @version 1.0.2 (2019-11-14 - 2019-11-18)
  */
-public class GeneratorStatusQuery {
+public class GeneratorQuery {
 
     // ------------------------------------------------------------------------------------ Costants
 
