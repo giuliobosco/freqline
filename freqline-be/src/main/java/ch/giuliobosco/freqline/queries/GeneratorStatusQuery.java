@@ -30,7 +30,7 @@ import java.sql.*;
  * Queries for status of generator.
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0.1 (2019-11-14 - 2019-11-18)
+ * @version 1.0.2 (2019-11-14 - 2019-11-18)
  */
 public class GeneratorStatusQuery {
 
@@ -55,6 +55,11 @@ public class GeneratorStatusQuery {
      * Select the status of the generator from user favorite generator.
      */
     private static final String GET_FREQUENCE_USER_ID_QUERY = "SELECT frequence FROM user u JOIN generator g ON u.favorite_generator = g.id WHERE u.id = ?";
+
+    /**
+     * Select the key of communication from the user id.
+     */
+    private static final String GET_KEY_USER_ID_QUERY = "SELECT g.key_c FROM user u JOIN generator g ON u.favorite_generator = g.id WHERE u.id = ?";
 
     /**
      * Select timer of the mic from the keyc.
@@ -105,6 +110,11 @@ public class GeneratorStatusQuery {
      * Ip string.
      */
     private static final String IP = "ip";
+
+    /**
+     * Key of communication string.
+     */
+    private static final String KEY_C = "key_c";
 
     // --------------------------------------------------------------------------- Static Components
 
@@ -330,5 +340,26 @@ public class GeneratorStatusQuery {
         }
 
         return resultSet.getString(IP);
+    }
+
+    /**
+     * Get the key of communication of the generator from the user id.
+     *
+     * @param connection Connection to MySQL database.
+     * @param userId     User id of the user.
+     * @return Key of communication of the generator.
+     * @throws SQLException Error with MySQL.
+     */
+    public static String getKeyByUserId(Connection connection, int userId) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(GET_KEY_USER_ID_QUERY);
+        statement.setInt(1, userId);
+
+        ResultSet resultSet = statement.executeQuery();
+
+        if (!resultSet.next()) {
+            return null;
+        }
+
+        return resultSet.getString(KEY_C);
     }
 }
