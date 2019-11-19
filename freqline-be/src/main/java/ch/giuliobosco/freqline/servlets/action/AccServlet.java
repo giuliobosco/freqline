@@ -48,8 +48,8 @@ import java.sql.SQLException;
  * @author giuliobosco (giuliobva@gmail.com)
  * @version 1.0 (2019-11-15 - 2019-11-15)
  */
-@WebServlet(name = "GeneratorStatusServlet", urlPatterns = {"action/generatorStatus"}, loadOnStartup = 1)
-public class GeneratorStatusServlet extends BaseServlet {
+@WebServlet(name = "AccServlet", urlPatterns = {"action/acc"}, loadOnStartup = 1)
+public class AccServlet extends BaseServlet {
 
     /**
      * Keyc string.
