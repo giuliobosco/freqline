@@ -30,7 +30,7 @@ import java.sql.*;
  * Queries for status of generator.
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0.2 (2019-11-14 - 2019-11-18)
+ * @version 1.0.3 (2019-11-14 - 2019-11-18)
  */
 public class GeneratorQuery {
 
@@ -80,6 +80,11 @@ public class GeneratorQuery {
      * Set the frequence from the user id.
      */
     private static final String SET_FREQUENCE_USER_ID_QUERY = "UPDATE generator g JOIN user u ON u.favorite_generator=g.id SET g.frequence=? WHERE u.id = ?";
+
+    /**
+     * Set the mic timer from the user id.
+     */
+    private static final String SET_MIC_TIMER_USER_ID_QUERY = "UPDATE mic m JOIN generator g on m.generator = g.id JOIN user u on g.id = u.favorite_generator SET m.timer=? WHERE u.id=?";
 
     /**
      * Get the ip of the generator from the favorite generator of the user.
@@ -282,7 +287,7 @@ public class GeneratorQuery {
 
         Timestamp timestamp = resultSet.getTimestamp(TIMER);
 
-        return timestamp.getTime();
+        return timestamp.getTime() - 10000000;
     }
 
     /**
@@ -361,5 +366,25 @@ public class GeneratorQuery {
         }
 
         return resultSet.getString(KEY_C);
+    }
+
+    /**
+     * Set the mic timer from the user id.
+     *
+     * @param connection Connection to MySQL.
+     * @param userId User id.
+     * @param timer Length of the timer.
+     * @return True if executed query correctly.
+     * @throws SQLException Error with MysQL.
+     */
+    public static boolean setMicTimer(Connection connection, int userId, long timer) throws SQLException {
+        timer += 10000000;
+        Timestamp timestamp = new Timestamp(timer);
+
+        PreparedStatement statement = connection.prepareStatement(SET_MIC_TIMER_USER_ID_QUERY);
+        statement.setTimestamp(1, timestamp);
+        statement.setInt(2, userId);
+
+        return statement.executeUpdate() > 0;
     }
 }
