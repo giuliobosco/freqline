@@ -35,7 +35,7 @@ import java.sql.SQLException;
  * Acc Check queries.
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0.1 (2019-11-15 - 2019-11-17)
+ * @version 1.0.2 (2019-11-15 - 2019-11-19)
  */
 public class AccCheckQueries {
     // ------------------------------------------------------------------------------------ Costants
@@ -58,7 +58,7 @@ public class AccCheckQueries {
     /**
      * Query for acc auto conf.
      */
-    private static final String CONF_QUERY = "SELECT g.name AS gname, g.frequence as gfreqence, g.key_c AS gkey, g.ip AS gip, m.timer AS mtimer, m.key_c AS mkey, r.key_c AS rkey FROM generator g JOIN remote r ON g.id = r.generator JOIN mic m ON g.id = m.generator WHERE g.key_c = ?";
+    private static final String CONF_QUERY = "SELECT g.name AS gname, g.frequence as gfrequence, g.key_c AS gkey, g.ip AS gip, m.timer AS mtimer, m.key_c AS mkey, r.key_c AS rkey FROM generator g JOIN remote r ON g.id = r.generator JOIN mic m ON g.id = m.generator WHERE g.key_c = ?";
 
     // --------------------------------------------------------------------------- Static Components
 
@@ -85,7 +85,7 @@ public class AccCheckQueries {
         jo.put("gfrequence", resultSet.getString("gfrequence"));
         jo.put("gkey", resultSet.getString("gkey"));
         jo.put("gip", resultSet.getString("gip"));
-        jo.put("mtimer", resultSet.getString("mtimer"));
+        jo.put("mtimer", resultSet.getTimestamp("mtimer").getTime());
         jo.put("mkey", resultSet.getString("rkey"));
         jo.put("rkey", resultSet.getString("rkey"));
 
