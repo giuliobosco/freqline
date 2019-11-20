@@ -47,16 +47,21 @@ import java.sql.SQLException;
  * Change generator status API.
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0 (2019-11-19 - 2019-11-19)
+ * @version 1.0.1 (2019-11-19 - 2019-11-20)
  */
 @WebServlet(name = "GeneratorStatusServlet", urlPatterns = {"action/generatorStatus"}, loadOnStartup = 1)
 public class GeneratorStatusServlet extends BaseServlet {
     // ------------------------------------------------------------------------------------ Costants
 
     /**
-     * Change generator status permission.
+     * Set generator status permission.
      */
-    private final String CHANGE_GENERATOR_STATUS_PERM = "user";
+    private final String SET_GENERATOR_STATUS_PERM = "user";
+
+    /**
+     * Get generator status permission.
+     */
+    private final String GET_GENERATOR_STATUS_PERM = "user";
 
     /**
      * Status string.
@@ -75,7 +80,7 @@ public class GeneratorStatusServlet extends BaseServlet {
     // ----------------------------------------------------------------------------- General Methods
 
     /**
-     * Do post request, change generator status.
+     * Do post request, set generator status.
      *
      * @param request  Http request.
      * @param response Http response.
@@ -91,7 +96,7 @@ public class GeneratorStatusServlet extends BaseServlet {
 
             String[] perms = PermissionsUserQuery.getPermissions(connector, sm.getUserId());
 
-            boolean hasPermission = ArrayHelper.isInArray(perms, CHANGE_GENERATOR_STATUS_PERM);
+            boolean hasPermission = ArrayHelper.isInArray(perms, SET_GENERATOR_STATUS_PERM);
 
             if (sm.isValidSession() && hasPermission) {
 
@@ -120,6 +125,36 @@ public class GeneratorStatusServlet extends BaseServlet {
             }
         } catch (Exception e) {
             internalServerError(response, e.getMessage());
+        }
+    }
+
+    /**
+     * Do post request, get generator status.
+     *
+     * @param req  Http request.
+     * @param resp Http response.
+     * @throws ServletException Error in servlet.
+     * @throws IOException      I/O Error.
+     */
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        SessionManager sm = new SessionManager(req.getSession());
+        try {
+            JdbcConnector connector = new JapiConnector();
+            connector.openConnection();
+
+            String[] perms = PermissionsUserQuery.getPermissions(connector, sm.getUserId());
+
+            boolean hasPermission = ArrayHelper.isInArray(perms, GET_GENERATOR_STATUS_PERM);
+
+            if (sm.isValidSession() && hasPermission) {
+                boolean status = GeneratorQuery.getGeneratorStatus(connector.getConnection(), sm.getUserId());
+                ok(resp, String.valueOf(status));
+            } else {
+                unauthorized(req, resp);
+            }
+        } catch (Exception e) {
+            internalServerError(resp, e.getMessage());
         }
     }
 

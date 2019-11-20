@@ -46,16 +46,21 @@ import java.sql.SQLException;
  * Change generator frequence API.
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0 (2019-11-19 - 2019-11-19)
+ * @version 1.0.1 (2019-11-19 - 2019-11-20)
  */
 @WebServlet(name = "GeneratorFrequenceServlet", urlPatterns = {"action/generatorFrequence"}, loadOnStartup = 1)
 public class GeneratorFrequenceServlet extends BaseServlet {
     // ------------------------------------------------------------------------------------ Costants
 
     /**
-     * Change generator frequence permission.
+     * Set generator frequence permission.
      */
-    private final String CHANGE_GENERATOR_FREQUENCE_PERM = "user";
+    private final String SET_GENERATOR_FREQUENCE_PERM = "user";
+
+    /**
+     * Get generator frequence permission.
+     */
+    private final String GET_GENERATOR_FREQUENCE_PERM = "user";
 
     /**
      * Frequence string.
@@ -105,7 +110,7 @@ public class GeneratorFrequenceServlet extends BaseServlet {
 
             String[] perms = PermissionsUserQuery.getPermissions(connector, sm.getUserId());
 
-            boolean hasPermission = ArrayHelper.isInArray(perms, CHANGE_GENERATOR_FREQUENCE_PERM);
+            boolean hasPermission = ArrayHelper.isInArray(perms, SET_GENERATOR_FREQUENCE_PERM);
 
             if (sm.isValidSession() && hasPermission) {
 
@@ -129,6 +134,38 @@ public class GeneratorFrequenceServlet extends BaseServlet {
                         notAcceptable(req, resp);
                         break;
                 }
+            } else {
+                unauthorized(req, resp);
+            }
+        } catch (Exception e) {
+            internalServerError(resp, e.getMessage());
+        }
+    }
+
+    /**
+     * Do post request, get generator frequence.
+     *
+     * @param req  Http request.
+     * @param resp Http response.
+     * @throws ServletException Error in servlet.
+     * @throws IOException      I/O Error.
+     */
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        SessionManager sm = new SessionManager(req.getSession());
+
+        try {
+            JdbcConnector connector = new JapiConnector();
+            connector.openConnection();
+
+            String[] perms = PermissionsUserQuery.getPermissions(connector, sm.getUserId());
+
+            boolean hasPermission = ArrayHelper.isInArray(perms, GET_GENERATOR_FREQUENCE_PERM);
+
+            if (sm.isValidSession() && hasPermission) {
+                int status = GeneratorQuery.getGeneratorFrequence(connector.getConnection(), sm.getUserId());
+
+                ok(resp, String.valueOf(status));
             } else {
                 unauthorized(req, resp);
             }

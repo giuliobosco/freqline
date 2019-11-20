@@ -46,16 +46,21 @@ import java.sql.SQLException;
  * Change generator mic API.
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0 (2019-11-19 - 2019-11-19)
+ * @version 1.0.1 (2019-11-19 - 2019-11-20)
  */
 @WebServlet(name = "GeneratorMicServlet", urlPatterns = {"action/generatorMicTimer"}, loadOnStartup = 1)
 public class GeneratorMicServlet extends BaseServlet {
     // ------------------------------------------------------------------------------------ Costants
 
     /**
-     * Change generator mic permission.
+     * Set generator mic permission.
      */
-    private final String CHANGE_GENERATOR_MIC_PERM = "user";
+    private final String SET_GENERATOR_MIC_PERM = "user";
+
+    /**
+     * Get generator mic permission.
+     */
+    private final String GET_GENERATOR_MIC_PERM = "user";
 
     /**
      * Mic string.
@@ -89,7 +94,7 @@ public class GeneratorMicServlet extends BaseServlet {
     // ----------------------------------------------------------------------------- General Methods
 
     /**
-     * Do post request, change generator frequence.
+     * Do post request, set generator frequence.
      *
      * @param req  Http request.
      * @param resp Http response.
@@ -105,7 +110,7 @@ public class GeneratorMicServlet extends BaseServlet {
 
             String[] perms = PermissionsUserQuery.getPermissions(connector, sm.getUserId());
 
-            boolean hasPermission = ArrayHelper.isInArray(perms, CHANGE_GENERATOR_MIC_PERM);
+            boolean hasPermission = ArrayHelper.isInArray(perms, SET_GENERATOR_MIC_PERM);
 
             if (sm.isValidSession() && hasPermission) {
 
@@ -129,6 +134,38 @@ public class GeneratorMicServlet extends BaseServlet {
                         notAcceptable(req, resp);
                         break;
                 }
+            } else {
+                unauthorized(req, resp);
+            }
+        } catch (Exception e) {
+            internalServerError(resp, e.getMessage());
+        }
+    }
+
+    /**
+     * Do post request, get generator mic timer.
+     *
+     * @param req  Http request.
+     * @param resp Http response.
+     * @throws ServletException Error in servlet.
+     * @throws IOException      I/O Error.
+     */
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        SessionManager sm = new SessionManager(req.getSession());
+        try {
+            JdbcConnector connector = new JapiConnector();
+            connector.openConnection();
+
+            String[] perms = PermissionsUserQuery.getPermissions(connector, sm.getUserId());
+
+            boolean hasPermission = ArrayHelper.isInArray(perms, GET_GENERATOR_MIC_PERM);
+
+            if (sm.isValidSession() && hasPermission) {
+                String keyC = GeneratorQuery.getKeyByUserId(connector.getConnection(), sm.getUserId());
+                long mic = GeneratorQuery.getMicTimer(connector.getConnection(), keyC);
+
+                ok(resp, String.valueOf(mic));
             } else {
                 unauthorized(req, resp);
             }
