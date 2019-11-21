@@ -2,7 +2,8 @@ app.factory('GeneratorMicService', ['$http', function($http) {
     var service = {};
 	var address = "localhost";
 	var port = 8080;
-    var urlBase = "http://" + address + ":" + port;
+    var baseApi = "/freqline-be"
+    var urlBase = "http://" + address + ":" + port + baseApi;
 	urlBase += "/action/generatorMicTimer";
 
     service.setGeneratorMic = function (timer) { 
