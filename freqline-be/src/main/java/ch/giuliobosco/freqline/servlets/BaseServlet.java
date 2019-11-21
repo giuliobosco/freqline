@@ -29,6 +29,7 @@ import ch.giuliobosco.freqline.help.StringArrayHelper;
 import ch.giuliobosco.freqline.help.StringHelper;
 import ch.giuliobosco.freqline.jdbc.JdbcConnector;
 
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -423,6 +424,11 @@ public abstract class BaseServlet extends HttpServlet {
      */
     private void writeStatus(HttpServletResponse response, int statusCode, String statusString, JSONObject jo) throws IOException {
         response.setStatus(statusCode);
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Content-Type", "application/json");
+        response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
+        response.setHeader("Access-Control-Allow-Headers", "*");
+        response.setHeader("Access-Control-Max-Age", "86400");
         jo.put(S_STATUS_CODE, statusString);
         write(response, jo.toString());
     }
@@ -544,4 +550,14 @@ public abstract class BaseServlet extends HttpServlet {
      * @return Request path.
      */
     protected abstract String getPath();
+
+    @Override
+    protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // TODO Auto-generated method stub
+        String origin = request.getHeader("origin");
+        response.setHeader("Access-Control-Allow-Origin",origin);
+        response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
+        response.setHeader("Access-Control-Allow-Headers", "*");
+        response.setHeader("Access-Control-Max-Age", "86400");
+    }
 }
