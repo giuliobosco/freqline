@@ -41,6 +41,7 @@ import ch.giuliobosco.freqline.queries.PermissionsUserQuery;
 import ch.giuliobosco.freqline.servlets.BaseServlet;
 import ch.giuliobosco.freqline.servlets.help.ServletNfe;
 import ch.giuliobosco.freqline.servlets.help.ServletRequestAnalyser;
+import org.json.JSONObject;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -124,7 +125,7 @@ public abstract class BaseDataServlet extends BaseServlet {
         Optional<Base> optional = dao.getById(id);
         if (optional.isPresent()) {
             BaseJson bj = getJson(optional.get());
-            write(response, bj.getJson().toString());
+            ok(response, bj.getJson());
         } else {
             notFound(request, response);
         }
@@ -147,7 +148,7 @@ public abstract class BaseDataServlet extends BaseServlet {
             ja.put(bj.getJson());
         }
 
-        write(response, ja.toString());
+        ok(response, new JSONObject().put("data", ja));
     }
 
     /**
