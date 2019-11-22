@@ -424,10 +424,11 @@ public abstract class BaseServlet extends HttpServlet {
      */
     private void writeStatus(HttpServletResponse response, int statusCode, String statusString, JSONObject jo) throws IOException {
         response.setStatus(statusCode);
+        response.setHeader("Access-Control-Allow-Credentials", "true");
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Content-Type", "application/json");
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
-        response.setHeader("Access-Control-Allow-Headers", "*");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type");
         response.setHeader("Access-Control-Max-Age", "86400");
         jo.put(S_STATUS_CODE, statusString);
         write(response, jo.toString());
@@ -555,9 +556,10 @@ public abstract class BaseServlet extends HttpServlet {
     protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
         String origin = request.getHeader("origin");
+        response.setHeader("Access-Control-Allow-Credentials", "true");
         response.setHeader("Access-Control-Allow-Origin",origin);
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
-        response.setHeader("Access-Control-Allow-Headers", "*");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type");
         response.setHeader("Access-Control-Max-Age", "86400");
     }
 }
