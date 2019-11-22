@@ -40,7 +40,7 @@ import java.util.Map;
 
 /**
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0 (2019-10-27 - 2019-10-27)
+ * @version 1.0.1 (2019-10-27 - 2019-11-22)
  */
 @WebServlet(name = "BaseServlet")
 public abstract class BaseServlet extends HttpServlet {
@@ -113,7 +113,7 @@ public abstract class BaseServlet extends HttpServlet {
     /**
      * Status code string.
      */
-    public static final String S_STATUS_CODE = "statusCode";
+    public static final String S_STATUS_STRING = "statusString";
 
     /**
      * Error string.
@@ -430,7 +430,8 @@ public abstract class BaseServlet extends HttpServlet {
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type");
         response.setHeader("Access-Control-Max-Age", "86400");
-        jo.put(S_STATUS_CODE, statusString);
+        jo.put(S_STATUS_STRING, statusString);
+        jo.put(S_STATUS, statusCode);
         write(response, jo.toString());
     }
 
