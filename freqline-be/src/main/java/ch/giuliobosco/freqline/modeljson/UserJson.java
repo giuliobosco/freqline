@@ -33,7 +33,7 @@ import ch.giuliobosco.freqline.model.User;
  * Trasform the user object to JSON.
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0.1 (2019-10-10 - 2019-10-26)
+ * @version 1.0.2 (2019-10-10 - 2019-11-22)
  */
 public class UserJson extends BaseJson {
 
@@ -147,8 +147,6 @@ public class UserJson extends BaseJson {
         User user = (User) base;
 
         getJson().put(USERNAME, user.getUsername());
-        getJson().put(PASSWORD, user.getPassword());
-        getJson().put(SALT, user.getSalt());
         getJson().put(FIRSTNAME, user.getFirstname());
         getJson().put(LASTNAME, user.getLastname());
         getJson().put(EMAIL, user.getEmail());
