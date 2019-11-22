@@ -1,0 +1,18 @@
+<div ng-controller="LoginController">
+  <form novalidate class="css-form">
+    <label>username: <input type="text" ng-model="login.username" required></label><br>
+    <label>password: <input type="password" ng-model="login.password" required></label><br>
+    <label style="color:red">{{message}}</label><br>
+    <input type="submit" ng-click="login(login)" value="Login" />
+  </form>
+</div>
+
+<style type="text/css">
+  .css-form input.ng-invalid.ng-touched {
+    background-color: #FA787E;
+  }
+  
+  .css-form input.ng-valid.ng-touched {
+    background-color: #78FA89;
+  }
+</style>

@@ -5,6 +5,14 @@ app.config(function ($routeProvider) {
         templateUrl: 'views/index.html'
     });
 
+    $routeProvider.when('/users', {
+        templateUrl: 'views/users.html'
+    });
+
+    $routeProvider.when('/login', {
+        templateUrl: 'views/login.html'
+    });
+
     $routeProvider.otherwise({
         redirectTo: '/'
     });
