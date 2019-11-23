@@ -1,3 +1,5 @@
 <div ng-controller="UsersController">
-    {{data}}
+    <div ng-repeat="user in data.data">
+        <p><a href="#!/user/{{user.id}}">{{user.firstname}} {{user.lastname}}</a></p>
+    </div>
 </div>

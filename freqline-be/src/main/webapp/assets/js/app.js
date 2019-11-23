@@ -9,6 +9,10 @@ app.config(function ($routeProvider) {
         templateUrl: 'views/users.html'
     });
 
+    $routeProvider.when('/user/:id', {
+        templateUrl: 'views/user.html',
+    });
+
     $routeProvider.when('/login', {
         templateUrl: 'views/login.html'
     });
@@ -18,9 +22,13 @@ app.config(function ($routeProvider) {
         controller: 'Error401Controller'
     });
 
-    $routeProvider.otherwise({
+    $routeProvider.when('/404', {
         templateUrl: 'views/errors/404.html',
         controller: 'Error404Controller'
+    });
+
+    $routeProvider.otherwise({
+        redirectTo: '/404'
     });
 }).run(function($rootScope, $route) {
     $rootScope.$route = $route;

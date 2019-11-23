@@ -1,0 +1,32 @@
+<div ng-controller="UserController">
+    <form novalidate>
+        <p>
+            <small>username</small><br>
+            <input type="text" ng-model="user.username">
+        </p>
+        <p>
+            <small>firstname</small><br>
+            <input type="text" ng-model="user.firstname">
+        </p>
+        <p>
+            <small>lastname</small><br>
+            <input type="text" ng-model="user.lastname">
+        </p>
+        <p>
+            <small>email</small><br>
+            <input type="text"  ng-model="user.email">
+        </p>
+        <p>
+            <small>password</small><br>
+            <input type="password" ng-model="user.passwordNew">
+        </p>
+        <p>
+            <small>password check</small><br>
+            <input type="password" ng-model="user.passwordCheck">
+        </p>
+        <span style="color: #f00" ng-bind-html="htmlTrusted(error)"></span>
+        <input type="button" ng-click="delete()" value="DELETE" ng-class="{'hide': showDelete == 'true'}">
+        <input type="button" ng-click="save(user)" value="{{saveMessage}}">
+        <input type="button" ng-click="reset()" value="RESET">
+    </form>
+</div>
