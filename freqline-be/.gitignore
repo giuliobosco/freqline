@@ -3,7 +3,9 @@
 .idea
 .project
 .settings
+.classpath
 
 # Ignore Gradle build output directory
 build
 dbe.properties
+bin
