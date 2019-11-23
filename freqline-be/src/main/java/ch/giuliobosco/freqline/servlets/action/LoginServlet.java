@@ -31,8 +31,10 @@ import ch.giuliobosco.freqline.jdbc.JapiConnector;
 import ch.giuliobosco.freqline.jdbc.JdbcConnector;
 import ch.giuliobosco.freqline.model.User;
 import ch.giuliobosco.freqline.modeljson.UserJson;
+import ch.giuliobosco.freqline.queries.PermissionsUserQuery;
 import ch.giuliobosco.freqline.servlets.BaseServlet;
 import ch.giuliobosco.freqline.servlets.help.ServletRequestAnalyser;
+import org.json.JSONObject;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -45,9 +47,9 @@ import java.io.IOException;
  * Login action servlet.
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0.1 (2019-10-29 - 2019-11-07)
+ * @version 1.0.2 (2019-10-29 - 2019-11-23)
  */
-@WebServlet(name = "LoginServlet", urlPatterns = {"action/login"}, loadOnStartup = 1)
+@WebServlet(name = "LoginServlet", urlPatterns = {"action/login/*"}, loadOnStartup = 1)
 public class LoginServlet extends BaseServlet {
 
     /**
@@ -134,6 +136,42 @@ public class LoginServlet extends BaseServlet {
         } else {
             sm.destroySession();
             ok(response, "else");
+        }
+    }
+
+    /**
+     * Do get, execute http get request.
+     * @param req HTTP request.
+     * @param resp HTTP response.
+     * @throws ServletException Error with servlet.
+     * @throws IOException I/O Exception.
+     */
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try {
+            SessionManager sm = new SessionManager(req.getSession());
+
+            if (sm.isValidSession()) {
+                int startIndex = req.getRequestURI().lastIndexOf('/') + 1;
+                String requestType = req.getRequestURI().substring(startIndex);
+
+                JSONObject jo = new JSONObject();
+                jo.put("isLoggedIn", true);
+
+                if (requestType.equals("permissions")) {
+                    JdbcConnector connector = new JapiConnector();
+                    connector.openConnection();
+                    String[] perms = PermissionsUserQuery.getPermissions(connector.getConnection(), sm.getUserId());
+
+                    jo.put("permissions", perms);
+                }
+
+                ok(resp, jo);
+            } else {
+                unauthorized(req, resp);
+            }
+        } catch (Exception e) {
+            internalServerError(resp, e.getMessage());
         }
     }
 
