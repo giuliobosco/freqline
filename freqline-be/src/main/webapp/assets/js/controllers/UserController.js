@@ -10,10 +10,11 @@ app.controller('UserController', ['$scope', '$route', '$sce', '$location', '$roo
     $scope.empty = {};
     $scope.saveMessage = 'SAVE';
     $scope.hideDelete = 'true';
+    $scope.hidePasswordCheck = 'false';
     
     $scope.save = function(user) {//TODO fix password (1 new user, 2 update no pw, 3 update with pw)
-        if (user.passwordNew == user.passwordCheck) {
-            if (id == 0) {
+        if (id == 0) {
+            if (user.passwordNew == user.passwordCheck) {
                 user.password = user.passwordNew;
                 
                 userService.insert(user).then(function(data) {
@@ -28,23 +29,36 @@ app.controller('UserController', ['$scope', '$route', '$sce', '$location', '$roo
                         $scope.error = s;
                     } else if (data.id != null) {
                         $location.path('/user/' + data.id);
+                    } else {
+                        $scope.error = "Error";
                     }
                 })
             } else {
-                user.id = id;
-                userService.update(user).then(function(data) {
-                    if (data.message != null) {
-                        $scope.error = data.message;
-                    } else if (data.missingParameters != null) {
-                        let s = "Missing parameters: <ul>";
-                        data.missingParameters.forEach(element => {
-                            s += "<li>" + element + "</li>";
-                        });
-                        s += "</ul>";
-                        $scope.error = s;
-                    }
-                })
+                $scope.error = "Password do not match";
             }
+        } else {
+            user.id = id;
+            if (user.passwordNew != '********') {
+                if (user.passwordNew == user.passwordCheck) {
+                    user.password = user.passwordNew;
+                } else {
+                    $scope.error = "Password do not match";
+                    return '';
+                }
+            }
+            
+            userService.update(user).then(function(data) {
+                if (data.message != null) {
+                    $scope.error = data.message;
+                } else if (data.missingParameters != null) {
+                    let s = "Missing parameters: <ul>";
+                    data.missingParameters.forEach(element => {
+                        s += "<li>" + element + "</li>";
+                    });
+                    s += "</ul>";
+                    $scope.error = s;
+                } 
+            })
         }
     };
     
@@ -53,12 +67,16 @@ app.controller('UserController', ['$scope', '$route', '$sce', '$location', '$roo
             $scope.user = angular.copy($scope.empty);
             $scope.saveMessage = 'SAVE';
             $scope.hideDelete = 'true';
+            $scope.hidePasswordCheck = 'false';
             
         } else {
             userService.getById(id).then(function(data) {
                 $scope.user = angular.copy(data);
                 $scope.saveMessage = 'UPDATE';
                 $scope.hideDelete = 'false';
+                $scope.hidePasswordCheck = 'true';
+                $scope.user.passwordNew = '********';
+                $scope.user.passwordCheck = '********';
             })
         }
     };
@@ -69,6 +87,10 @@ app.controller('UserController', ['$scope', '$route', '$sce', '$location', '$roo
                 $location.path('/users')
             })
         }
+    }
+
+    $scope.showPasswordCheck = function() {
+        $scope.hidePasswordCheck = 'false';
     }
     
     $scope.reset();

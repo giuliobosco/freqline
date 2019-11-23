@@ -18,15 +18,15 @@
         </p>
         <p>
             <small>password</small><br>
-            <input type="password" ng-model="user.passwordNew">
+            <input type="password" ng-model="user.passwordNew" ng-click="showPasswordCheck()">
         </p>
-        <p>
+        <p ng-class="{'hide': hidePasswordCheck == 'true'}">
             <small>password check</small><br>
             <input type="password" ng-model="user.passwordCheck">
         </p>
         <span style="color: #f00" ng-bind-html="htmlTrusted(error)"></span>
-        <input type="button" ng-click="delete()" value="DELETE" ng-class="{'hide': hideDelete == 'true'}">
         <input type="button" ng-click="save(user)" value="{{saveMessage}}">
+        <input type="button" ng-click="delete()" value="DELETE" ng-class="{'hide': hideDelete == 'true'}">
         <input type="button" ng-click="reset()" value="RESET">
     </form>
 </div>
