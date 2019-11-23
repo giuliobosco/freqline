@@ -30,17 +30,13 @@ import ch.giuliobosco.freqline.jdbc.DaoQueryBuilder;
 import ch.giuliobosco.freqline.jdbc.JdbcConnector;
 import ch.giuliobosco.freqline.model.Base;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.sql.PreparedStatement;
+import java.sql.*;
+import java.util.Date;
 import java.util.Optional;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
-import java.util.Date;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -48,7 +44,7 @@ import java.util.stream.StreamSupport;
  * Base for MySQL Connection with DAO Pattern.
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.2.5 (2019-09-17 - 2019-10-26)
+ * @version 1.2.6 (2019-09-17 - 2019-11-23)
  */
 public abstract class DbDao extends Dao {
 
@@ -80,6 +76,11 @@ public abstract class DbDao extends Dao {
      * Action by.
      */
     private int actionBy;
+
+    /**
+     * Last generated key.
+     */
+    private int lastGeneratedKey;
 
     // -------------------------------------------------------------------------------- Constructors
 
@@ -124,6 +125,15 @@ public abstract class DbDao extends Dao {
      */
     public int getActionBy() {
         return this.actionBy;
+    }
+
+    /**
+     * Get the last generated key.
+     *
+     * @return Last generated key.
+     */
+    public int getLastGeneratedKey() {
+        return this.lastGeneratedKey;
     }
 
     // -------------------------------------------------------------------------------- Help Methods
@@ -284,7 +294,7 @@ public abstract class DbDao extends Dao {
      */
     protected PreparedStatement getByIdStatement(int id) throws Exception {
         String query = daoQueryBuilder.getByIdQuery();
-        PreparedStatement statement = getConnection().prepareStatement(query);
+        PreparedStatement statement = getConnection().prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
         statement.setInt(1, id);
 
         return statement;
@@ -325,7 +335,7 @@ public abstract class DbDao extends Dao {
      * @throws Exception SQL Exception.
      */
     protected PreparedStatement getAllStatement() throws Exception {
-        return getConnection().prepareStatement(daoQueryBuilder.getAllQuery());
+        return getConnection().prepareStatement(daoQueryBuilder.getAllQuery(), Statement.RETURN_GENERATED_KEYS);
     }
 
     /**
@@ -363,7 +373,7 @@ public abstract class DbDao extends Dao {
      */
     protected PreparedStatement getAddStatement(Base base) throws Exception {
         String query = daoQueryBuilder.getAddQuery();
-        PreparedStatement statement = getConnection().prepareStatement(query);
+        PreparedStatement statement = getConnection().prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
         setAuditData(base, statement);
         fillStatement(base, statement);
@@ -392,7 +402,14 @@ public abstract class DbDao extends Dao {
 
         PreparedStatement statement = getAddStatement(base);
 
-        return !statement.execute();
+        int affectedRows = statement.executeUpdate();
+
+        ResultSet rs = statement.getGeneratedKeys();
+        if (rs.next()) {
+            this.lastGeneratedKey = rs.getInt(1);
+        }
+
+        return affectedRows > 0;
     }
 
     /**
@@ -403,7 +420,7 @@ public abstract class DbDao extends Dao {
      */
     protected PreparedStatement getUpdateStatement(Base base) throws Exception {
         String query = daoQueryBuilder.getUpdateQuery();
-        PreparedStatement statement = getConnection().prepareStatement(query);
+        PreparedStatement statement = getConnection().prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
         setAuditData(base, statement);
         fillStatement(base, statement);
@@ -427,7 +444,14 @@ public abstract class DbDao extends Dao {
 
         try {
             PreparedStatement statement = getUpdateStatement(base);
-            return statement.executeUpdate() > 0;
+            int affectedRows = statement.executeUpdate();
+
+            ResultSet rs = statement.getGeneratedKeys();
+            if (rs.next()) {
+                this.lastGeneratedKey = rs.getInt(1);
+            }
+
+            return affectedRows > 0;
         } catch (SQLException sqle) {
             throw new DaoException(sqle.getMessage(), sqle);
         }
@@ -441,7 +465,7 @@ public abstract class DbDao extends Dao {
      */
     protected PreparedStatement getDeleteStatement(Base base) throws Exception {
         String query = daoQueryBuilder.getDeleteQuery();
-        PreparedStatement statement = getConnection().prepareStatement(query);
+        PreparedStatement statement = getConnection().prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
         statement.setInt(1, base.getId());
 
