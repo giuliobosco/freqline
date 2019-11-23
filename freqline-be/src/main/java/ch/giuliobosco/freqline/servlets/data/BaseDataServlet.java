@@ -57,7 +57,7 @@ import java.util.stream.Stream;
  * Base servlet for japi.
  *
  * @author giuliobosco
- * @version 1.1.0 (2019-10-18 - 2019-11-07)
+ * @version 1.1.1 (2019-10-18 - 2019-11-23)
  */
 @WebServlet(name = "BaseDataServlet")
 public abstract class BaseDataServlet extends BaseServlet {
@@ -174,7 +174,7 @@ public abstract class BaseDataServlet extends BaseServlet {
                     Optional<Base> optional = dao.getById(id);
                     if (optional.isPresent()) {
                         if (dao.delete(optional.get())) {
-                            ok(response, getOkResponse());
+                            ok(response, getOkResponse(id));
                         } else {
                             internalServerError(response, getNotCapableResponse());
                         }
@@ -250,7 +250,7 @@ public abstract class BaseDataServlet extends BaseServlet {
         DbDao dao = getDao(actionBy);
 
         if (dao.add(mapToBase(sra.getParameters(), null, dao.getActionBy(), dao))) {
-            created(response, getOkResponse());
+            created(response, getOkResponse(dao.getLastGeneratedKey()));
 
         } else {
             internalServerError(response, getNotCapableResponse());
@@ -325,7 +325,7 @@ public abstract class BaseDataServlet extends BaseServlet {
                 b = mapToBase(params, b, 1, dao);
 
                 if (dao.update(b)) {
-                    ok(response, getOkResponse());
+                    ok(response, getOkResponse(id));
                 } else {
                     internalServerError(response, getNotCapableResponse());
                 }

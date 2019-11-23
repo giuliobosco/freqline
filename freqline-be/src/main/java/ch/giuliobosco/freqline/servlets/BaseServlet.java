@@ -40,7 +40,7 @@ import java.util.Map;
 
 /**
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0.1 (2019-10-27 - 2019-11-22)
+ * @version 1.0.2 (2019-10-27 - 2019-11-23)
  */
 @WebServlet(name = "BaseServlet")
 public abstract class BaseServlet extends HttpServlet {
@@ -503,6 +503,16 @@ public abstract class BaseServlet extends HttpServlet {
         jo.put(S_STATUS, S_STATUS_OK);
 
         return jo;
+    }
+
+    /**
+     * Get ok response with id.
+     *
+     * @param id Id.
+     * @return Ok response with id.
+     */
+    public JSONObject getOkResponse(int id) {
+        return getOkResponse().put("id", id);
     }
 
     /**
