@@ -9,7 +9,7 @@ app.controller('UserController', ['$scope', '$route', '$sce', '$location', '$roo
     $scope.master = {};
     $scope.empty = {};
     $scope.saveMessage = 'SAVE';
-    $scope.showDelete = 'true';
+    $scope.hideDelete = 'true';
     
     $scope.save = function(user) {//TODO fix password (1 new user, 2 update no pw, 3 update with pw)
         if (user.passwordNew == user.passwordCheck) {
@@ -52,13 +52,13 @@ app.controller('UserController', ['$scope', '$route', '$sce', '$location', '$roo
         if (id == 0) {
             $scope.user = angular.copy($scope.empty);
             $scope.saveMessage = 'SAVE';
-            $scope.showDelete = 'true';
+            $scope.hideDelete = 'true';
             
         } else {
             userService.getById(id).then(function(data) {
                 $scope.user = angular.copy(data);
                 $scope.saveMessage = 'UPDATE';
-                $scope.showDelete = 'false';
+                $scope.hideDelete = 'false';
             })
         }
     };

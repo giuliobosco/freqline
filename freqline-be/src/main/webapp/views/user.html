@@ -25,7 +25,7 @@
             <input type="password" ng-model="user.passwordCheck">
         </p>
         <span style="color: #f00" ng-bind-html="htmlTrusted(error)"></span>
-        <input type="button" ng-click="delete()" value="DELETE" ng-class="{'hide': showDelete == 'true'}">
+        <input type="button" ng-click="delete()" value="DELETE" ng-class="{'hide': hideDelete == 'true'}">
         <input type="button" ng-click="save(user)" value="{{saveMessage}}">
         <input type="button" ng-click="reset()" value="RESET">
     </form>
