@@ -14,7 +14,8 @@ app.config(function ($routeProvider) {
     });
 
     $routeProvider.otherwise({
-        redirectTo: '/'
+        templateUrl: 'views/errors/404.html',
+        controller: 'ErrorController'
     });
 }).run(function($rootScope, $route) {
     $rootScope.$route = $route;
