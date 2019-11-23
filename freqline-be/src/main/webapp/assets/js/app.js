@@ -13,6 +13,11 @@ app.config(function ($routeProvider) {
         templateUrl: 'views/login.html'
     });
 
+    $routeProvider.when('/401', {
+        templateUrl: 'views/errors/401.html',
+        controller: 'Error401Controller'
+    });
+
     $routeProvider.otherwise({
         templateUrl: 'views/errors/404.html',
         controller: 'Error404Controller'
