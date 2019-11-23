@@ -17,4 +17,6 @@ app.controller('Error401Controller', ['$scope', '$rootScope', 'LoginService', fu
         d = "delete";
     }
     $scope.method = d;
+
+    $rootScope.error = null;
 }]);
