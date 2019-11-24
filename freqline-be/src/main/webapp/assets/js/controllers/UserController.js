@@ -66,6 +66,10 @@ app.controller('UserController', ['$scope', '$route', '$sce', '$location', 'Grou
     };
     
     $scope.reset = function() {
+        groupService.getAll().then(function(data) {
+            $scope.groups = data.data;
+        });
+        
         if (id == 0) {
             $scope.user = angular.copy($scope.empty);
             $scope.saveMessage = 'SAVE';
@@ -85,10 +89,6 @@ app.controller('UserController', ['$scope', '$route', '$sce', '$location', 'Grou
                     if (data != null) {
                         $scope.group = data.group;
                     }
-                });
-            
-                groupService.getAll().then(function(data) {
-                    $scope.groups = data.data;
                 });
             })
         }
