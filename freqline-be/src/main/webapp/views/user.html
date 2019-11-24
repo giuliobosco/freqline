@@ -17,6 +17,12 @@
             <input type="text"  ng-model="user.email">
         </p>
         <p>
+            <small>group</small><br>
+            <select ng-model="user.group" placeholder="select group">
+                <option value="{{groupItem.id}}" ng-repeat="groupItem in groups" ng-selected="groupItem.id == group">{{groupItem.name}}</option>
+            </select>
+        </p>
+        <p>
             <small>password</small><br>
             <input type="password" ng-model="user.passwordNew" ng-click="showPasswordCheck()">
         </p>

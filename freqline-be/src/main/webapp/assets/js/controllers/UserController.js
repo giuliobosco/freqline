@@ -1,10 +1,11 @@
-app.controller('UserController', ['$scope', '$route', '$sce', '$location', '$rootScope', 'UserService', function ($scope, $route, $sce, $location, $rootScope, userService) {
+app.controller('UserController', ['$scope', '$route', '$sce', '$location', 'GroupService',  'UserGroupService', 'UserService', function ($scope, $route, $sce, $location, groupService, userGroupService, userService) {
     
     $scope.htmlTrusted = function(html) {
         return $sce.trustAsHtml(html);
     }
     
     let id = $route.current.params.id;
+    let userGroupId = null;
     
     $scope.master = {};
     $scope.empty = {};
@@ -28,6 +29,7 @@ app.controller('UserController', ['$scope', '$route', '$sce', '$location', '$roo
                         s += "</ul>";
                         $scope.error = s;
                     } else if (data.id != null) {
+                        userGroupService.insert(data.id, user.group);
                         $location.path('/user/' + data.id);
                     } else {
                         $scope.error = "Error";
@@ -48,6 +50,7 @@ app.controller('UserController', ['$scope', '$route', '$sce', '$location', '$roo
             }
             
             userService.update(user).then(function(data) {
+                userGroupService.update(userGroupId, id, user.group);
                 if (data.message != null) {
                     $scope.error = data.message;
                 } else if (data.missingParameters != null) {
@@ -77,6 +80,16 @@ app.controller('UserController', ['$scope', '$route', '$sce', '$location', '$roo
                 $scope.hidePasswordCheck = 'true';
                 $scope.user.passwordNew = '********';
                 $scope.user.passwordCheck = '********';
+    
+                groupService.getByUserId(id).then(function(data) {
+                    if (data != null) {
+                        $scope.group = data.group;
+                    }
+                });
+            
+                groupService.getAll().then(function(data) {
+                    $scope.groups = data.data;
+                });
             })
         }
     };
