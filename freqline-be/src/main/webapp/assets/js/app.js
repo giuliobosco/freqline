@@ -17,6 +17,11 @@ app.config(function ($routeProvider) {
         templateUrl: 'views/login.html'
     });
 
+    $routeProvider.when('/status', {
+        templateUrl: 'views/status.html',
+        controller: 'StatusController'
+    });
+
     $routeProvider.when('/401', {
         templateUrl: 'views/errors/401.html',
         controller: 'Error401Controller'
