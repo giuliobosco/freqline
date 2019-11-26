@@ -32,12 +32,11 @@ import ch.giuliobosco.freqline.model.Mic;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Timestamp;
 
 /**
  * 
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0 (2019-11-12 - 2019-11-12)
+ * @version 1.0.1 (2019-11-12 - 2019-11-26)
  */
 public class DbMicDao extends DbDao {
 
@@ -79,7 +78,7 @@ public class DbMicDao extends DbDao {
 
         Generator generator = getGenerator(resultSet, connector);
         int decibel = resultSet.getInt("decibel");
-        Timestamp timer = resultSet.getTimestamp("timer");
+        int timer = resultSet.getInt("timer");
         String ip = resultSet.getString("ip");
         String keyC = resultSet.getString("key_c");
 
@@ -105,7 +104,7 @@ public class DbMicDao extends DbDao {
         }
 
         statement.setInt(8, mic.getDecibel());
-        statement.setTimestamp(9, mic.getTimer());
+        statement.setInt(9, mic.getTimer());
         statement.setString(10, mic.getIp());
         statement.setString(11, mic.getKeyC());
     }

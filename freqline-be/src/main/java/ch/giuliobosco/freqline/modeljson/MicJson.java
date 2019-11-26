@@ -34,7 +34,7 @@ import java.sql.Timestamp;
 
 /**
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0.1 (2019-11-08 - 2019-11-08)
+ * @version 1.0.2 (2019-11-08 - 2019-11-26)
  */
 public class MicJson extends BaseJson {
     // ------------------------------------------------------------------------------------ Costants
@@ -116,7 +116,7 @@ public class MicJson extends BaseJson {
     public Base get(DbDao dao) throws Exception {
         int generatorId = getInt(GENERATOR);
         int decibel = getInt(DECIBEL);
-        Timestamp timer = getTimestamp(TIMER);
+        int timer = getInt(TIMER);
         String ip = getString(IP);
         String keyC = getString(KEY_C);
 

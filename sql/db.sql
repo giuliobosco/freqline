@@ -412,7 +412,7 @@ CREATE TABLE `freqline`.`mic` (
 
     `generator`    INT         NOT NULL,
     `decibel`      VARCHAR(64) NOT NULL,
-    `timer`        TIMESTAMP,
+    `timer`        INT,
     `ip`           VARCHAR(39) NOT NULL,
     `key_c`        VARCHAR(12) NOT NULL,
 
@@ -448,7 +448,7 @@ CREATE TABLE `freqline`.`mic_audit` (
 
     `audit_generator`    INT         NOT NULL,
     `audit_decibel`      VARCHAR(64) NOT NULL,
-    `audit_timer`        TIMESTAMP,
+    `audit_timer`        INT,
     `audit_ip`           VARCHAR(39) NOT NULL,
     `audit_key_c`        VARCHAR(12) NOT NULL,
 

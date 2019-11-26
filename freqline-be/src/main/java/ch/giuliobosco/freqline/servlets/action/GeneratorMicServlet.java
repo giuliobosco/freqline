@@ -46,7 +46,7 @@ import java.sql.SQLException;
  * Change generator mic API.
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0.1 (2019-11-19 - 2019-11-20)
+ * @version 1.0.2 (2019-11-19 - 2019-11-26)
  */
 @WebServlet(name = "GeneratorMicServlet", urlPatterns = {"action/generatorMicTimer"}, loadOnStartup = 1)
 public class GeneratorMicServlet extends BaseServlet {
@@ -86,7 +86,7 @@ public class GeneratorMicServlet extends BaseServlet {
     private void executePost(HttpServletResponse response, Connection connection, int userId, ServletRequestAnalyser sra) throws SQLException {
         String timerString = sra.getParameter(TIMER);
 
-        long timer = Long.parseLong(timerString);
+        int timer = Integer.parseInt(timerString);
 
         GeneratorQuery.setMicTimer(connection, userId, timer);
     }
@@ -163,7 +163,7 @@ public class GeneratorMicServlet extends BaseServlet {
 
             if (sm.isValidSession() && hasPermission) {
                 String keyC = GeneratorQuery.getKeyByUserId(connector.getConnection(), sm.getUserId());
-                long mic = GeneratorQuery.getMicTimer(connector.getConnection(), keyC);
+                int mic = GeneratorQuery.getMicTimer(connector.getConnection(), keyC);
 
                 ok(resp, String.valueOf(mic));
             } else {

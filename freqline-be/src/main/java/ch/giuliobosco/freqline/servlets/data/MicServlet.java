@@ -104,12 +104,11 @@ public class MicServlet extends BaseDataServlet {
         }
 
         int decibel;
-        Timestamp timer;
+        int timer;
 
         try {
             decibel = Integer.parseInt(decibelString);
-            long timerLong = Long.parseLong(timerString);
-            timer = new Timestamp(timerLong);
+            timer = Integer.parseInt(timerString);
         } catch (NumberFormatException nfe) {
             return null;
         }

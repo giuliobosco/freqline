@@ -30,7 +30,7 @@ import java.sql.*;
  * Queries for status of generator.
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0.3 (2019-11-14 - 2019-11-18)
+ * @version 1.0.4 (2019-11-14 - 2019-11-26)
  */
 public class GeneratorQuery {
 
@@ -275,7 +275,7 @@ public class GeneratorQuery {
      * @return Timer of the mic.
      * @throws SQLException Error with MySQL.
      */
-    public static long getMicTimer(Connection connection, String keyC) throws SQLException {
+    public static int getMicTimer(Connection connection, String keyC) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(GET_MIC_TIMER_KEY_QUERY);
         statement.setString(1, keyC);
 
@@ -285,9 +285,7 @@ public class GeneratorQuery {
             return -1;
         }
 
-        Timestamp timestamp = resultSet.getTimestamp(TIMER);
-
-        return timestamp.getTime() - 10000000;
+        return resultSet.getInt(TIMER);
     }
 
     /**
@@ -377,12 +375,9 @@ public class GeneratorQuery {
      * @return True if executed query correctly.
      * @throws SQLException Error with MysQL.
      */
-    public static boolean setMicTimer(Connection connection, int userId, long timer) throws SQLException {
-        timer += 10000000;
-        Timestamp timestamp = new Timestamp(timer);
-
+    public static boolean setMicTimer(Connection connection, int userId, int timer) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(SET_MIC_TIMER_USER_ID_QUERY);
-        statement.setTimestamp(1, timestamp);
+        statement.setInt(1, timer);
         statement.setInt(2, userId);
 
         return statement.executeUpdate() > 0;

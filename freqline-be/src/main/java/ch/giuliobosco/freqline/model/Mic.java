@@ -24,14 +24,13 @@
 
 package ch.giuliobosco.freqline.model;
 
-import java.sql.Timestamp;
 import java.util.Date;
 
 /**
  * Freqline, Mic model.
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0 (2019-11-08 - 2019-11-08)
+ * @version 1.0.1 (2019-11-08 - 2019-11-26)
  */
 public class Mic extends Base {
     // ---------------------------------------------------------------------------------- Attributes
@@ -49,7 +48,7 @@ public class Mic extends Base {
     /**
      * Decibel level of the mic.
      */
-    private Timestamp timer;
+    private int timer;
 
     /**
      * Ip of the generator.
@@ -79,7 +78,7 @@ public class Mic extends Base {
      * @param ip          Ip of the mic.
      * @param keyC        Key of communication of the mic.
      */
-    public Mic(int id, int createdBy, Date createdDate, int updatedBy, Date updatedDate, int deletedBy, Date deletedDate, Generator generator, int decibel, Timestamp timer, String ip, String keyC) {
+    public Mic(int id, int createdBy, Date createdDate, int updatedBy, Date updatedDate, int deletedBy, Date deletedDate, Generator generator, int decibel, int timer, String ip, String keyC) {
         super(id, createdBy, createdDate, updatedBy, updatedDate, deletedBy, deletedDate);
 
         this.generator = generator;
@@ -104,7 +103,7 @@ public class Mic extends Base {
      * @param ip          Ip of the mic.
      * @param keyC        Key of communication of the mic.
      */
-    public Mic(int id, int createdBy, Date createdDate, int updatedBy, Date updatedDate, Generator generator, int decibel, Timestamp timer, String ip, String keyC) {
+    public Mic(int id, int createdBy, Date createdDate, int updatedBy, Date updatedDate, Generator generator, int decibel, int timer, String ip, String keyC) {
         this(id, createdBy, createdDate, updatedBy, updatedDate, SQL_INT_NULL, null, generator, decibel, timer, ip, keyC);
     }
 
@@ -120,7 +119,7 @@ public class Mic extends Base {
      * @param ip        Ip of the mic.
      * @param keyC      Key of communication of the mic.
      */
-    public Mic(int createdBy, Generator generator, int decibel, Timestamp timer, String ip, String keyC) {
+    public Mic(int createdBy, Generator generator, int decibel, int timer, String ip, String keyC) {
         this(SQL_INT_NULL, createdBy, now(), createdBy, now(), generator, decibel, timer, ip, keyC);
     }
 
@@ -135,7 +134,7 @@ public class Mic extends Base {
      * @param ip        Ip of the mic.
      * @param keyC      Key of communication of the mic.
      */
-    public Mic(Base base, Generator generator, int decibel, Timestamp timer, String ip, String keyC) {
+    public Mic(Base base, Generator generator, int decibel, int timer, String ip, String keyC) {
         super(base);
 
         this.generator = generator;
@@ -188,7 +187,7 @@ public class Mic extends Base {
      *
      * @return Timer for stop the generator.
      */
-    public Timestamp getTimer() {
+    public int getTimer() {
         return timer;
     }
 
@@ -197,7 +196,7 @@ public class Mic extends Base {
      *
      * @param timer Timer for stop the generator.
      */
-    public void setTimer(Timestamp timer) {
+    public void setTimer(int timer) {
         this.timer = timer;
     }
 
