@@ -23,42 +23,42 @@ body {
 
 .user-input-wrp {
     margin-top: 15px;
-	position: relative;
-	width: 100%;
+    position: relative;
+    width: 100%;
 }
 
 .user-input-wrp .inputText {
-	width: 100%;
-	outline: none;
-	border: none;
+    width: 100%;
+    outline: none;
+    border: none;
     border-bottom: 1px solid #777;
     padding-left: 10px;
 }
 
 .user-input-wrp .inputText:invalid {
-	box-shadow: none !important;
+    box-shadow: none !important;
 }
 
 .user-input-wrp .inputText:focus {
-	border-color: blue;
-	border-width: medium medium 2px;
+    border-color: blue;
+    border-width: medium medium 2px;
 }
 
 .user-input-wrp .floating-label {
-	position: absolute;
-	pointer-events: none;
-	top: 18px;
-	left: 10px;
-	transition: 0.2s ease all;
+    position: absolute;
+    pointer-events: none;
+    top: 18px;
+    left: 10px;
+    transition: 0.2s ease all;
 }
 
 .user-input-wrp input:focus ~ .floating-label,
 .user-input-wrp input:not(:focus):valid ~ .floating-label,
 .floating-label-top {
-	top: 0px;
-	left: 10px;
-	font-size: 13px;
-	opacity: 1;
+    top: 0px;
+    left: 10px;
+    font-size: 13px;
+    opacity: 1;
 }
 
 input[type=button], input[type=submit] {
@@ -67,4 +67,25 @@ input[type=button], input[type=submit] {
     color: #eee;
     padding: 8px;
     width: 100%;
+}
+
+nav ul {
+    padding: 10px;
+    margin: 0;
+
+    background-color: #0090c2;
+}
+
+nav ul li {
+    display: inline;
+    padding: 0 10px;
+}
+
+nav ul li a, ul li a:link, ul li a:active, ul li a:visited, ul li a:hover {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+nav ul li a:hover {
+    color: #bbb;
 }
