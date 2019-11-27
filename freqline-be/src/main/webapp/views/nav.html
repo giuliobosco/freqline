@@ -1,5 +1,5 @@
 <nav>
-    <ul>
+    <ul class="float-left">
         <li>
             <a href="#!/status" ng-class="{'active': $route.current.active == 'status'}">status</a>
         </li>
@@ -7,4 +7,18 @@
             <a href="#!/users" ng-class="{'active': $route.current.active == 'users'}">users</a>
         </li>
     </ul>
+    
+    <ul class="float-right">
+        <li>
+            <a href="#!/user/0">new</a>
+        </li>
+    </ul>
+    <div class="clearfix"></div>
 </nav>
+
+<footer>
+    <p class="float-left">&copy; 2019 giulio bosco</p>
+    <p class="float-right">
+        <a href="http://github.com/giuliobosco/freqline">GitHub</a>
+    </p>
+</footer>

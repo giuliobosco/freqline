@@ -1,5 +1,14 @@
+<div ng-include="'views/nav.html'"></div>
+
 <div ng-controller="UsersController">
-    <div ng-repeat="user in data.data">
-        <p><a href="#!/user/{{user.id}}">{{user.firstname}} {{user.lastname}}</a></p>
-    </div>
+    <ul class="list">
+        <li ng-repeat="user in data.data">
+            <a href="#!/user/{{user.id}}">
+                <div class="item-cont">
+                    {{user.firstname}} {{user.lastname}}
+                </div>
+                <div class="clearfix"></div>
+            </a>
+        </li>
+    </ul>
 </div>
