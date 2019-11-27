@@ -1,18 +1,40 @@
-<div ng-controller="LoginController">
+<div ng-controller="LoginController" class="full-size">
   <form novalidate class="css-form">
-    <label>username: <input type="text" ng-model="login.username" required></label><br>
-    <label>password: <input type="password" ng-model="login.password" required></label><br>
+    <h3>Freqline</h3>
+    <p>Gestore di generatore di frequenze</p>
+    <p>&nbsp;</p>
+    <div class="user-input-wrp">
+      <br/>
+      <input type="text" class="inputText" ng-model="login.username" required>
+      <span class="floating-label">username</span>
+    </div>
+    <div class="user-input-wrp">
+      <br/>
+      <input type="password" class="inputText" ng-model="login.password" required>
+      <span class="floating-label">password</span>
+    </div>
     <label style="color:red">{{message}}</label><br>
     <input type="submit" ng-click="login(login)" value="Login" />
+    <p style="padding: 15px 10px;">&copy; 2019 Giulio Bosco</p>
   </form>
 </div>
 
 <style type="text/css">
-  .css-form input.ng-invalid.ng-touched {
-    background-color: #FA787E;
+  
+  .css-form {
+    position: absolute;
+    top: 50%;
+    left: 5%;
+    transform: translate(0, -50%);
+  }
+
+  @media screen and (min-width: 720px){
+    .css-form {
+      left: 20%;
+    }
   }
   
-  .css-form input.ng-valid.ng-touched {
-    background-color: #78FA89;
+  .css-form input.ng-invalid.ng-touched {
+    border-bottom-color: #FA787E;
   }
 </style>
