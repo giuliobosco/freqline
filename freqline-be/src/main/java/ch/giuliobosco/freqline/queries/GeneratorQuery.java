@@ -30,7 +30,7 @@ import java.sql.*;
  * Queries for status of generator.
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0.4 (2019-11-14 - 2019-11-26)
+ * @version 1.0.5 (2019-11-14 - 2019-11-30)
  */
 public class GeneratorQuery {
 
@@ -95,6 +95,16 @@ public class GeneratorQuery {
      * Get the ip of the generator from the keyc.
      */
     private static final String GET_IP_KEY_QUERY = "SELECT ip FROM generator WHERE key_c=?";
+
+    /**
+     * Set the decibels from the user id.
+     */
+    private static final String SET_DECIBEL = "UPDATE freqline.mic m JOIN generator g on m.generator = g.id JOIN user u on g.id = u.favorite_generator SET m.decibel=? WHERE u.id=?";
+
+    /**
+     * Get he decibels from the user.
+     */
+    private static final String GET_DECIBEL_USER_ID = "SELECT mic.decibel FROM mic JOIN generator g on mic.generator = g.id JOIN user u on g.id = u.favorite_generator WHERE u.id=?";
 
     /**
      * Status string.
@@ -381,5 +391,42 @@ public class GeneratorQuery {
         statement.setInt(2, userId);
 
         return statement.executeUpdate() > 0;
+    }
+
+    /**
+     * Set the decibels of the favorite generator of the user.
+     * @param connection Connection to MySQL database.
+     * @param userId User id.
+     * @param decibel Decibels.
+     * @return True if query executed correctly.
+     * @throws SQLException Error with MySQL database.
+     */
+    public static boolean setDecibel(Connection connection, int userId, int decibel) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(SET_DECIBEL);
+        statement.setInt(1, decibel);
+        statement.setInt(2, userId);
+
+        return statement.executeUpdate() > 0;
+    }
+
+    /**
+     * Get the decibels of the favorite generator of the user.
+     *
+     * @param connection Connection to MySQL database.
+     * @param userId User id.
+     * @return Decibels.
+     * @throws SQLException Error with MySQL database.
+     */
+    public static int getDecibel(Connection connection, int userId) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(GET_DECIBEL_USER_ID);
+        statement.setInt(1, userId);
+
+        ResultSet resultSet = statement.executeQuery();
+
+        if (!resultSet.next()) {
+            return -1;
+        }
+
+        return resultSet.getInt(1);
     }
 }
