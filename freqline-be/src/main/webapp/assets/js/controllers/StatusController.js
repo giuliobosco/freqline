@@ -1,20 +1,25 @@
 app.controller('StatusController', ['$scope', '$location', 'GeneratorFrequenceService', 'GeneratorMicService', 'GeneratorStatusService', 'GeneratorDecibelService', function ($scope, $location, generatorFrequenceService, generatorMicService, generatorStatusService, generatorDecibelService) {
     
+    $scope.s = {};
+    $scope.s.timer = '';
+    $scope.s.frequence = '';
+    $scope.s.decibel = '';
+
     $scope.load = function() {
         generatorStatusService.getGeneratorStatus().then(function(data) {
-            $scope.status = data.message;
+            $scope.status = data.message=="true"?'checked':'';
         });
         
         generatorFrequenceService.getGeneratorFrequence().then(function(data) {
-            $scope.frequence = data.message;
+            $scope.s.frequence = parseInt(data.message);
         });
         
         generatorMicService.getMicTimer().then(function(data) {
-            $scope.timer = data.message;
+            $scope.s.timer = parseInt(data.message);
         });
 
         generatorDecibelService.getDecibel().then(function(data) {
-            $scope.decibel = data.message;
+            $scope.s.decibel = parseInt(data.message);
         });
     }
     
@@ -22,6 +27,20 @@ app.controller('StatusController', ['$scope', '$location', 'GeneratorFrequenceSe
         generatorStatusService.setGeneratorStatus(status).then(function(data) {
             $scope.load();
         });
+    }
+
+    $scope.toggleStatus = function() {
+        if ($scope.status == "checked") {
+            $scope.setStatus(0);
+        } else {
+            $scope.setStatus(1);
+        }
+    }
+
+    $scope.save = function() {
+        $scope.setTimer($scope.s.timer);
+        $scope.setFrequence($scope.frequence);
+        $scope.setDecibel($scope.decibel);
     }
 
     $scope.setTimer = function(timer) {

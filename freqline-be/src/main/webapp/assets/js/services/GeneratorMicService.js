@@ -28,7 +28,6 @@ app.factory('GeneratorMicService', ['$http', function($http) {
     
     service.setMicTimer = function (timer) { 
         let url = urlBase + "?timer=" + timer;
-        console.log(url);
         let data = 't=' + new Date().getTime();
         
         return $http.post(url, data, config).then(function (response){
