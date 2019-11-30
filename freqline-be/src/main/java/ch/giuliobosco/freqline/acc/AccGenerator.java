@@ -35,7 +35,7 @@ import java.sql.SQLException;
  * Send message to Generator (ACC Protocol).
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0.1 (2019-11-18 - 2019-11-19)
+ * @version 1.0.2 (2019-11-18 - 2019-11-30)
  */
 public class AccGenerator {
 
@@ -92,6 +92,26 @@ public class AccGenerator {
         String ip = GeneratorQuery.getIp(connection, keyC);
 
         String url = buildUrl(connection, ip, keyC, timer);
+
+        request(url);
+    }
+
+    /**
+     * Update decibel (in the database) and sends the decibel value to the ACC.
+     *
+     * @param connection Connection to MySQL database.
+     * @param userId     User id.
+     * @param decibel    Decibel value.
+     * @throws SQLException Error with MySQL.
+     * @throws IOException  Error while sending message to generator.
+     */
+    public static void updateDecibel(Connection connection, int userId, int decibel) throws SQLException, IOException {
+        GeneratorQuery.setDecibel(connection, userId, decibel);
+
+        String ip = GeneratorQuery.getIp(connection, userId);
+        String keyC = GeneratorQuery.getKeyByUserId(connection, userId);
+
+        String url = "http://" + ip + "/acc?key_c=" + keyC + "&decibel=" + decibel;
 
         request(url);
     }
