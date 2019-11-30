@@ -1,4 +1,4 @@
-app.controller('StatusController', ['$scope', '$location', 'GeneratorFrequenceService', 'GeneratorMicService', 'GeneratorStatusService', function ($scope, $location, generatorFrequenceService, generatorMicService, generatorStatusService) {
+app.controller('StatusController', ['$scope', '$location', 'GeneratorFrequenceService', 'GeneratorMicService', 'GeneratorStatusService', 'GeneratorDecibelService', function ($scope, $location, generatorFrequenceService, generatorMicService, generatorStatusService, generatorDecibelService) {
     
     $scope.load = function() {
         generatorStatusService.getGeneratorStatus().then(function(data) {
@@ -11,6 +11,10 @@ app.controller('StatusController', ['$scope', '$location', 'GeneratorFrequenceSe
         
         generatorMicService.getMicTimer().then(function(data) {
             $scope.timer = data.message;
+        });
+
+        generatorDecibelService.getDecibel().then(function(data) {
+            $scope.decibel = data.message;
         });
     }
     
@@ -30,6 +34,12 @@ app.controller('StatusController', ['$scope', '$location', 'GeneratorFrequenceSe
         generatorFrequenceService.setGeneratorFrequence(frequence).then(function(data) {
             $scope.load();
         });
+    }
+
+    $scope.setDecibel = function(decibel) {
+        generatorDecibelService.setDecibel(decibel).then(function(data) {
+            $scope.load();
+        })
     }
 
     $scope.load();
