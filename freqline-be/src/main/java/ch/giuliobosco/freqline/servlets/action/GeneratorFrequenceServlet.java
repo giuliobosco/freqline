@@ -46,7 +46,7 @@ import java.sql.SQLException;
  * Change generator frequence API.
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0.1 (2019-11-19 - 2019-11-20)
+ * @version 1.0.2 (2019-11-19 - 2019-11-30)
  */
 @WebServlet(name = "GeneratorFrequenceServlet", urlPatterns = {"action/generatorFrequence"}, loadOnStartup = 1)
 public class GeneratorFrequenceServlet extends BaseServlet {
@@ -83,12 +83,13 @@ public class GeneratorFrequenceServlet extends BaseServlet {
      * @param sra        Servlet request analyser.
      * @throws SQLException Error with MySQL.
      */
-    private void executePost(HttpServletResponse response, Connection connection, int userId, ServletRequestAnalyser sra) throws SQLException {
+    private void executePost(HttpServletResponse response, Connection connection, int userId, ServletRequestAnalyser sra) throws SQLException, IOException {
         String frequenceString = sra.getParameter(FREQUENCE);
 
         int frequence = Integer.parseInt(frequenceString);
 
         GeneratorQuery.setFrequence(connection, userId, frequence);
+        ok(response, frequenceString);
     }
 
     // ----------------------------------------------------------------------------- General Methods
