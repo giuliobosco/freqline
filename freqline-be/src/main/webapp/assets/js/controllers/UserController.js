@@ -50,7 +50,12 @@ app.controller('UserController', ['$scope', '$route', '$sce', '$location', 'Grou
             }
             
             userService.update(user).then(function(data) {
-                userGroupService.update(userGroupId, id, user.group);
+                if (userGroupId == null) {
+                    userGroupService.insert(id, user.group);
+                } else {
+                    userGroupService.update(userGroupId, id, user.group);
+                }
+                
                 if (data.message != null) {
                     $scope.error = data.message;
                 } else if (data.missingParameters != null) {
@@ -88,6 +93,7 @@ app.controller('UserController', ['$scope', '$route', '$sce', '$location', 'Grou
                 groupService.getByUserId(id).then(function(data) {
                     if (data != null) {
                         $scope.group = data.group;
+                        userGroupId = data.id;
                     }
                 });
             })

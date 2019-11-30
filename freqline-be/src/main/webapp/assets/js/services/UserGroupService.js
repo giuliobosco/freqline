@@ -61,7 +61,7 @@ app.factory('UserGroupService', ['$http', function($http) {
         let url = urlBase + "?id=" + id + "&user=" + user + "&group=" + group;
         let data = "t=" + new Date().getTime();
         
-        return $http.post(url, data, config).then(function (response) {
+        return $http.put(url, data, config).then(function (response) {
             return response;
         }, function (error) {
             return error;
