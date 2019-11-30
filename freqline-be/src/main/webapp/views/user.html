@@ -1,38 +1,64 @@
+<div ng-include="'views/nav.html'"></div>
+
 <div ng-controller="UserController">
     <form novalidate>
-        <p>
-            <small>username</small><br>
-            <input type="text" ng-model="user.username">
-        </p>
-        <p>
-            <small>firstname</small><br>
-            <input type="text" ng-model="user.firstname">
-        </p>
-        <p>
-            <small>lastname</small><br>
-            <input type="text" ng-model="user.lastname">
-        </p>
-        <p>
-            <small>email</small><br>
-            <input type="text"  ng-model="user.email">
-        </p>
-        <p>
-            <small>group</small><br>
-            <select ng-model="user.group" placeholder="select group">
-                <option value="{{groupItem.id}}" ng-repeat="groupItem in groups" ng-selected="groupItem.id == group">{{groupItem.name}}</option>
-            </select>
-        </p>
-        <p>
-            <small>password</small><br>
-            <input type="password" ng-model="user.passwordNew" ng-click="showPasswordCheck()">
-        </p>
-        <p ng-class="{'hide': hidePasswordCheck == 'true'}">
-            <small>password check</small><br>
-            <input type="password" ng-model="user.passwordCheck">
-        </p>
-        <span style="color: #f00" ng-bind-html="htmlTrusted(error)"></span>
-        <input type="button" ng-click="save(user)" value="{{saveMessage}}">
-        <input type="button" ng-click="delete()" value="DELETE" ng-class="{'hide': hideDelete == 'true'}">
-        <input type="button" ng-click="reset()" value="RESET">
+        <div class="cont-v">
+            <div class="cont-h">
+                <div class="user-input-wrp">
+                    <br/>
+                    <input type="text" class="inputText" ng-model="user.username" required>
+                    <span class="floating-label">username</span>
+                </div>
+                <div class="user-input-wrp">
+                    <br/>
+                    <input type="text" class="inputText" ng-model="user.firstname" required>
+                    <span class="floating-label">firstname</span>
+                </div>
+                <div class="user-input-wrp">
+                    <br/>
+                    <input type="text" class="inputText" ng-model="user.lastname" required>
+                    <span class="floating-label">lastname</span>
+                </div>
+                <div class="user-input-wrp">
+                    <br/>
+                    <input type="text" class="inputText" ng-model="user.email" required>
+                    <span class="floating-label">email</span>
+                </div><br>
+                <p>
+                    <div class="select">
+                        <select class="select-text" required ng-model="user.group" placeholder="select group">
+                            <option value="" disabled selected></option>
+                            <option value="{{groupItem.id}}" ng-repeat="groupItem in groups" ng-selected="groupItem.id == group">{{groupItem.name}}</option>
+                        </select>
+                        <span class="select-highlight"></span>
+                        <span class="select-bar"></span>
+                        <label class="select-label">group</label>
+                    </div>
+                </p>
+                <div class="user-input-wrp">
+                    <br/>
+                    <input type="password" class="inputText" ng-model="user.passwordNew" ng-click="showPasswordCheck()" required>
+                    <span class="floating-label">password</span>
+                </div>
+                <div class="user-input-wrp" ng-class="{'hide': hidePasswordCheck == 'true'}">
+                    <br/>
+                    <input type="password" class="inputText" ng-model="user.passwordCheck" equired>
+                    <span class="floating-label">password check</span>
+                </div><br>
+                <span style="color: #f00" ng-bind-html="htmlTrusted(error)"></span>
+            </div>
+
+            <div class="w33">
+                <input type="button" ng-click="save(user)" value="{{saveMessage}}">
+            </div>
+            <div class="w33">
+                <input type="button" ng-click="delete()" value="DELETE" ng-class="{'hide': hideDelete == 'true'}">
+            </div>
+            <div class="w33">
+                <input type="button" ng-click="reset()" value="RESET"><br><br>
+            </div>
+
+            <div class="clearfix"></div>
+        </div>
     </form>
 </div>
