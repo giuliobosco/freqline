@@ -477,14 +477,103 @@ VALUES ('created'),
        ('updated'),
        ('deleted');
 
-INSERT INTO `freqline`.`user` (`created_by`,
-                       `created_date`,
-                       `updated_by`,
-                       `updated_date`,
-                       `username`,
-                       `password`,
-                       `salt`,
-                       `firstname`,
-                       `lastname`,
-                       `email`)
-VALUES (1, NOW(), 1, NOW(), 'db_core', 'pw', '`salt`', 'DB', 'CORE', 'core@db');
+INSERT INTO `freqline`.`permission` (
+  created_by, 
+  created_date, 
+  updated_by, 
+  updated_date, 
+  name, 
+  string,
+  description)
+VALUES (1, NOW(), 1, NOW(), 'db', 'db', 'Database Permissions'),
+       (1, NOW(), 1, NOW(), 'admin', 'admin', 'Administration Permissions'),
+       (1, NOW(), 1, NOW(), 'user', 'user', 'Basic User Permissions');
+
+INSERT INTO freqline.`group` (
+  created_by, 
+  created_date, 
+  updated_by, 
+  updated_date, 
+  name,
+  parent_group)
+VALUES (1, NOW(), 1, NOW(), 'admin', null),
+       (1, NOW(), 1, NOW(), 'user', null);
+
+INSERT INTO freqline.group_permission (
+  created_by, 
+  created_date, 
+  updated_by, 
+  updated_date,
+  permission, 
+  `group`)
+VALUES (1, NOW(), 1, NOW(), 2, 1),
+       (1, NOW(), 1, NOW(), 3, 1),
+       (1, NOW(), 1, NOW(), 3, 2);
+
+INSERT INTO freqline.user (
+  created_by, created_date, updated_by, updated_date, 
+  username, 
+  password,
+  salt, 
+  firstname, lastname, email, 
+  favorite_generator)
+VALUES (
+  1, NOW(), 1, NOW(), 
+  'admin',
+  'fea8f928a64d883d28006bb0a8b8fb2973b7b867fafa8af4cff4524028979514',
+  'OCxr[@fJfTHeQWXipgfqpgOgsXxfz`XA', 
+  'Admin', 'Database', 'admin@db', 
+  NULL),
+  (1, NOW(), 1, NOW(), 
+  'user',
+  '50144087fc14bf2e4c19fabaa479eff0859253b9eb29eb3c1a633c3d415763e2',
+  'QhzykCqQcAOWXKzpjqBTyoE`gtbVrxI[', 
+  'User', 'Database', 'user@db', 
+  NULL);
+
+INSERT INTO freqline.generator(
+  created_by, 
+  created_date, 
+  updated_by,
+  updated_date,
+  name,
+  frequence,
+  status,
+  ip,
+  key_c) 
+VALUES (1, NOW(), 1, NOW(), 'Generator', 10000, 1, '127.0.0.1', 'AAAA');
+
+UPDATE freqline.user SET favorite_generator=1;
+
+INSERT INTO freqline.mic(
+  created_by, 
+  created_date, 
+  updated_by,
+  updated_date,
+  generator,
+  decibel,
+  timer,
+  ip,
+  key_c)
+VALUES (1, NOW(), 1, NOW(), 1, 80, 30000, '127.0.0.1', 'AAAA');
+
+INSERT INTO freqline.remote(
+  created_by, 
+  created_date, 
+  updated_by,
+  updated_date,
+  generator,
+  command,
+  ip,
+  key_c)
+VALUES (1, NOW(), 1, NOW(), 1, 'AAAA', '127.0.0.1', 'AAAA');
+
+INSERT INTO freqline.user_group (
+  created_by, 
+  created_date, 
+  updated_by, 
+  updated_date, 
+  user, 
+  `group`)
+VALUES (1, NOW(), 1, NOW(), 1, 1),
+       (1, NOW(), 1, NOW(), 2, 2);
