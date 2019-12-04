@@ -1,0 +1,71 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+package ch.giuliobosco.freqline.queries {
+
+    class PermissionUserQuery {
+        - {static} String QUERY
+        - {static} int ID_INDEX 
+        + {static} String[] getPermission(Connection connection, int id)
+        + {static} String[] getPermission(Connection connection, User id)
+        + {static} String[] getPermission(JdbcConnetor connector, int id)
+    }
+
+    class AccCheckQueries {
+        - {static} String GENERATOR_KEY_CHECK
+        - {static} String MIC_KEY_CHECK
+        - {static} String REMOTE_KEY_CHECK
+        - {static} String CONF_QUERY
+        + {static} JSONOjbect getJsonConf(Connection connection, String keyC)
+        - {static} boolean isValidKey(String query, Connection connection, String keyC)
+        + {static} boolean isValidGeneratorKey(Connection connection, String keyC)
+        + {static} boolean isValidMicKey(Connection connection, String keyC)
+        + {static} boolean isValidRemoteKey(Connection connection, String keyC)
+    }
+
+    class UserIdQuery {
+        - {static} String QUERY
+        - {static} int USERNAME_INDEX
+        + {static} int getUserId(Connection connection, String username)
+    }
+
+    class GeneratorQuery {
+        - {static} String GET_STATUS_KEY_QUERY
+        - {static} String GET_STATUS_USER_ID_QUERY
+        - {static} String GET_FREQUENCE_KEY_QUERY
+        - {static} String GET_FREQUENCE_USER_ID_QUERY
+        - {static} String GET_KEY_USER_ID_QUERY
+        - {static} String GET_MIC_TIMER_KEY_QUERY
+        - {static} String SET_STATUS_KEY_QUERY
+        - {static} String SET_STATUS_USER_ID_QUERY
+        - {static} String SET_FREQUENCE_USER_ID_QUERY
+        - {static} String SET_MIC_TIMER_USER_ID_QUERY
+        - {static} String GET_IP_USER_ID_QUERY
+        - {static} String GET_IP_KEY_QUERY
+        - {static} String SET_DECIBEL
+        - {static} String GET_DECIBEL_USER_ID
+        - {static} String STATUS
+        - {static} String FREQUENCE
+        - {static} String TIMER
+        - {static} String IP
+        - {static} String KEY_C
+        + {static} boolean getGeneratorStatus(Connection connection, String keyC)
+        + {static} boolean getGeneratorStatus(Connection connection, int userId)
+        + {static} int getGeneratorFrequence(Connection connection, String keyC)
+        + {static} int getGeneratorFrequence(Connection connection, int userId)
+        - {static} boolean getStatus(Connection connection, String query, String stringValue, int intValue)
+        - {static} int getFrequence(Connection connection, String query, String stringValue, int intValue)
+        - {static} ResultSet get(Connection connection, String query, String stringValue, int intValue)
+        + {static} boolean setStatus(Connection connection, int userId, boolean status)
+        + {static} boolean setStatus(Connection connection, String keyC, boolean status)
+        + {static} int getMicTimer(Connection connection, String keyC)
+        + {static} boolean setFrequence(Connection connection, int userId, int frequence)
+        + {static} String getIp(Connection connection, int userId)
+        + {static} String getIp(Connection connection, String keyC)
+        + {static} String getKeyByUserId(Connection connection, int userId)
+        + {static} boolean setMicTimer(Connection connection, int userId, int timer)
+        + {static} boolean setDecibel(Connection connection, int userId, int decibel)
+        + {static} int getDecibel(Connection connection, int userId)
+    }
+}
+@enduml

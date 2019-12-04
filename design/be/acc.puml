@@ -1,0 +1,256 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+class Exception {
+
+}
+
+package ch.giuliobosco.freqline {
+
+    package servlet.help {
+        class ServletRequestAnalyser {
+            + {static} int OK
+            + {static} int MISSING_PARAMETERS
+            + {static} int NOT_VALID_PARAMETERS
+            - Map<String, String[]> parameters
+            - String[] requiredParameters
+            - String[] optionalParameters
+            - String[] missingParameters
+            - String[] notValidParameters
+            - String[] presentOptionalParameters
+            - Validator validator
+            + String[] getMissingParameters()
+            + String[] getNotValidParameters()
+            + String[] getPresentOptionalParameters()
+            + int getStatus()
+            + Map<String, String[]> getParameters()
+            + String getParameter(String key)
+            + ServletRequestAnalyser(String[] requiredParameters, String[] optionalParameters, Map<String, String[]> parameters, Validator validator)
+            + ServletRequestAnalyser(String[] requiredParameters, Map<String, String[]> parameters)
+            + ServletRequestAnalyser(String[] requiredParameters, Map<String, String[]> parameters, Validator validator)
+            - void setMissingParameters()
+            - void setPresentOptionalParameters()
+            - void setNotValidParameters(String[] parameters)
+        }
+
+        class ServletNfe {
+            + ServletNfe()
+            + ServletNfe(String message)
+        }
+        Exception <|-- ServletNfe
+    }
+
+    package acc {
+        class AccGenerator{
+            + {static} void turnGeneratorOn(Connection connection, String keyC)
+            + {static} void turnGeneratorOff(Connection connection, String keyC)
+            + {static} void turnGeneratorOn(Connection connection, String, long timer)
+            + {static} void updateDecibel(Connection connection, int userId, int decibel)
+            - {static} void request(String url)
+            - {static} String buildUrl(Connection connection, String address, String keyC, boolean on)
+            - {static} String buildUrl(Connection connection, String address, String keyC, long timer)
+            - {static} int getFrequence(Connection connection, String keyC)
+        }
+        ServletRequestAnalyser -[hidden]-> AccGenerator
+    }
+
+    package auth {
+        interface Authenticator {
+            + boolean authenticate(String username, String password)
+        }
+
+        class SqlAuthenticator {
+            - {static} int SALT_LENGTH = 32
+            - DbUserDao dao
+            - String dbHash
+            - String dbSalt
+            + SqlAuthenticator(DbUserDao dao)
+            + boolean authenticate(String username, Stirng password)
+            + User authenticateUser(String username, Stirng password)
+            - User findUser(String username)
+            + {static} User getUserToInsert(User user)
+            + {static} User getUserToUpdatePassword(User user, DbDao dao)
+            + {static} User getUserToUPdate(User user, DbDao dao)
+        }
+        Authenticator <|.. SqlAuthenticator
+
+        class SessionManager {
+            - {static} int MAX_INACTIVE_INTERNAL = 3600
+            - {static} String USER = "user"
+            - {static} String USER_ID = "user_id"
+            - HttpSession session
+            - int userId
+            + SessionManager(HttpSession session)
+            + User getUser()
+            + int getUserId()
+            + boolean isValidSession()
+            + void initSession(User user, int maxInactiveInterval)
+            + void initSession(User user)
+            + void destroySession()
+        }
+    }
+
+    package jdbc {
+        class DaoQueryBuilder {
+            - String database
+            - String table
+            - String[] attributes
+            + DaoQueryBuilder(String database, Class <? extends Base> baseClass)
+            - void setDatabase(String database)
+            - void setTable(String table)
+            - void setAttributes(String[] attributes)
+            - String getDatabaseTable()
+            + int getUpdateIdIndex()
+            + String getAllQuery()
+            + String getByIdQuery()
+            + String getAddQuery()
+            + String getUpdateQuery()
+            + String getDeleteQuery()
+        }
+
+        class JdbcConnector {
+            - {static} String S_USERNAME
+            - {static} String S_PASSWORD
+            - {static} String S_HOST
+            - {static} String S_PORT
+            - {static} String S_DATABASE
+            - {static} String S_USE_SSL
+            - {static} String S_USE_UNICODE
+            - {static} String S_JDBC_TIMEZONE_SHIFT
+            - {static} String S_LEGACY_DATETIME
+            - {static} String S_SERVER_TIMEZONE
+            - {static} String S_ZERO_TIME_BEHAVOIR
+            - {static} String PORT
+            - {static} String USE_SSL
+            - {static} String USE_UNICODE
+            - {static} String JDBC_TIMEZONE_SHIFT
+            - {static} String LEGACY_DATETIME
+            - {static} String SERVER_TIMEZONE
+            - {static} String ZERO_DATE_TIME_BEHAVOIR
+            - String username
+            - Stirng password
+            - String host
+            - String port 
+            - String database
+            - boolean useSsl
+            - boolean useUnicode
+            - boolean jdbcTimezoneShift
+            - boolean legacyDateTime
+            - String serverTimezone
+            - String zeroDateTimeBehavoir
+            - Connection connection
+            + Connection getConnection()
+            + Connection getOpenConnection()
+            + DaoQueryBuilder getQueryBuilder(Class clazz)
+            + JdbcConnector(...)
+            + JdbcConnector(String username, String password, String host, int port, String database)
+            + JdbcConnector(String propertiesFilePath)
+            - String getConnectionString()
+            - Properites getConnectionProperties()
+            + void close()
+            + void openConnection()
+            + writeProperties(String propertiesFilePath)
+        }
+
+        class JapiConnector() {
+            - {static} String PROPERTIES_FILE_PATH
+            - {static} boolean SSL 
+            + JapiConnector()
+            + {static} JdbcConnector initialize()
+            + {static} Connection get()
+        }
+    }
+
+    package help {
+        package validators {
+            abstract Validator {
+                + Validator() 
+                + boolean isValid(String string)
+            }
+
+            class StringValidator {
+
+            }
+            Validator <|-- StringValidator
+
+            class IntValidator {
+                + IntValidator()
+                + boolean isValid(String string)
+            }
+        }
+
+        class ArrayHelper {
+            + {static} boolean isInArray(Object[] a, Object o)
+            + {static} int countInArray(Object[] a, Object o)
+            + {static} Object[] removeFromArray(Object[] a, Object o)
+
+        }
+
+        class ClassStirngHelper {
+            + {static} String[] fieldsNameToStringArray(Fields[] fields)
+            + {static} String[] classFieldsNameToStringArray(Class<?> clazz)
+        }
+
+        class Hasher {
+            - {static} String SHA_256 = "SHA-256"
+            + {static} byte[] sha256(String string)
+            + {static} byte[] sha256(String string, String salt)
+            + {static} String sha256Hex(String string)
+            + {static} String sha256Hex(String string, String salt)
+        }
+    
+        class HttpRequestor {
+            + {static} String GET = "GET"
+            - URL url
+            - String method
+            - String response
+            + HttpRequestor(URL url, String method)
+            + HttpRequestor(String urlString)
+            + String getResponse()
+            + void executeRequest()
+        }
+
+        class NumberHelper {
+            + {static} int random(int min, int max)
+            + {static} int random(int max)
+            + {static} int random()
+
+        }
+
+        class StringArrayHelper {
+            + {static} String[] toStringArray(List<String> l)
+            + {static} String[] toStringArray(Object[] objects)
+            + {static} List<String> arrayToList(String[] a)
+            + {static} concatenateArray(String[] a, String[] b)
+            + {static} boolean arrayEmpty(String[] a)
+            + {static} boolean arrayNotEmpty(String[] a)
+            + {static} JSONArray toJsonArray(String[] a)
+            + {static} String[] removeFromArray(String[] a, String string)
+            + {static} String[] objectArrayToStringArray(Object[] a)
+        }
+
+        class StringHelper {
+            + {static} boolean isLowerCase(char c)
+            + {static} boolean isLowerCase(String string)
+            + {static} boolean isLowerCase(char c)
+            + {static} boolean isUpperCase(Stirng string)
+            + {static} String toLwr(char c)
+            + {static} String toLwr(String string)
+            + {static} String toUpr(char c)
+            + {static} String toUpr(String string)
+            + {static} String camelToSnake(String string)
+            + {static} String toSqlName(Stirng string)
+            + {static} String hex(byte[] bytes)
+            + {static} char randomChar()
+            + {static} String randomString(int length)
+            + {static} boolean is(String str)
+        }
+    }
+
+    servlet.help -[hidden]>jdbc
+    help -[hidden]>auth
+    auth -[hidden]> acc
+    auth -[hidden]->help
+}
+
+@enduml

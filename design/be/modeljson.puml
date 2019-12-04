@@ -1,0 +1,123 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+package ch.giuliobosco.freqline.modeljson {
+    abstract BaseJson {
+        - {static} String ID
+        - {static} String CREATED_BY
+        - {static} String CREATED_DATE
+        - {static} String UPDATED_BY
+        - {static} String UPDATED_DATE
+        - {static} String DELETED_BY
+        - {static} String DELETED_DATE
+        - JSONObject json
+        + BaseJson(Base base)
+        + BaseJson(JSONObject json)
+        + BaseJson(String json)
+        + JSONObject getJson()
+        # Base getBase(DbDao dao, int id)
+        - void setJsonBase(Base base)
+        # int getInt(String key)
+        # Date getDate(String key)
+        # String getString(String key)
+        # boolean getBoolean(String key)
+        # Timestamp getTimestamp(String key)
+        # Base getBase()
+        + {abstract} void set(Base base)
+        + {abstract} Base get(DbDao dao)
+    }
+
+    class GeneratorJson {
+        + {static} String NAME
+        + {static} String FREQUENCE
+        + {static} String STATUS
+        + {static} String IP
+        + {static} String KEY_C
+        + GeneratorJson(Generator generator)
+        + GeneratorJson(Base base)
+        + GeneratorJson(JSONObject json)
+        + GeneratorJson(String string)
+    }
+    BaseJson <|-- GeneratorJson
+
+    class GroupJson {
+        + {static} String NAME
+        + {static} String PARENT_GROUP
+        + GroupJson(Group group)
+        + GroupJson(Base base)
+        + GroupJson(JSONObject json)
+        + GroupJson(String jsonString)
+    }
+    BaseJson <|-- GroupJson
+
+    class GroupPermissionJson {
+        + {static} String GROUP
+        + {static} String PERMISSION
+        + GroupPermissionJson(GroupPermission groupPermission)
+        + GroupPermissionJson(Base base)
+        + GroupPermissionJson(JSONObject json)
+        + GroupPermissionJson(String string)
+    }
+    BaseJson <|-- GroupPermissionJson
+
+    class MicJson {
+        + {static} String GENERATOR
+        + {static} String DECIBEL
+        + {static} String TIMER
+        + {static} String IP
+        + {static} String KEY_C
+        + MicJson(Mic mic)
+        + MicJson(Base base)
+        + MicJson(JSONObject json)
+        + MicJson(String string)
+    }
+    BaseJson <|-- MicJson
+
+    class PermissionJson {
+        + {static} String NAME
+        + {static} String STRING
+        + {static} String DESCRIPTION
+        + PermissionJson(Permission permission)
+        + PermissionJson(Base base)
+        + PermissionJson(JSONObject json)
+        + PermissionJson(String string)
+    }
+    PermissionJson --|> BaseJson
+
+    class RemoteJson {
+        + {static} String GENERATOR
+        + {static} String COMMAND
+        + {static} String IP
+        + {static} String KEY_C
+        + RemoteJson(Remote remote)
+        + RemoteJson(Base base)
+        + RemoteJson(JSONObject json)
+        + RemoteJson(String string)
+    }
+    RemoteJson --|> BaseJson
+
+    class UserGroupJson {
+        + {static} String USER
+        + {static} String GROUP
+        + UserGroupJson(UserGroup userGroup)
+        + UserGroupJson(Base base)
+        + UserGroupJson(JSONObject json)
+        + UserGroupJson(String string)
+    }
+    UserGroupJson --|> BaseJson
+
+    class UserJson {
+        + {static} String USERNAME
+        + {static} String PASSWORD
+        + {static} String SALT
+        + {static} String FIRSTNAME
+        + {static} String LASTNAME
+        + {static} String EMAIL
+        + UserJson(User user)
+        + UserJson(Base base)
+        + UserJson(JSONObject json)
+        + UserJson(String string)
+    }
+    UserJson --|> BaseJson
+}
+@enduml

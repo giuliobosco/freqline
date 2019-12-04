@@ -1,0 +1,121 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+class Exception {
+
+}
+
+package ch.giuliobosco.freqline {
+    package dao {
+        interface IDao<Base> {
+            + Optional<Base> getById(int id)
+            + Stream<Base> getAll()
+            + boolean add(Base base)
+            + boolean update(Base base)
+            + boolean delete(Base base)
+        }
+
+        class Dao {
+            
+        }
+        IDao <|.. Dao
+
+        class DaoException {
+            - {static} final long serialVersionUID = 1L
+            + DaoException()
+            + DaoException(String message)
+            + DaoException(String message, Throwable cause)
+        }
+        Exception <|-- DaoException        
+    }
+
+    package dbdao {
+        abstract DbDao {
+            - {static} Logger LOGGER
+            - {static} int NULL_ACTION_BY = 1
+            - Connection connection;
+            - DaoQueryBuilder daoQueryBuilder
+            - int actionBy
+            - int lastGeneratedKey
+            + DbDao(JdbcConnector connector, Class<? extends Base> baseClass)
+            + DbDao(JdbcConnector connector, Class<? extends Base> baseClass, int actionBy)
+            + Connection getConnection()
+            + int getActionBy()
+            + int getLastGeneratedKey()
+            # Date getDate(ResultSet resultSet, String column)
+            # Timestamp getTimestamp(Date date)
+            # void mutedClose(Connection connection, PreparedStatement statement, ResultSet resultSet)
+            # Base getBase(ResulSet resultSet, String resulSetColumn, DbDao dao) 
+            # {abstract} Base create(ResultSet resultSet, Base base)
+            # {abstract} void fillStatement(Base base, PreparedStatement statement)
+            - Base createBase(ResultSet resultSet)
+            - void setAuditData(Base base, PreparedStatement statement)
+            # PreparedStatement getByIdStatemnt(int id)
+            + Optional<Base> getById(int id)
+            # PreparedStatement getAllStatement()
+            + Stream<Base> getAll()
+            # PreparedStatement getAddStatement(Base base)
+            + boolean add(Base base)
+            # PreparedStatement getUpdateStatement(Base base)
+            + boolean update(Base base)
+            # PreparedStatement getDeleteStatement(Base base)
+            + boolean delete(Base base)
+        }
+        Dao <|-- DbDao
+
+        class DbGeneratorDao {
+            + DbGeneratorDao(JdbcConnector connector)
+            + DbGeneratorDao(JdbcConnector connector, int actionBy)
+        }
+        DbDao <|-- DbGeneratorDao
+
+        class DbGroupDao {
+            + DbGroupDao(JdbcConnector connector)
+            + DbGroupDao(JdbcConnector connector, int actionBy)
+        }
+        DbDao <|-- DbGroupDao
+
+        class DbGroupPermissionDao {
+            + DbGroupPermissionDao(JdbcConnector connector)
+            + DbGroupPermissionDao(JdbcConnector connector, int actionBy)
+        }
+        DbDao <|-- DbGroupPermissionDao
+
+        class DbMicDao {
+            + DbMicDao(JdbcConnector connector)
+            + DbMicDao(JdbcConnector connector, int actionBy)
+            - getPermission(ResultSet resultSet, JdbcConnector connector)
+            - getGroup(ResultSet resultSet, JdbcConnector connector)
+        }
+        DbDao <|-- DbMicDao
+
+        class DbPermissionDao {
+            + DbPermissionDao(JdbcConnector connector)
+            + DbPermissionDao(JdbcConnector connector, int actionBy)
+        }
+        DbDao <|-- DbPermissionDao
+
+        class DbRemoteDao {
+            + DbRemoteDao(JdbcConnector connector)
+            + DbRemoteDao(JdbcConnector connector, int actionBy)
+        }
+        DbDao <|-- DbRemoteDao
+
+        class DbUserDao {
+            + DbUserDao(JdbcConnector connector)
+            + DbUserDao(JdbcConnector connector, int actionBy)
+        }
+        DbDao <|-- DbUserDao
+
+        class DbUserGroupDao {
+            + DbUserGroupDao(JdbcConnector connector)
+            + DbUserGroupDao(JdbcConnector connector, int actionBy)
+            - getGroup(ResultSet resultSet, JdbcConnector connector)
+            - getUser(ResultSet resultSet, JdbcConnector connector)
+        }
+        DbDao <|-- DbUserGroupDao
+
+    }
+}
+
+@enduml

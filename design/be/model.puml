@@ -1,0 +1,204 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+package ch.giuliobosco.freqline.model {
+    abstract Base {
+        + {static} String ID = "id"
+        + {static} int CREATED_BY_INDEX = 1
+        + {static} int CREATED_DATE_INDEX = 2
+        + {static} int UPDATED_BY_INDEX = 3
+        + {static} int UPDATED_DATE_INDEX = 4
+        + {static} int DELETED_BY_INDEX = 5
+        + {static} int DELETED_DATE_INDEX = 6
+        + {static} String[] DEFAULT_ATTRIBUTES
+        + {static} int SQL_INT_NULL = 0;
+        - {static} int DEFAULT_ID = 0;
+        + {static} Date NOW
+        - int id
+        - int createdBy
+        - Date createdDate
+        - int updatedBy
+        - Date updatedDate
+        - int deleteeBy
+        - Date deletedDate
+        + Base(int id, int createdBy, Date createdDate, int updatedBy, Date updatedDate, int deletedBy, Date deletedDate)
+        + Base(int id, int createdBy, Date createdDate, int updatedBy, Date updatedDate)
+        + Base(int createdBy)
+        + Base(Base base)
+        + int getId()
+        + void setCreatedBy(int createdBy)
+        + int getCreatedBy()
+        + void setCreatedDate(Date createdDate)
+        + Date getCreatedDate()
+        + void setUpdatedBy(int updatedBy)
+        + int getUpdatedBy()
+        + void setUpdatedDate(Date updatedDate)
+        + Date getUpdatedDate()
+        + void setDeletedBy(int deletedBy)
+        + int getDeletedBy()
+        + void setDeletedDate(Date deletedDate)
+        + Date getDeletedDate()
+        # {static} Date now()
+        + {static} String[] getDefaultAttributes()
+        + {static} String getString(int index)
+        + {static} String getCreatedByString()
+        + {static} String getCreatedDateString()
+        + {static} String getUpdatedByString()
+        + {static} String getUpdatedDateString()
+        + {static} String getDeletedByString()
+        + {static} String getDeletedDateString()
+    }
+
+    class Permission{
+        - String name
+        - String string
+        - String description
+        + Permission(..., Date deletedDate, String name, String string, String description)
+        + Permission(..., String name, String string, String description)
+        + Permission(int createdBy, String name, String string, String description)
+        + Permission(Base base, String name, String string, String description)
+        + Stirng getName()
+        + void setName(String name)
+        + String getString()
+        + void setString(String string)
+        + String getDescription()
+        + void setDescription(String description)
+    }
+    Base <|-- Permission
+
+    class Group {
+        - String name
+        + Group(..., Date deleteDate, String name, Group parentGroup)
+        + Group(..., String name, Group parentGroup)
+        + Group(int createdBy, String name, Group parentGroup)
+        + Group(Base base, String name, Group parentGroup)
+        + String getName()
+        + void setName(String name)
+        + Group getParentGroup()
+        + void setParentGroup(Group parentGroup)
+    }
+    Base <|-- Group
+    Group o-- Group : - parentGroup
+
+    class GroupPermission {
+        + GroupPermission(..., Date deletedDate, Permission permission, Group group)
+        + GroupPermission(..., Permission permission, Group group)
+        + GroupPermission(int actionBy, Permission permission, Group group)
+        + GroupPermission(Base base, Permission permission, Group group)
+        + Group getGroup()
+        + void setGroup(Group group)
+        + Permission getPermission()
+        + void setPermission(Permission permission)
+    }
+    Base <|-- GroupPermission
+    GroupPermission o-- Group : group
+    GroupPermission o-- Permission : permission
+
+    class User {
+        - String username
+        - String password
+        - String salt
+        - String firstname
+        - String lastname
+        - String email
+        + User(..., Date deletedDate, String username, String password, String salt, String firstname, String lastname, String email)
+        + User(..., String username, String password, String salt, String firstname, String lastname, String email)
+        + User(int createdBy, String username, String password, String salt, String firstname, String lastname, String email)
+        + User(Base base, String username, String password, String salt, String firstname, String lastname, String email)
+        + String getUsername()
+        + void setUsername(String username)
+        + String getPassword()
+        + void setPassword(String password)
+        + String getSalt() 
+        + void setSalt(String salt)
+        + String getFirstname()
+        + void setFirstname(String firstname)
+        + String getLastname()
+        + void setLastname(String lastname)
+        + String getEmail() 
+        + void setLastname(String email)
+    }
+    Base <|-- User
+
+    class UserGroup {
+        + UserGroup(..., Deleted date, Group group, User user)
+        + UserGroup(..., Group group, User user)
+        + UserGroup(int createdBy, Group group, User user)
+        + UserGroup(Base base, Group group, User user)
+        + Group getGroup()
+        + void setGroup(Group group)
+        + User getUser()
+        + void setUser(User user)
+    }
+    Base <|-- UserGroup
+    UserGroup o-- User : user
+    UserGroup o-- Group : group
+
+    class Generator {
+        - String name
+        - int frequence
+        - boolean status
+        - String ip
+        - String keyC
+        + Generator(..., Date deletedDate, String name, int frequence, boolean status, String ip, String keyC)
+        + Generator(..., String name, int frequence, boolean status, String ip, String keyC)
+        + Generator(int actionBy, String name, int frequence, boolean status, String ip, String keyC)
+        + Generator(Base base, String name, int frequence, boolean status, String ip, String keyC)
+        + String getName()
+        + void setName(String name)
+        + int getFrequence()
+        + void setFrequence(int frequence)
+        + boolean isStatus()
+        + void setStatus(boolean status)
+        + String getIp()
+        + void setIp(String ip)
+        + String getKeyC()
+        + void setKeyC(String keyC)
+    }
+    Base <|-- Generator
+
+    class Mic {
+        - int decibel
+        - int timer 
+        - String ip
+        - String keyC
+        + Mic(..., int deletedDate, Generator generator, int decibel, int timer, String ip, String keyC)
+        + Mic(..., Generator generator, int decibel, int timer, String ip, String keyC)
+        + Mic(int createdBy, Generator generator, int decibel, int timer, String ip, String keyC)
+        + Mic(Base base, Generator generator, int decibel, int timer, String ip, String keyC)
+        + Genrator getGenerator()
+        + void setGenerator(Generator generator)
+        + int getDecibel()
+        + void setDecibel(int decibel)
+        + int getTimer()
+        + void setTimer(int timer)
+        + String getIp()
+        + void setIp(String ip)
+        + String getKeyC()
+        + void setKeyC(String keyC)
+    }
+    Base <|-- Mic
+    Mic o-- Generator : generator
+
+    class Remote{
+        - String command
+        - String ip
+        - String keyC
+        + Remote(..., Date deletedDate, Generator generator, String command, String ip, String keyC)
+        + Remote(..., Generator generator, String command, String ip, String keyC)
+        + Remote(int createdBy, Generator generator, String command, String ip, String keyC)
+        + Remote(Base base, Generator generator, String command, String ip, String keyC)
+        + Genrator getGenerator()
+        + void setGenerator(Generator generator)
+        + String getCommand() 
+        + void setCommand(String command)
+        + String getIp()
+        + void setIp(String ip)
+        + String getKeyC()
+        + void setKeyC(String keyC)
+    }
+    Base <|-- Remote
+    Remote o-- Generator : genrator
+}
+
+@enduml
