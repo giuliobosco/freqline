@@ -1,0 +1,890 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+class Exception {
+
+}
+
+package javax.servlet.http {
+    class HttpServlet {
+
+    }
+}
+
+package ch.giuliobosco.freqline {
+
+package acc {
+    class AccGenerator{
+        + {static} void turnGeneratorOn(Connection connection, String keyC)
+        + {static} void turnGeneratorOff(Connection connection, String keyC)
+        + {static} void turnGeneratorOn(Connection connection, String, long timer)
+        + {static} void updateDecibel(Connection connection, int userId, int decibel)
+        - {static} void request(String url)
+        - {static} String buildUrl(Connection connection, String address, String keyC, boolean on)
+        - {static} String buildUrl(Connection connection, String address, String keyC, long timer)
+        - {static} int getFrequence(Connection connection, String keyC)
+    }
+}
+
+package auth {
+    interface Authenticator {
+        + boolean authenticate(String username, String password)
+    }
+
+    class SqlAuthenticator {
+        - {static} int SALT_LENGTH = 32
+        - DbUserDao dao
+        - String dbHash
+        - String dbSalt
+        + SqlAuthenticator(DbUserDao dao)
+        + boolean authenticate(String username, Stirng password)
+        + User authenticateUser(String username, Stirng password)
+        - User findUser(String username)
+        + {static} User getUserToInsert(User user)
+        + {static} User getUserToUpdatePassword(User user, DbDao dao)
+        + {static} User getUserToUPdate(User user, DbDao dao)
+    }
+    Authenticator <|.. SqlAuthenticator
+
+    class SessionManager {
+        - {static} int MAX_INACTIVE_INTERNAL = 3600
+        - {static} String USER = "user"
+        - {static} String USER_ID = "user_id"
+        - HttpSession session
+        - int userId
+        + SessionManager(HttpSession session)
+        + User getUser()
+        + int getUserId()
+        + boolean isValidSession()
+        + void initSession(User user, int maxInactiveInterval)
+        + void initSession(User user)
+        + void destroySession()
+    }
+}
+
+package dao {
+        interface IDao<Base> {
+            + Optional<Base> getById(int id)
+            + Stream<Base> getAll()
+            + boolean add(Base base)
+            + boolean update(Base base)
+            + boolean delete(Base base)
+        }
+
+        class Dao {
+            
+        }
+        IDao <|.. Dao
+
+        class DaoException {
+            - {static} final long serialVersionUID = 1L
+            + DaoException()
+            + DaoException(String message)
+            + DaoException(String message, Throwable cause)
+        }
+        Exception <|-- DaoException        
+    }
+
+    package dbdao {
+        abstract DbDao {
+            - {static} Logger LOGGER
+            - {static} int NULL_ACTION_BY = 1
+            - Connection connection;
+            - DaoQueryBuilder daoQueryBuilder
+            - int actionBy
+            - int lastGeneratedKey
+            + DbDao(JdbcConnector connector, Class<? extends Base> baseClass)
+            + DbDao(JdbcConnector connector, Class<? extends Base> baseClass, int actionBy)
+            + Connection getConnection()
+            + int getActionBy()
+            + int getLastGeneratedKey()
+            # Date getDate(ResultSet resultSet, String column)
+            # Timestamp getTimestamp(Date date)
+            # void mutedClose(Connection connection, PreparedStatement statement, ResultSet resultSet)
+            # Base getBase(ResulSet resultSet, String resulSetColumn, DbDao dao) 
+            # {abstract} Base create(ResultSet resultSet, Base base)
+            # {abstract} void fillStatement(Base base, PreparedStatement statement)
+            - Base createBase(ResultSet resultSet)
+            - void setAuditData(Base base, PreparedStatement statement)
+            # PreparedStatement getByIdStatemnt(int id)
+            + Optional<Base> getById(int id)
+            # PreparedStatement getAllStatement()
+            + Stream<Base> getAll()
+            # PreparedStatement getAddStatement(Base base)
+            + boolean add(Base base)
+            # PreparedStatement getUpdateStatement(Base base)
+            + boolean update(Base base)
+            # PreparedStatement getDeleteStatement(Base base)
+            + boolean delete(Base base)
+        }
+        Dao <|-- DbDao
+
+        class DbGeneratorDao {
+            + DbGeneratorDao(JdbcConnector connector)
+            + DbGeneratorDao(JdbcConnector connector, int actionBy)
+        }
+        DbDao <|-- DbGeneratorDao
+
+        class DbGroupDao {
+            + DbGroupDao(JdbcConnector connector)
+            + DbGroupDao(JdbcConnector connector, int actionBy)
+        }
+        DbDao <|-- DbGroupDao
+
+        class DbGroupPermissionDao {
+            + DbGroupPermissionDao(JdbcConnector connector)
+            + DbGroupPermissionDao(JdbcConnector connector, int actionBy)
+        }
+        DbDao <|-- DbGroupPermissionDao
+
+        class DbMicDao {
+            + DbMicDao(JdbcConnector connector)
+            + DbMicDao(JdbcConnector connector, int actionBy)
+            - getPermission(ResultSet resultSet, JdbcConnector connector)
+            - getGroup(ResultSet resultSet, JdbcConnector connector)
+        }
+        DbDao <|-- DbMicDao
+
+        class DbPermissionDao {
+            + DbPermissionDao(JdbcConnector connector)
+            + DbPermissionDao(JdbcConnector connector, int actionBy)
+        }
+        DbDao <|-- DbPermissionDao
+
+        class DbRemoteDao {
+            + DbRemoteDao(JdbcConnector connector)
+            + DbRemoteDao(JdbcConnector connector, int actionBy)
+        }
+        DbDao <|-- DbRemoteDao
+
+        class DbUserDao {
+            + DbUserDao(JdbcConnector connector)
+            + DbUserDao(JdbcConnector connector, int actionBy)
+        }
+        DbDao <|-- DbUserDao
+
+        class DbUserGroupDao {
+            + DbUserGroupDao(JdbcConnector connector)
+            + DbUserGroupDao(JdbcConnector connector, int actionBy)
+            - getGroup(ResultSet resultSet, JdbcConnector connector)
+            - getUser(ResultSet resultSet, JdbcConnector connector)
+        }
+        DbDao <|-- DbUserGroupDao
+
+    }
+
+    package jdbc {
+    class DaoQueryBuilder {
+        - String database
+        - String table
+        - String[] attributes
+        + DaoQueryBuilder(String database, Class <? extends Base> baseClass)
+        - void setDatabase(String database)
+        - void setTable(String table)
+        - void setAttributes(String[] attributes)
+        - String getDatabaseTable()
+        + int getUpdateIdIndex()
+        + String getAllQuery()
+        + String getByIdQuery()
+        + String getAddQuery()
+        + String getUpdateQuery()
+        + String getDeleteQuery()
+    }
+
+    class JdbcConnector {
+        - {static} String S_USERNAME
+        - {static} String S_PASSWORD
+        - {static} String S_HOST
+        - {static} String S_PORT
+        - {static} String S_DATABASE
+        - {static} String S_USE_SSL
+        - {static} String S_USE_UNICODE
+        - {static} String S_JDBC_TIMEZONE_SHIFT
+        - {static} String S_LEGACY_DATETIME
+        - {static} String S_SERVER_TIMEZONE
+        - {static} String S_ZERO_TIME_BEHAVOIR
+        - {static} String PORT
+        - {static} String USE_SSL
+        - {static} String USE_UNICODE
+        - {static} String JDBC_TIMEZONE_SHIFT
+        - {static} String LEGACY_DATETIME
+        - {static} String SERVER_TIMEZONE
+        - {static} String ZERO_DATE_TIME_BEHAVOIR
+        - String username
+        - Stirng password
+        - String host
+        - String port 
+        - String database
+        - boolean useSsl
+        - boolean useUnicode
+        - boolean jdbcTimezoneShift
+        - boolean legacyDateTime
+        - String serverTimezone
+        - String zeroDateTimeBehavoir
+        - Connection connection
+        + Connection getConnection()
+        + Connection getOpenConnection()
+        + DaoQueryBuilder getQueryBuilder(Class clazz)
+        + JdbcConnector(...)
+        + JdbcConnector(String username, String password, String host, int port, String database)
+        + JdbcConnector(String propertiesFilePath)
+        - String getConnectionString()
+        - Properites getConnectionProperties()
+        + void close()
+        + void openConnection()
+        + writeProperties(String propertiesFilePath)
+    }
+
+    class JapiConnector() {
+        - {static} String PROPERTIES_FILE_PATH
+        - {static} boolean SSL 
+        + JapiConnector()
+        + {static} JdbcConnector initialize()
+        + {static} Connection get()
+    }
+}
+
+package model {
+    abstract Base {
+        + {static} String ID = "id"
+        + {static} int CREATED_BY_INDEX = 1
+        + {static} int CREATED_DATE_INDEX = 2
+        + {static} int UPDATED_BY_INDEX = 3
+        + {static} int UPDATED_DATE_INDEX = 4
+        + {static} int DELETED_BY_INDEX = 5
+        + {static} int DELETED_DATE_INDEX = 6
+        + {static} String[] DEFAULT_ATTRIBUTES
+        + {static} int SQL_INT_NULL = 0;
+        - {static} int DEFAULT_ID = 0;
+        + {static} Date NOW
+        - int id
+        - int createdBy
+        - Date createdDate
+        - int updatedBy
+        - Date updatedDate
+        - int deleteeBy
+        - Date deletedDate
+        + Base(int id, int createdBy, Date createdDate, int updatedBy, Date updatedDate, int deletedBy, Date deletedDate)
+        + Base(int id, int createdBy, Date createdDate, int updatedBy, Date updatedDate)
+        + Base(int createdBy)
+        + Base(Base base)
+        + int getId()
+        + void setCreatedBy(int createdBy)
+        + int getCreatedBy()
+        + void setCreatedDate(Date createdDate)
+        + Date getCreatedDate()
+        + void setUpdatedBy(int updatedBy)
+        + int getUpdatedBy()
+        + void setUpdatedDate(Date updatedDate)
+        + Date getUpdatedDate()
+        + void setDeletedBy(int deletedBy)
+        + int getDeletedBy()
+        + void setDeletedDate(Date deletedDate)
+        + Date getDeletedDate()
+        # {static} Date now()
+        + {static} String[] getDefaultAttributes()
+        + {static} String getString(int index)
+        + {static} String getCreatedByString()
+        + {static} String getCreatedDateString()
+        + {static} String getUpdatedByString()
+        + {static} String getUpdatedDateString()
+        + {static} String getDeletedByString()
+        + {static} String getDeletedDateString()
+    }
+
+    class Permission{
+        - String name
+        - String string
+        - String description
+        + Permission(..., Date deletedDate, String name, String string, String description)
+        + Permission(..., String name, String string, String description)
+        + Permission(int createdBy, String name, String string, String description)
+        + Permission(Base base, String name, String string, String description)
+        + Stirng getName()
+        + void setName(String name)
+        + String getString()
+        + void setString(String string)
+        + String getDescription()
+        + void setDescription(String description)
+    }
+    Base <|-- Permission
+
+    class Group {
+        - String name
+        + Group(..., Date deleteDate, String name, Group parentGroup)
+        + Group(..., String name, Group parentGroup)
+        + Group(int createdBy, String name, Group parentGroup)
+        + Group(Base base, String name, Group parentGroup)
+        + String getName()
+        + void setName(String name)
+        + Group getParentGroup()
+        + void setParentGroup(Group parentGroup)
+    }
+    Base <|-- Group
+    Group o-- Group : - parentGroup
+
+    class GroupPermission {
+        + GroupPermission(..., Date deletedDate, Permission permission, Group group)
+        + GroupPermission(..., Permission permission, Group group)
+        + GroupPermission(int actionBy, Permission permission, Group group)
+        + GroupPermission(Base base, Permission permission, Group group)
+        + Group getGroup()
+        + void setGroup(Group group)
+        + Permission getPermission()
+        + void setPermission(Permission permission)
+    }
+    Base <|-- GroupPermission
+    GroupPermission o-- Group : group
+    GroupPermission o-- Permission : permission
+
+    class User {
+        - String username
+        - String password
+        - String salt
+        - String firstname
+        - String lastname
+        - String email
+        + User(..., Date deletedDate, String username, String password, String salt, String firstname, String lastname, String email)
+        + User(..., String username, String password, String salt, String firstname, String lastname, String email)
+        + User(int createdBy, String username, String password, String salt, String firstname, String lastname, String email)
+        + User(Base base, String username, String password, String salt, String firstname, String lastname, String email)
+        + String getUsername()
+        + void setUsername(String username)
+        + String getPassword()
+        + void setPassword(String password)
+        + String getSalt() 
+        + void setSalt(String salt)
+        + String getFirstname()
+        + void setFirstname(String firstname)
+        + String getLastname()
+        + void setLastname(String lastname)
+        + String getEmail() 
+        + void setLastname(String email)
+    }
+    Base <|-- User
+
+    class UserGroup {
+        + UserGroup(..., Deleted date, Group group, User user)
+        + UserGroup(..., Group group, User user)
+        + UserGroup(int createdBy, Group group, User user)
+        + UserGroup(Base base, Group group, User user)
+        + Group getGroup()
+        + void setGroup(Group group)
+        + User getUser()
+        + void setUser(User user)
+    }
+    Base <|-- UserGroup
+    UserGroup o-- User : user
+    UserGroup o-- Group : group
+
+    class Generator {
+        - String name
+        - int frequence
+        - boolean status
+        - String ip
+        - String keyC
+        + Generator(..., Date deletedDate, String name, int frequence, boolean status, String ip, String keyC)
+        + Generator(..., String name, int frequence, boolean status, String ip, String keyC)
+        + Generator(int actionBy, String name, int frequence, boolean status, String ip, String keyC)
+        + Generator(Base base, String name, int frequence, boolean status, String ip, String keyC)
+        + String getName()
+        + void setName(String name)
+        + int getFrequence()
+        + void setFrequence(int frequence)
+        + boolean isStatus()
+        + void setStatus(boolean status)
+        + String getIp()
+        + void setIp(String ip)
+        + String getKeyC()
+        + void setKeyC(String keyC)
+    }
+    Base <|-- Generator
+
+    class Mic {
+        - int decibel
+        - int timer 
+        - String ip
+        - String keyC
+        + Mic(..., int deletedDate, Generator generator, int decibel, int timer, String ip, String keyC)
+        + Mic(..., Generator generator, int decibel, int timer, String ip, String keyC)
+        + Mic(int createdBy, Generator generator, int decibel, int timer, String ip, String keyC)
+        + Mic(Base base, Generator generator, int decibel, int timer, String ip, String keyC)
+        + Genrator getGenerator()
+        + void setGenerator(Generator generator)
+        + int getDecibel()
+        + void setDecibel(int decibel)
+        + int getTimer()
+        + void setTimer(int timer)
+        + String getIp()
+        + void setIp(String ip)
+        + String getKeyC()
+        + void setKeyC(String keyC)
+    }
+    Base <|-- Mic
+    Mic o-- Generator : generator
+
+    class Remote{
+        - String command
+        - String ip
+        - String keyC
+        + Remote(..., Date deletedDate, Generator generator, String command, String ip, String keyC)
+        + Remote(..., Generator generator, String command, String ip, String keyC)
+        + Remote(int createdBy, Generator generator, String command, String ip, String keyC)
+        + Remote(Base base, Generator generator, String command, String ip, String keyC)
+        + Genrator getGenerator()
+        + void setGenerator(Generator generator)
+        + String getCommand() 
+        + void setCommand(String command)
+        + String getIp()
+        + void setIp(String ip)
+        + String getKeyC()
+        + void setKeyC(String keyC)
+    }
+    Base <|-- Remote
+    Remote o-- Generator : genrator
+}
+
+package modeljson {
+    abstract BaseJson {
+        - {static} String ID
+        - {static} String CREATED_BY
+        - {static} String CREATED_DATE
+        - {static} String UPDATED_BY
+        - {static} String UPDATED_DATE
+        - {static} String DELETED_BY
+        - {static} String DELETED_DATE
+        - JSONObject json
+        + BaseJson(Base base)
+        + BaseJson(JSONObject json)
+        + BaseJson(String json)
+        + JSONObject getJson()
+        # Base getBase(DbDao dao, int id)
+        - void setJsonBase(Base base)
+        # int getInt(String key)
+        # Date getDate(String key)
+        # String getString(String key)
+        # boolean getBoolean(String key)
+        # Timestamp getTimestamp(String key)
+        # Base getBase()
+        + {abstract} void set(Base base)
+        + {abstract} Base get(DbDao dao)
+    }
+
+    class GeneratorJson {
+        + {static} String NAME
+        + {static} String FREQUENCE
+        + {static} String STATUS
+        + {static} String IP
+        + {static} String KEY_C
+        + GeneratorJson(Generator generator)
+        + GeneratorJson(Base base)
+        + GeneratorJson(JSONObject json)
+        + GeneratorJson(String string)
+    }
+    BaseJson <|-- GeneratorJson
+
+    class GroupJson {
+        + {static} String NAME
+        + {static} String PARENT_GROUP
+        + GroupJson(Group group)
+        + GroupJson(Base base)
+        + GroupJson(JSONObject json)
+        + GroupJson(String jsonString)
+    }
+    BaseJson <|-- GroupJson
+
+    class GroupPermissionJson {
+        + {static} String GROUP
+        + {static} String PERMISSION
+        + GroupPermissionJson(GroupPermission groupPermission)
+        + GroupPermissionJson(Base base)
+        + GroupPermissionJson(JSONObject json)
+        + GroupPermissionJson(String string)
+    }
+    BaseJson <|-- GroupPermissionJson
+
+    class MicJson {
+        + {static} String GENERATOR
+        + {static} String DECIBEL
+        + {static} String TIMER
+        + {static} String IP
+        + {static} String KEY_C
+        + MicJson(Mic mic)
+        + MicJson(Base base)
+        + MicJson(JSONObject json)
+        + MicJson(String string)
+    }
+    BaseJson <|-- MicJson
+
+    class PermissionJson {
+        + {static} String NAME
+        + {static} String STRING
+        + {static} String DESCRIPTION
+        + PermissionJson(Permission permission)
+        + PermissionJson(Base base)
+        + PermissionJson(JSONObject json)
+        + PermissionJson(String string)
+    }
+    PermissionJson --|> BaseJson
+
+    class RemoteJson {
+        + {static} String GENERATOR
+        + {static} String COMMAND
+        + {static} String IP
+        + {static} String KEY_C
+        + RemoteJson(Remote remote)
+        + RemoteJson(Base base)
+        + RemoteJson(JSONObject json)
+        + RemoteJson(String string)
+    }
+    RemoteJson --|> BaseJson
+
+    class UserGroupJson {
+        + {static} String USER
+        + {static} String GROUP
+        + UserGroupJson(UserGroup userGroup)
+        + UserGroupJson(Base base)
+        + UserGroupJson(JSONObject json)
+        + UserGroupJson(String string)
+    }
+    UserGroupJson --|> BaseJson
+
+    class UserJson {
+        + {static} String USERNAME
+        + {static} String PASSWORD
+        + {static} String SALT
+        + {static} String FIRSTNAME
+        + {static} String LASTNAME
+        + {static} String EMAIL
+        + UserJson(User user)
+        + UserJson(Base base)
+        + UserJson(JSONObject json)
+        + UserJson(String string)
+    }
+    UserJson --|> BaseJson
+}
+
+package queries {
+
+    class PermissionUserQuery {
+        - {static} String QUERY
+        - {static} int ID_INDEX 
+        + {static} String[] getPermission(Connection connection, int id)
+        + {static} String[] getPermission(Connection connection, User id)
+        + {static} String[] getPermission(JdbcConnetor connector, int id)
+    }
+
+    class AccCheckQueries {
+        - {static} String GENERATOR_KEY_CHECK
+        - {static} String MIC_KEY_CHECK
+        - {static} String REMOTE_KEY_CHECK
+        - {static} String CONF_QUERY
+        + {static} JSONOjbect getJsonConf(Connection connection, String keyC)
+        - {static} boolean isValidKey(String query, Connection connection, String keyC)
+        + {static} boolean isValidGeneratorKey(Connection connection, String keyC)
+        + {static} boolean isValidMicKey(Connection connection, String keyC)
+        + {static} boolean isValidRemoteKey(Connection connection, String keyC)
+    }
+
+    class UserIdQuery {
+        - {static} String QUERY
+        - {static} int USERNAME_INDEX
+        + {static} int getUserId(Connection connection, String username)
+    }
+
+    class GeneratorQuery {
+        - {static} String GET_STATUS_KEY_QUERY
+        - {static} String GET_STATUS_USER_ID_QUERY
+        - {static} String GET_FREQUENCE_KEY_QUERY
+        - {static} String GET_FREQUENCE_USER_ID_QUERY
+        - {static} String GET_KEY_USER_ID_QUERY
+        - {static} String GET_MIC_TIMER_KEY_QUERY
+        - {static} String SET_STATUS_KEY_QUERY
+        - {static} String SET_STATUS_USER_ID_QUERY
+        - {static} String SET_FREQUENCE_USER_ID_QUERY
+        - {static} String SET_MIC_TIMER_USER_ID_QUERY
+        - {static} String GET_IP_USER_ID_QUERY
+        - {static} String GET_IP_KEY_QUERY
+        - {static} String SET_DECIBEL
+        - {static} String GET_DECIBEL_USER_ID
+        - {static} String STATUS
+        - {static} String FREQUENCE
+        - {static} String TIMER
+        - {static} String IP
+        - {static} String KEY_C
+        + {static} boolean getGeneratorStatus(Connection connection, String keyC)
+        + {static} boolean getGeneratorStatus(Connection connection, int userId)
+        + {static} int getGeneratorFrequence(Connection connection, String keyC)
+        + {static} int getGeneratorFrequence(Connection connection, int userId)
+        - {static} boolean getStatus(Connection connection, String query, String stringValue, int intValue)
+        - {static} int getFrequence(Connection connection, String query, String stringValue, int intValue)
+        - {static} ResultSet get(Connection connection, String query, String stringValue, int intValue)
+        + {static} boolean setStatus(Connection connection, int userId, boolean status)
+        + {static} boolean setStatus(Connection connection, String keyC, boolean status)
+        + {static} int getMicTimer(Connection connection, String keyC)
+        + {static} boolean setFrequence(Connection connection, int userId, int frequence)
+        + {static} String getIp(Connection connection, int userId)
+        + {static} String getIp(Connection connection, String keyC)
+        + {static} String getKeyByUserId(Connection connection, int userId)
+        + {static} boolean setMicTimer(Connection connection, int userId, int timer)
+        + {static} boolean setDecibel(Connection connection, int userId, int decibel)
+        + {static} int getDecibel(Connection connection, int userId)
+    }
+}
+
+package servlets {
+    package help {
+    class ServletRequestAnalyser {
+        + {static} int OK
+        + {static} int MISSING_PARAMETERS
+        + {static} int NOT_VALID_PARAMETERS
+        - Map<String, String[]> parameters
+        - String[] requiredParameters
+        - String[] optionalParameters
+        - String[] missingParameters
+        - String[] notValidParameters
+        - String[] presentOptionalParameters
+        - Validator validator
+        + String[] getMissingParameters()
+        + String[] getNotValidParameters()
+        + String[] getPresentOptionalParameters()
+        + int getStatus()
+        + Map<String, String[]> getParameters()
+        + String getParameter(String key)
+        + ServletRequestAnalyser(String[] requiredParameters, String[] optionalParameters, Map<String, String[]> parameters, Validator validator)
+        + ServletRequestAnalyser(String[] requiredParameters, Map<String, String[]> parameters)
+        + ServletRequestAnalyser(String[] requiredParameters, Map<String, String[]> parameters, Validator validator)
+        - void setMissingParameters()
+        - void setPresentOptionalParameters()
+        - void setNotValidParameters(String[] parameters)
+    }
+
+    class ServletNfe {
+        + ServletNfe()
+        + ServletNfe(String message)
+    }
+    Exception <|-- ServletNfe
+
+    ServletRequestAnalyser -[hidden]> ServletNfe
+}
+
+abstract BaseServlet {
+        + {static} String S_200_OK
+        + {static} String S_201_CREATED
+        + {static} String S_201_NO_CONTENT
+        + {static} String S_304_NOT_MODIFIED
+        + {static} String S_400_BAD_REQUEST
+        + {static} String S_401_UNAUTHORIZED
+        + {static} String S_403_FORBIDDEN
+        + {static} String S_404_NOT_FOUND
+        + {static} String S_406_NOT_ACCEPTABLE
+        + {static} String S_409_CONFLICT
+        + {static} String S_500_INTERNAL_SERVER_ERROR
+        + {static} String S_501_NOT_IMPLEMENTED
+        + {static} String S_STATUS
+        + {static} String S_STATUS_STRING
+        + {static} String S_STATUS_ERROR
+        + {static} String S_STATUS_NOT_ACCEPTABLE
+        + {static} String S_NOT_VALID_PARAMETERS
+        + {static} String S_MISSING_PARAMETERS
+        + {static} String S_PATH
+        + {static} String S_ACTION
+        + {static} String S_MESSAGE
+        + {static} String S_REQUEST_URI
+        + {static} String S_REQUEST_URL
+        + {static} String S_METHOD
+        + {static} String S_REQUEST
+        - JdbcConnector connector
+        # JdbcConnector getConnector()
+        # JdbcConnector setConnector(JdbcConnector connector)
+        # void ok(HttpServletResponse response, String string)
+        # void ok(HttpServletResponse response, JSONObject jo)
+        # void created(HttpServletResponse response, String string)
+        # void created(HttpServletResponse response, JSONObject jo)
+        # void noContent(HttpServletResponse response)
+        # void notModified(HttpServletResponse response)
+        # void badRequest(HttpServletResponse response, HttpServletResponse response)
+        # void unauthorized(HttpServletResponse response, HttpServletResponse response)
+        # void forbidden(HttpServletResponse response, String action)
+        # void notFound(HttpServletResponse response, HttpServletResponse response)
+        # void notAcceptable(HttpServletResponse response, HttpServletResponse response)
+        # void conflict(HttpServletResponse response, String string)
+        # void internalServerError(HttpServletResponse response, String message)
+        # void internalServerError(HttpServletResponse response, JSONObject jo)
+        # void notImplemented(HttpServletResponse response)
+        - void write(HttpServletResponse response, String string)
+        - void writeStatus(HttpServletResponse response, int statusCode, String statusCode)
+        - void writeStatus(HttpServletResponse response, int statusCode, String statusString, String message)
+        - void writeStatus(HttpServletResponse response, int statusCode, String statusString, JSONObject jo)
+        - JSONObject requestToJson(HttpServletRequest request)
+        - JSONObject requestToJson(HttpServletRequest request, JSONObject jo)
+        # void notValidParameters(HttpServletResponse response, String[] notValidParameters)
+        # void missingParameters(HttpServletResponse response, Stringp[] missingParameters)
+        + JSONObject getOkResponse()
+        + JSONObject getOkResponse(int id)
+        + JSONOBject getNotCapableResponse()
+        + void closeConnector()
+        # String firstValue(Map<String, String[]> map, String key)
+        # {abstract} String getPath();
+        # void doOptions(HttpServletRequest request, HttpServletResponse response)
+    }
+    HttpServlet <|-- BaseServlet
+
+    package data {
+        class BaseDataServlet {
+            - int getId(HttpServletRequest request)
+            # void doGet(HttpServletRequest request, HttpServletResponse response)
+            - void doGetById(HttpServletRequest request, HttpServletResponse response, DbDao dao)
+            - void doGetAll(HttpServletResponse response, DbDao dao)
+            # void doDelete(HttpServletRequest request, HttpServletResponse response)
+            # void doPost(HttpServletRequest request, HttpServletResponse response)
+            - void executePost(HttpServletResponse response, ServletRequestAnalyser sra, int actionBy)
+            # void doPut(HttpServletRequest request, HttpServletResponse response)
+            - void executePut(HttpServletRequest request, HttpServletResponse response, ServletRequestAnalyser sra)
+            # String[] getRequiredPutParameters()
+            # String[] getRequiredPostParameters()
+            - DbDao getDao(int actionBy)
+            - void initConnector()
+            # Base getBase(Map<String, String> params, DbDao dao, String key)
+            - boolean hasRequiredPermission(int userId, String requiredPermission)
+            - boolean hasRequiredPermission(User user, String requiredPermission)
+            # {abstract} Base mapToBase(Map<String, String[]> params, Base base, int actionBy)
+            # {abstract} Class<? extends Base> getModel()
+            # {abstract} DbDao getDao(JdbcConnector connector, int actionBy)
+            # {abstract} BaseJson getJson(Base base)
+            # {abstract} String requiredGetPermission()
+            # {abstract} String requiredPostPermission()
+            # {abstract} String requiredPutPermission()
+            # {abstract} String requiredDeletePermission()
+        }
+        BaseServlet <|-- BaseDataServlet
+
+        class GeneratorServlet {
+
+        }
+        BaseDataServlet <|-- GeneratorServlet
+
+        class GroupPermissionServlet {
+
+        }
+        BaseDataServlet <|-- GroupPermissionServlet
+
+        class GroupServlet {
+
+        }
+        BaseDataServlet <|-- GroupServlet
+
+        class MicServlet {
+
+        }
+        BaseDataServlet <|-- MicServlet
+
+        class PermissionServlet {
+
+        }
+        BaseDataServlet <|-- PermissionServlet
+
+        class RemoteServlet {
+
+        }
+        BaseDataServlet <|-- RemoteServlet
+
+        class UserGroupServlet {
+
+        }
+        BaseDataServlet <|-- UserGroupServlet
+
+        class UserServlet {
+
+        }
+        BaseDataServlet <|-- UserServlet
+    }
+
+    package action {
+        class LoginServlet {
+            - String LOGGED_IN 
+            - String WRONG_USERNAME_PASSWORD
+            # void doPost(HttpServletRequest request, HttpServletResponse response)
+            - void checkOldSession(HttpServletRequest request)
+            - void executePost(HttpServletRequest request, HttpServletResponse response, ServletRequestAnalyser sra)
+            # void doGet(HttpServletRequest request, HttpServletResponse response)
+        }
+        LoginServlet --|> BaseServlet
+
+        class GeneratorStatusServlet {
+            - String GET_GENERATOR_STATUS_PERM
+            - String SET_GENERATOR_STATUS_PERM
+            - String STATUS
+            - String[] REQUIRED_POST_PARAMETERS
+            # void doPost(HttpServletRequest request, HttpServletResponse response)
+            # void doGet(HttpServletRequest request, HttpServletResponse response)
+            - void executePost(HttpServletResponse response, Connection connection, int userId, ServletRequestAnalyser sra)
+        }
+        GeneratorStatusServlet --|> BaseServlet
+
+        class GeneratorMicServlet {
+            - String SET_GENERATOR_MIC_PERM
+            - String GET_GENERATOR_MIC_PERM
+            - String TIMER
+            - String[] REQUIRED_POST_PARAMETERS
+            - void executePost(HttpServletResponse response, Connection connection, int userId, ServletRequestAnalyser sra)
+            # void doPost(HttpServletRequest request, HttpServletResponse response)
+            # void doGet(HttpServletRequest request, HttpServletResponse response)
+        }
+        GeneratorMicServlet --|> BaseServlet
+
+        class GeneratorFrequenceServlet {
+            - String SET_GENERATOR_FREQUENCE_PERM
+            - String GET_GENERATOR_FREQUENCE_PERM
+            - String FREQUENCE
+            - String[] REQUIRED_POST_PARAMETERS
+            - void executePost(HttpServletResponse response, Connection connection, int userId, ServletRequestAnalyser sra)
+            # void doPost(HttpServletRequest request, HttpServletResponse response)
+            # void doGet(HttpServletRequest request, HttpServletResponse response)
+        }
+        GeneratorFrequenceServlet --|> BaseServlet
+
+        class GeneratorDecibelServlet {
+            - String SET_GENERATOR_DECIBEL_PERM
+            - String GET_GENERATOR_DECIBEL_PERM
+            - String DECIBEL
+            - String[] REQUIRED_POST_PARAMETERS
+            - void executePost(HttpServletResponse response, Connection connection, int userId, ServletRequestAnalyser sra)
+            # void doPost(HttpServletRequest request, HttpServletResponse response)
+            # void doGet(HttpServletRequest request, HttpServletResponse response)
+        }
+        GeneratorDecibelServlet --|> BaseServlet
+
+        class AccServlet {
+            - String KEY_C
+            - String ACTION
+            - String CONTENT
+            - String ACTION_MIC
+            - String ACTION_REMOTE
+            - String ACTION_REMOTE_TOGGLE
+            - String ACTION_REMOTE_ON
+            - String ACTION_REMOTE_OFF
+            - String ACTION_CONF
+            - String[] POST_REQUIRED_PARAMETERS
+            - Connection connection
+            - ServletRequestAnalyser sra
+            - Connection getConnection()
+            - ServletRequestAnalyser getSra()
+            - String getKeyC()
+            - String getAction()
+            - String getContent()
+            # void doPost(HttpServletRequest request, HttpServletResponse response)
+            - void executePost(HttpServletResponse response)
+            - void conf(HttpServletResponse response)
+            - void mic(HttpServletResponse response)
+            - void remote(HttpServletResponse response)
+            - void remoteToggle(HttpServletResponse response)
+            - boolean isValidKey()
+        }
+    }
+
+}
+
+}
+
+@enduml

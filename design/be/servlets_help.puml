@@ -1,0 +1,43 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+class Exception {
+
+}
+
+package ch.giuliobosco.freqline.servlets.help {
+    class ServletRequestAnalyser {
+        + {static} int OK
+        + {static} int MISSING_PARAMETERS
+        + {static} int NOT_VALID_PARAMETERS
+        - Map<String, String[]> parameters
+        - String[] requiredParameters
+        - String[] optionalParameters
+        - String[] missingParameters
+        - String[] notValidParameters
+        - String[] presentOptionalParameters
+        - Validator validator
+        + String[] getMissingParameters()
+        + String[] getNotValidParameters()
+        + String[] getPresentOptionalParameters()
+        + int getStatus()
+        + Map<String, String[]> getParameters()
+        + String getParameter(String key)
+        + ServletRequestAnalyser(String[] requiredParameters, String[] optionalParameters, Map<String, String[]> parameters, Validator validator)
+        + ServletRequestAnalyser(String[] requiredParameters, Map<String, String[]> parameters)
+        + ServletRequestAnalyser(String[] requiredParameters, Map<String, String[]> parameters, Validator validator)
+        - void setMissingParameters()
+        - void setPresentOptionalParameters()
+        - void setNotValidParameters(String[] parameters)
+    }
+
+    class ServletNfe {
+        + ServletNfe()
+        + ServletNfe(String message)
+    }
+    Exception <|-- ServletNfe
+
+    ServletRequestAnalyser -[hidden]> ServletNfe
+}
+
+@enduml

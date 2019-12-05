@@ -1,0 +1,75 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+package ch.giuliobosco.freqline.jdbc {
+    class DaoQueryBuilder {
+        - String database
+        - String table
+        - String[] attributes
+        + DaoQueryBuilder(String database, Class <? extends Base> baseClass)
+        - void setDatabase(String database)
+        - void setTable(String table)
+        - void setAttributes(String[] attributes)
+        - String getDatabaseTable()
+        + int getUpdateIdIndex()
+        + String getAllQuery()
+        + String getByIdQuery()
+        + String getAddQuery()
+        + String getUpdateQuery()
+        + String getDeleteQuery()
+    }
+
+    class JdbcConnector {
+        - {static} String S_USERNAME
+        - {static} String S_PASSWORD
+        - {static} String S_HOST
+        - {static} String S_PORT
+        - {static} String S_DATABASE
+        - {static} String S_USE_SSL
+        - {static} String S_USE_UNICODE
+        - {static} String S_JDBC_TIMEZONE_SHIFT
+        - {static} String S_LEGACY_DATETIME
+        - {static} String S_SERVER_TIMEZONE
+        - {static} String S_ZERO_TIME_BEHAVOIR
+        - {static} String PORT
+        - {static} String USE_SSL
+        - {static} String USE_UNICODE
+        - {static} String JDBC_TIMEZONE_SHIFT
+        - {static} String LEGACY_DATETIME
+        - {static} String SERVER_TIMEZONE
+        - {static} String ZERO_DATE_TIME_BEHAVOIR
+        - String username
+        - Stirng password
+        - String host
+        - String port 
+        - String database
+        - boolean useSsl
+        - boolean useUnicode
+        - boolean jdbcTimezoneShift
+        - boolean legacyDateTime
+        - String serverTimezone
+        - String zeroDateTimeBehavoir
+        - Connection connection
+        + Connection getConnection()
+        + Connection getOpenConnection()
+        + DaoQueryBuilder getQueryBuilder(Class clazz)
+        + JdbcConnector(...)
+        + JdbcConnector(String username, String password, String host, int port, String database)
+        + JdbcConnector(String propertiesFilePath)
+        - String getConnectionString()
+        - Properites getConnectionProperties()
+        + void close()
+        + void openConnection()
+        + writeProperties(String propertiesFilePath)
+    }
+
+    class JapiConnector() {
+        - {static} String PROPERTIES_FILE_PATH
+        - {static} boolean SSL 
+        + JapiConnector()
+        + {static} JdbcConnector initialize()
+        + {static} Connection get()
+    }
+}
+
+@enduml

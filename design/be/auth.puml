@@ -1,0 +1,40 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+package ch.giuliobosco.freqline.auth {
+    interface Authenticator {
+        + boolean authenticate(String username, String password)
+    }
+
+    class SqlAuthenticator {
+        - {static} int SALT_LENGTH = 32
+        - DbUserDao dao
+        - String dbHash
+        - String dbSalt
+        + SqlAuthenticator(DbUserDao dao)
+        + boolean authenticate(String username, Stirng password)
+        + User authenticateUser(String username, Stirng password)
+        - User findUser(String username)
+        + {static} User getUserToInsert(User user)
+        + {static} User getUserToUpdatePassword(User user, DbDao dao)
+        + {static} User getUserToUPdate(User user, DbDao dao)
+    }
+    Authenticator <|.. SqlAuthenticator
+
+    class SessionManager {
+        - {static} int MAX_INACTIVE_INTERNAL = 3600
+        - {static} String USER = "user"
+        - {static} String USER_ID = "user_id"
+        - HttpSession session
+        - int userId
+        + SessionManager(HttpSession session)
+        + User getUser()
+        + int getUserId()
+        + boolean isValidSession()
+        + void initSession(User user, int maxInactiveInterval)
+        + void initSession(User user)
+        + void destroySession()
+    }
+}
+
+@enduml

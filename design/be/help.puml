@@ -1,0 +1,91 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+package ch.giuliobosco.freqline.help {
+
+    package validators {
+        abstract Validator {
+            + Validator() 
+            + boolean isValid(String string)
+        }
+
+        class StringValidator {
+
+        }
+        Validator <|-- StringValidator
+
+        class IntValidator {
+            + IntValidator()
+            + boolean isValid(String string)
+        }
+    }
+
+    class ArrayHelper {
+        + {static} boolean isInArray(Object[] a, Object o)
+        + {static} int countInArray(Object[] a, Object o)
+        + {static} Object[] removeFromArray(Object[] a, Object o)
+
+    }
+
+    class ClassStirngHelper {
+        + {static} String[] fieldsNameToStringArray(Fields[] fields)
+        + {static} String[] classFieldsNameToStringArray(Class<?> clazz)
+    }
+
+    class Hasher {
+        - {static} String SHA_256 = "SHA-256"
+        + {static} byte[] sha256(String string)
+        + {static} byte[] sha256(String string, String salt)
+        + {static} String sha256Hex(String string)
+        + {static} String sha256Hex(String string, String salt)
+    }
+
+    class HttpRequestor {
+        + {static} String GET = "GET"
+        - URL url
+        - String method
+        - String response
+        + HttpRequestor(URL url, String method)
+        + HttpRequestor(String urlString)
+        + String getResponse()
+        + void executeRequest()
+    }
+
+    class NumberHelper {
+        + {static} int random(int min, int max)
+        + {static} int random(int max)
+        + {static} int random()
+
+    }
+
+    class StringArrayHelper {
+        + {static} String[] toStringArray(List<String> l)
+        + {static} String[] toStringArray(Object[] objects)
+        + {static} List<String> arrayToList(String[] a)
+        + {static} concatenateArray(String[] a, String[] b)
+        + {static} boolean arrayEmpty(String[] a)
+        + {static} boolean arrayNotEmpty(String[] a)
+        + {static} JSONArray toJsonArray(String[] a)
+        + {static} String[] removeFromArray(String[] a, String string)
+        + {static} String[] objectArrayToStringArray(Object[] a)
+    }
+
+    class StringHelper {
+        + {static} boolean isLowerCase(char c)
+        + {static} boolean isLowerCase(String string)
+        + {static} boolean isLowerCase(char c)
+        + {static} boolean isUpperCase(Stirng string)
+        + {static} String toLwr(char c)
+        + {static} String toLwr(String string)
+        + {static} String toUpr(char c)
+        + {static} String toUpr(String string)
+        + {static} String camelToSnake(String string)
+        + {static} String toSqlName(Stirng string)
+        + {static} String hex(byte[] bytes)
+        + {static} char randomChar()
+        + {static} String randomString(int length)
+        + {static} boolean is(String str)
+    }
+}
+
+@enduml
