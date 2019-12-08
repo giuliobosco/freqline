@@ -1,0 +1,93 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+package ch.giuliobosco.freqline.servlets {
+    abstract BaseServlet {
+        
+    }
+
+    package action {
+        class LoginServlet {
+            - String LOGGED_IN 
+            - String WRONG_USERNAME_PASSWORD
+            # void doPost(HttpServletRequest request, HttpServletResponse response)
+            - void checkOldSession(HttpServletRequest request)
+            - void executePost(HttpServletRequest request, HttpServletResponse response, ServletRequestAnalyser sra)
+            # void doGet(HttpServletRequest request, HttpServletResponse response)
+        }
+        LoginServlet --|> BaseServlet
+
+        class GeneratorStatusServlet {
+            - String GET_GENERATOR_STATUS_PERM
+            - String SET_GENERATOR_STATUS_PERM
+            - String STATUS
+            - String[] REQUIRED_POST_PARAMETERS
+            # void doPost(HttpServletRequest request, HttpServletResponse response)
+            # void doGet(HttpServletRequest request, HttpServletResponse response)
+            - void executePost(HttpServletResponse response, Connection connection, int userId, ServletRequestAnalyser sra)
+        }
+        GeneratorStatusServlet --|> BaseServlet
+
+        class GeneratorMicServlet {
+            - String SET_GENERATOR_MIC_PERM
+            - String GET_GENERATOR_MIC_PERM
+            - String TIMER
+            - String[] REQUIRED_POST_PARAMETERS
+            - void executePost(HttpServletResponse response, Connection connection, int userId, ServletRequestAnalyser sra)
+            # void doPost(HttpServletRequest request, HttpServletResponse response)
+            # void doGet(HttpServletRequest request, HttpServletResponse response)
+        }
+        GeneratorMicServlet --|> BaseServlet
+
+        class GeneratorFrequenceServlet {
+            - String SET_GENERATOR_FREQUENCE_PERM
+            - String GET_GENERATOR_FREQUENCE_PERM
+            - String FREQUENCE
+            - String[] REQUIRED_POST_PARAMETERS
+            - void executePost(HttpServletResponse response, Connection connection, int userId, ServletRequestAnalyser sra)
+            # void doPost(HttpServletRequest request, HttpServletResponse response)
+            # void doGet(HttpServletRequest request, HttpServletResponse response)
+        }
+        GeneratorFrequenceServlet --|> BaseServlet
+
+        class GeneratorDecibelServlet {
+            - String SET_GENERATOR_DECIBEL_PERM
+            - String GET_GENERATOR_DECIBEL_PERM
+            - String DECIBEL
+            - String[] REQUIRED_POST_PARAMETERS
+            - void executePost(HttpServletResponse response, Connection connection, int userId, ServletRequestAnalyser sra)
+            # void doPost(HttpServletRequest request, HttpServletResponse response)
+            # void doGet(HttpServletRequest request, HttpServletResponse response)
+        }
+        GeneratorDecibelServlet --|> BaseServlet
+
+        class AccServlet {
+            - String KEY_C
+            - String ACTION
+            - String CONTENT
+            - String ACTION_MIC
+            - String ACTION_REMOTE
+            - String ACTION_REMOTE_TOGGLE
+            - String ACTION_REMOTE_ON
+            - String ACTION_REMOTE_OFF
+            - String ACTION_CONF
+            - String[] POST_REQUIRED_PARAMETERS
+            - Connection connection
+            - ServletRequestAnalyser sra
+            - Connection getConnection()
+            - ServletRequestAnalyser getSra()
+            - String getKeyC()
+            - String getAction()
+            - String getContent()
+            # void doPost(HttpServletRequest request, HttpServletResponse response)
+            - void executePost(HttpServletResponse response)
+            - void conf(HttpServletResponse response)
+            - void mic(HttpServletResponse response)
+            - void remote(HttpServletResponse response)
+            - void remoteToggle(HttpServletResponse response)
+            - boolean isValidKey()
+        }
+    }
+}
+
+@enduml
