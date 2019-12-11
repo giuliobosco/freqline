@@ -11,6 +11,9 @@ class MicThread(threading.Thread):
         self.decibel = decibel
         self.host = host
 
+    def set_decibel(self, decibel):
+        self.decibel = decibel
+
     def is_interrupted(self):
         return self._stop_event.is_set()
 
@@ -32,4 +35,4 @@ class MicThread(threading.Thread):
             if self.check_status():
                 response = self.execute_http_req()
                 print (response)
-                sleep(0.1)
+            sleep(0.1)
