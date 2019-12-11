@@ -9,7 +9,7 @@ class RemoteThread(threading.Thread):
         self._stop_event = threading.Event()
         self.bridge = bridge
         self.host = host
-        self.status = None
+        self.status = 1
 
     def is_interrupted(self):
         return self._stop_event.is_set()
