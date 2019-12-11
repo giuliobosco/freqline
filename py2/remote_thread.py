@@ -5,6 +5,7 @@ from urllib2 import urlopen
 
 class RemoteThread(threading.Thread):
     def __init__(self, bridge, host):
+        super(RemoteThread, self).__init__()
         self._stop_event = threading.Event()
         self.bridge = bridge
         self.host = host
