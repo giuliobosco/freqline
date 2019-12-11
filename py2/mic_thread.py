@@ -10,6 +10,8 @@ class MicThread(threading.Thread):
         self.bridge = bridge
         self.decibel = decibel
         self.host = host
+        self.status = 0
+        self.last = False
 
     def set_decibel(self, decibel):
         self.decibel = decibel
@@ -22,9 +24,13 @@ class MicThread(threading.Thread):
 
     def check_status(self):
         status = self.bridge.get("m")
+        self.status = status
         if status > self.decibel:
-            return True
-        return False
+            if not self.last:
+                self.last = True
+                self.execute_http_req()
+        else:
+            self.last = False
 
     def execute_http_req(self):
         request = "http://" + self.host + "/acc?key_c=AAAAAA&action=mic&content=1"
@@ -32,7 +38,6 @@ class MicThread(threading.Thread):
 
     def run(self):
         while not self.is_interrupted():
-            if self.check_status():
-                response = self.execute_http_req()
-                print (response)
+            self.check_status()
+
             sleep(0.1)
