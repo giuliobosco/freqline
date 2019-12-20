@@ -80,36 +80,36 @@ public abstract class BaseDataServlet extends BaseServlet {
         }
     }
 
-    /**
-     * Do get.
-     *
-     * @param request  Http request.
-     * @param response Http response.
-     * @throws ServletException Error in servlet.
-     * @throws IOException      Input Output Error.
-     */
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        SessionManager sm = new SessionManager(request.getSession());
-        try {
-            initConnector();
-            boolean hasP = hasRequiredPermission(sm.getUserId(), requiredGetPermission());
-            if (sm.isValidSession() && hasP) {
-                DbDao dao = getDao(sm.getUserId());
+/**
+ * Do get.
+ *
+ * @param request  Http request.
+ * @param response Http response.
+ * @throws ServletException Error in servlet.
+ * @throws IOException      Input Output Error.
+ */
+protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    SessionManager sm = new SessionManager(request.getSession());
+    try {
+        initConnector();
+        boolean hasP = hasRequiredPermission(sm.getUserId(), requiredGetPermission());
+        if (sm.isValidSession() && hasP) {
+            DbDao dao = getDao(sm.getUserId());
 
-                try {
-                    doGetById(request, response, dao);
-                } catch (ServletNfe snfe) {
-                    doGetAll(response, dao);
-                }
-
-                closeConnector();
-            } else {
-                unauthorized(request, response);
+            try {
+                doGetById(request, response, dao);
+            } catch (ServletNfe snfe) {
+                doGetAll(response, dao);
             }
-        } catch (Exception e) {
-            internalServerError(response, e.getMessage());
+
+            closeConnector();
+        } else {
+            unauthorized(request, response);
         }
+    } catch (Exception e) {
+        internalServerError(response, e.getMessage());
     }
+}
 
     /**
      * Do get get by id.
