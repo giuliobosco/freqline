@@ -1,38 +1,31 @@
 @startuml
 
 :Admin User: as AdminUser
-:Normal User: as NormalUser
 
 User <|-- AdminUser
-User <|-- NormalUser
 
-(Mobile Phone - Normal user views) as NormalPhone
-(Mobile Phone - Admin user views) as AdminPhone
-(Desktop - Normal user views) as NormalDesktop
-(Desktop - Admin user views) as AdminDesktop
+(Admin user views) as AdminPage
+(Configure generator) as NormalPage
 (Edit DB) as edb
-(Controller) as chstatus
-(frequences generator status) as status
-(frequences generator remote) as remote
+(Controller) as ctrl
+(remote) as remote
+(microphone) as mic
+:Generator status: as status
 
-NormalUser ---> NormalPhone : Turn On/Off frequences generator
-NormalUser ---> NormalDesktop
-AdminUser ---> AdminPhone : Change frequences\nManage users\nTurn On/Off frequences generator
-AdminUser ---> AdminDesktop
+AdminUser ---> AdminPage : manage users
+AdminPage ---> edb : update db
+edb ---> ctrl : load configuration
 
-NormalPhone ---> chstatus
-NormalDesktop ---> chstatus
-AdminPhone ---> chstatus
-AdminDesktop ---> chstatus
-AdminPhone ---> edb
-AdminDesktop ---> edb
+User ---> NormalPage : on/off generator\nchange frequence\nchange decibel\nchange timer
+NormalPage ---> ctrl
 
-chstatus ---> status : On/Off
-edb ---> status : frequences\nregulation
+User ---> mic : loud noise
+mic ---> ctrl : turn generator on\nset timer
 
-User ---> chstatus : change status\nwith high noise
-User ---> remote
+User ---> remote : on/off generator\nor toggle
+remote ---> ctrl
 
-remote ---> chstatus
+ctrl ---> status : update generator\nstatus
+ctrl ---> edb : update db
 
 @enduml
