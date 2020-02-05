@@ -21,3 +21,16 @@
   - commenti (232) - 10h
 - consegna finale 4h
 - documentazione
+
+## Sistemare problema comunicazione
+
+IDEE
+
+- YUN
+  Cercare di trovare una soluzione sul funzionamento dell'arduino YUN.
+- Usare arduino UNO con comunicazione seriale
+  - comunicazione seriale tramite mini applicativo web
+    programmino scritto in python per riutilizzare il codice gia scritto, servirebbe solamente riscrivere classe GlobalBridge e lato arduino.
+  - comunicazione seriale direttamente in java
+    bisognerebbe scrivere la comunicazione seriale che funzioni in java e lato arduino.
+
