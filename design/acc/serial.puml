@@ -1,0 +1,12 @@
+@startuml
+
+arduino -> serial : "remote(boolean)"
+serial --> arduino : "ok"
+
+arduino -> serial : "mic(micData)"
+serial --> arduino : "ok"
+
+serial -> arduino : "command(command, value)"
+arduino --> serial : "ok"
+
+@enduml
