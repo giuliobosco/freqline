@@ -1,1 +1,23 @@
 # freqline - analysis
+
+- analisi iniziale 16h
+- analisi componenti da comprare 4h
+  - telecomando
+- connessione arduino raspberry (241) 50h
+  - studio dell'arte
+  - implementazione
+- mettere tutto assieme 20h
+  - java
+  - interfaccia wifi - dhcp (dns)
+- sistemare gli arrori
+  - front-end migliorare - 16h (153, 240, 148, 193, 254)
+    - controlli input
+    - gestione navigazione
+    - pop-up
+  - back-end (punto 240) 16h
+    - cambio frequenza
+    - utente cambia i suoi dati
+  - microfono - 4h
+  - commenti (232) - 10h
+- consegna finale 4h
+- documentazione
