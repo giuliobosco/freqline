@@ -1,12 +1,13 @@
 @startuml
 
-arduino -> serial : "remote(boolean)"
-serial --> arduino : "ok"
+alt "do {} while(response!=ok)":
+    arduino -> serial : "command(command, value)"
+    serial --> arduino : "response"
+end
 
-arduino -> serial : "mic(micData)"
-serial --> arduino : "ok"
-
-serial -> arduino : "command(command, value)"
-arduino --> serial : "ok"
+alt "do {} while(response!=ok)":
+    serial -> arduino : "command(command, value)"
+    arduino --> serial : "response"
+end
 
 @enduml
