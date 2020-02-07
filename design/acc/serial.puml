@@ -1,13 +1,13 @@
 @startuml
 
 alt "do {} while(response!=ok)":
-    arduino -> serial : "command(command, value)"
-    serial --> arduino : "response"
+    arduino -> raspberry : "command(command, value)"
+    raspberry --> arduino : "response"
 end
 
 alt "do {} while(response!=ok)":
-    serial -> arduino : "command(command, value)"
-    arduino --> serial : "response"
+    raspberry -> arduino : "command(command, value)"
+    arduino --> raspberry : "response"
 end
 
 @enduml
