@@ -9,7 +9,11 @@ void setup() {
 
 // loop of the arduino
 void loop() {
-  Serial.write("HelloWorld!\n");
+  String s = Serial.readStringUntil('\n');
+  for (int i = 0; i < s.length(); i++) {
+    Serial.write(s[i]);
+  }
+  Serial.write('\n');
 }
 
 void serialWriteCmd(char command, int value) {
