@@ -7,30 +7,55 @@ import com.fazecast.jSerialComm.SerialPort;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 public class App {
     public static final byte INIT = 42;
 
+    public static final byte RETURN = (byte) '\n';
+
     public static void main(String[] args) {
-        SerialPort serialPort =  SerialPort.getCommPort("/dev/tty.usbmodem14101");
-        //serialPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING, 100000000, 10000000);
-        System.out.println(serialPort.openPort());
+        SerialPort serialPort = null;
+        for (SerialPort serial : SerialPort.getCommPorts()) {
+            if (serial.getDescriptivePortName().contains("Arduino")) {
+                serialPort = serial;
+            }
+        }
+
+        if (serialPort == null) {
+            System.out.println("Arduino not found");
+            return;
+        }
+
+        serialPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING, 100000000, 10000000);
+
+        if (!serialPort.openPort()) {
+            System.out.println("Error while opening communication");
+        }
+
         InputStream input = serialPort.getInputStream();
+        OutputStream output = serialPort.getOutputStream();
 
         int read;
         try {
-            while ((read = input.read()) != 0) {
+            while ((read = input.read()) != INIT) {
                 byte c = (byte)(0x000000FF & read);
 
-                if (c == INIT) {
-                    System.out.println("Return");
-                }
-                System.out.print((char)c);
-
             }
+
+            output.write("HelloWorld!\n".getBytes());
+            Thread.sleep(100);
+            while ((read = input.read()) != RETURN) {
+                byte c = (byte)(0x000000FF & read);
+                System.out.print((char)c);
+            }
+            output.close();
+            input.close();
         } catch (IOException ioe) {
             ioe.printStackTrace();
             System.out.println(ioe.getMessage());
+        } catch (InterruptedException ie) {
+
         }
     }
 }
