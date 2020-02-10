@@ -15,6 +15,7 @@ public class App {
     public static final byte RETURN = (byte) '\n';
 
     public static void main(String[] args) {
+        // search arduino on serial
         SerialPort serialPort = null;
         for (SerialPort serial : SerialPort.getCommPorts()) {
             if (serial.getDescriptivePortName().contains("Arduino")) {
@@ -22,33 +23,41 @@ public class App {
             }
         }
 
+        // exit if arduino not found
         if (serialPort == null) {
             System.out.println("Arduino not found");
             return;
         }
 
+        // set new higher timeouts
         serialPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING, 100000000, 10000000);
 
+        // open serial port communication
         if (!serialPort.openPort()) {
             System.out.println("Error while opening communication");
         }
 
+        // set streams (I/O)
         InputStream input = serialPort.getInputStream();
         OutputStream output = serialPort.getOutputStream();
 
         int read;
         try {
-            while ((read = input.read()) != INIT) {
-                byte c = (byte)(0x000000FF & read);
+            // wait until INIT char
+            while ((read = input.read()) != INIT) { }
 
-            }
-
+            // wirte HelloWorld!\n on serial
             output.write("HelloWorld!\n".getBytes());
+
             Thread.sleep(100);
+
+            // read and print on CLI all chars until return
             while ((read = input.read()) != RETURN) {
                 byte c = (byte)(0x000000FF & read);
                 System.out.print((char)c);
             }
+
+            // close streams
             output.close();
             input.close();
         } catch (IOException ioe) {
