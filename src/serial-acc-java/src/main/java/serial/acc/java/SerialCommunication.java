@@ -33,7 +33,7 @@ import java.io.OutputStream;
  * Build commands and responses.
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0 (2020-02-12 - 2020-02-12)
+ * @version 1.0.1 (2020-02-12 - 2020-02-12)
  */
 public class SerialCommunication {
 
@@ -217,6 +217,7 @@ public class SerialCommunication {
         read = in.read();
         this.sequence = toByteUnsigned(read);
 
+        this.message = new byte[0];
         while ((read = in.read()) != END) {
             this.message = arrayPush(this.message, toByteUnsigned(read));
         }
