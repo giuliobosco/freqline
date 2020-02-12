@@ -1,0 +1,26 @@
+@startuml
+
+skinparam classAttributeIconSize 0
+
+class SerialCommunication {
+    + {static} byte INIT = 42
+    + {static} byte COMMAND_INIT = 43
+    + {static} byte RESPONSE_INIT = 45
+    + {static} byte END = 10
+    - byte sequenceType
+    - byte sequence 
+    - byte[] message
+    + SerialCommunication(byte sequenceType, byte sequence, byte[] message)
+    + SerialCommunication(boolean command, byte sequence, byte[] message)
+    + SerialCommunication()
+    + byte getSequenceType()
+    + byte getSequence()
+    + byte[] getMessage()
+    # byte[] toByteUnsigned(int b)
+    # byte[] arrayPush(byte[] b, byte b)
+    # byte[] buildBytesToWrite()
+    + void readUnitlEnd(InputStream in)
+    + void write(OutputStream out)
+}
+
+@enduml
