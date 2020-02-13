@@ -27,17 +27,23 @@ package serial.acc.java;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Arrays;
 
 /**
  * Serial communication protocol class. Sequence of communication.
  * Build commands and responses.
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0.2 (2020-02-12 - 2020-02-13)
+ * @version 1.0.3 (2020-02-12 - 2020-02-13)
  */
 public class SerialCommunication {
 
     // ------------------------------------------------------------------------------------ Costants
+
+    /**
+     * Empty byte array.
+     */
+    public static final byte[] EMPTY_BYTE_ARRAY = new byte[0];
 
     /**
      * Initial communication char.
@@ -242,6 +248,49 @@ public class SerialCommunication {
         byte[] bytes = buildBytesToWrite();
 
         out.write(bytes);
+    }
+
+    /**
+     * Is same sequence, check the serial communication sequence is the same as this.
+     *
+     * @param serialCommunication Serial Communication to check.
+     * @return True if sequences are the same.
+     */
+    public boolean isSameSequence(SerialCommunication serialCommunication) {
+        return serialCommunication.getSequence() == this.getSequence();
+    }
+
+    /**
+     * Is same sequence type, check the serial communication sequence type is the same as this.
+     *
+     * @param serialCommunication Serial Communication to check.
+     * @return True if sequences types are the same.
+     */
+    public boolean isSameSequenceType(SerialCommunication serialCommunication) {
+        return serialCommunication.getSequenceType() == this.getSequenceType();
+    }
+
+    /**
+     * Is same sequence and sequence type.
+     *
+     * @param serialCommunication Serial Communication to check.
+     * @return True if sequences and sequences types are the same.z
+     */
+    public boolean isSame(SerialCommunication serialCommunication) {
+        return this.isSameSequence(serialCommunication)
+                && this.isSameSequenceType(serialCommunication);
+    }
+
+    /**
+     * Compare object with this.
+     *
+     * @param obj Object to compare.
+     * @return True if objects content is the same.
+     */
+    @Override
+    public boolean equals(Object obj) {
+        SerialCommunication sc = (SerialCommunication) obj;
+        return isSame(sc) && Arrays.equals(sc.getMessage(), this.getMessage());
     }
 
     // --------------------------------------------------------------------------- Static Components

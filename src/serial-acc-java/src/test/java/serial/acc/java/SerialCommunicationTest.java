@@ -36,7 +36,7 @@ import static org.junit.Assert.*;
  * Test class for SerialCommunication.
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0.1 (2020-02-12 - 2020-02-13)
+ * @version 1.0.2 (2020-02-12 - 2020-02-13)
  */
 public class SerialCommunicationTest {
     /**
@@ -187,5 +187,68 @@ public class SerialCommunicationTest {
         testMethod.readUntilEnd(in);
 
         assertArrayEquals(mock, testMethod.buildBytesToWrite());
+    }
+
+    /**
+     * Test isSameSequence() method of class SerialCommunication.
+     */
+    @Test
+    public void testIsSameSequence() {
+        SerialCommunication scA = getSerialCommunicationInstance();
+        SerialCommunication scB = getSerialCommunicationInstance();
+
+        assertTrue(scA.isSameSequence(scB));
+
+        scB = new SerialCommunication(BYTE_TEST_VALUE_B, BYTE_TEST_VALUE, getBytesData());
+
+        assertFalse(scA.isSameSequence(scB));
+    }
+
+    /**
+     * Test isSameSequenceType() method of class SerialCommunication.
+     */
+    @Test
+    public void testIsSameSequenceType() {
+        SerialCommunication scA = getSerialCommunicationInstance();
+        SerialCommunication scB = getSerialCommunicationInstance();
+
+        assertTrue(scA.isSameSequenceType(scB));
+
+        scB = new SerialCommunication(BYTE_TEST_VALUE_B, BYTE_TEST_VALUE, getBytesData());
+
+        assertFalse(scA.isSameSequenceType(scB));
+    }
+
+    /**
+     * Test isSame() method of class SerialCommunication.
+     */
+    @Test
+    public void testIsSame() {
+        SerialCommunication scA = getSerialCommunicationInstance();
+        SerialCommunication scB = getSerialCommunicationInstance();
+
+        assertTrue(scA.isSame(scB));
+
+        scB = new SerialCommunication(BYTE_TEST_VALUE, BYTE_TEST_VALUE, getBytesData());
+
+        assertFalse(scA.isSame(scB));
+    }
+
+    /**
+     * Test equals() method of class SerialCommunication.
+     */
+    @Test
+    public void testEquals() {
+        SerialCommunication scA = getSerialCommunicationInstance();
+        assertEquals(scA, scA);
+
+        SerialCommunication scB = getSerialCommunicationInstance();
+        assertEquals(scA, scB);
+
+        scB = new SerialCommunication(BYTE_TEST_VALUE, BYTE_TEST_VALUE_B, getBytesData());
+        assertEquals(scA, scB);
+
+        scB = new SerialCommunication(BYTE_TEST_VALUE, BYTE_TEST_VALUE, getBytesData());
+        assertNotEquals(scA, scB);
     }
 }
