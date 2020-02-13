@@ -36,7 +36,7 @@ import static org.junit.Assert.*;
  * Test class for SerialCommunication.
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0 (2020-02-12 - 2020-02-13)
+ * @version 1.0.1 (2020-02-12 - 2020-02-13)
  */
 public class SerialCommunicationTest {
     /**
@@ -115,6 +115,18 @@ public class SerialCommunicationTest {
     }
 
     /**
+     * Test setMessage() method of class SerialCommunication.
+     */
+    @Test
+    public void testSetMessage() {
+        SerialCommunication sc = new SerialCommunication();
+
+        sc.setMessage(getBytesData());
+
+        assertArrayEquals(getBytesData(), sc.getMessage());
+    }
+
+    /**
      * Test arrayPush() method of class SerialCommunication.
      */
     @Test
@@ -134,7 +146,7 @@ public class SerialCommunicationTest {
     public void testBuildBytesToWrite() {
         byte[] bytes = new byte[]{1, 2, 3};
 
-        byte[] bytesTest = new byte[]{1, 2, 1, 2, 3, 10};
+        byte[] bytesTest = new byte[]{43, 101, 1, 2, 3, 10};
 
         bytes = new SerialCommunication(
                 BYTE_TEST_VALUE,

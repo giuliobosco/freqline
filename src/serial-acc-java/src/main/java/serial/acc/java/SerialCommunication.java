@@ -33,7 +33,7 @@ import java.io.OutputStream;
  * Build commands and responses.
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0.1 (2020-02-12 - 2020-02-12)
+ * @version 1.0.2 (2020-02-12 - 2020-02-13)
  */
 public class SerialCommunication {
 
@@ -140,6 +140,15 @@ public class SerialCommunication {
      */
     public byte[] getMessage() {
         return this.message;
+    }
+
+    /**
+     * Set the message of the communication.
+     *
+     * @param message Message of the communication.
+     */
+    public void setMessage(byte[] message) {
+        this.message = message;
     }
 
     // -------------------------------------------------------------------------------- Help Methods
