@@ -28,7 +28,7 @@ package serial.acc.java;
  * Serial command.
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0 (2020-02-10 - 2020-02-10)
+ * @version 1.0.1 (2020-02-10 - 2020-02-14)
  */
 public class SerialCommand extends SerialCommunication {
 
@@ -141,6 +141,8 @@ public class SerialCommand extends SerialCommunication {
         switch (serialCommunication.getSequence()) {
             case SerialCommand.ECHO_BYTE:
                 return new SerialEchoCommand(serialCommunication.getMessage()).response();
+            case NULL_BYTE:
+                return new SerialNullCommand().response();
         }
 
         return SerialResponse.ERROR;

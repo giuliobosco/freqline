@@ -26,8 +26,7 @@ package serial.acc.java;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 /**
  * Test Serial command.
@@ -45,7 +44,7 @@ public class SerialCommandTest {
     /**
      * Echo command test bytes.
      */
-    private static final byte[] ECHO_TEST_BYTES = {SerialCommunication.COMMAND_INIT, SerialCommand.ECHO_BYTE, 10, 20, 30, 10};
+    private static final byte[] ECHO_TEST_BYTES = {SerialCommunication.COMMAND_INIT, SerialCommand.ECHO_BYTE, 20, 20, 30, 10};
 
     /**
      * Test command codes.
@@ -86,6 +85,17 @@ public class SerialCommandTest {
         SerialResponse serialResponse = SerialCommand.loadCommand(serialCommunication);
 
         assertArrayEquals(BYTES, serialResponse.getMessage());
+    }
+
+    @Test
+    public void teestLoadCommandNull() {
+        SerialCommunication serialCommunication = new SerialCommunication(true,
+                SerialCommand.NULL_BYTE,
+                new byte[0]);
+
+        SerialResponse serialResponse = SerialCommand.loadCommand(serialCommunication);
+
+        assertTrue(SerialResponse.OK.isSame(serialResponse));
     }
 
 }
