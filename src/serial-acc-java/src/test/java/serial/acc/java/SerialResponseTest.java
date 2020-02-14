@@ -38,7 +38,7 @@ import static org.junit.Assert.*;
  */
 public class SerialResponseTest {
 
-    private static final byte[] ECHO_BYTES = {10, 20, 30};
+    private static final byte[] ECHO_BYTES = {11, 20, 30};
 
     private static final byte[] ECHO_BYTES_NULL = new byte[0];
 
@@ -74,5 +74,4 @@ public class SerialResponseTest {
         assertTrue(sr.isSame(sr));
         assertFalse(Arrays.equals(ECHO_BYTES_NULL, sr.getMessage()));
     }
-
 }

@@ -40,7 +40,7 @@ public class SerialCommandTest {
     /**
      * Data test bytes.
      */
-    private static final byte[] BYTES = {10, 20, 30};
+    private static final byte[] BYTES = {20, 20, 30};
 
     /**
      * Echo command test bytes.
@@ -72,6 +72,20 @@ public class SerialCommandTest {
         sc.setMessage(BYTES);
 
         assertArrayEquals(ECHO_TEST_BYTES, sc.buildBytesToWrite());
+    }
+
+    /**
+     * Test load command echo.
+     */
+    @Test
+    public void testLoadCommandEcho() {
+        SerialCommunication serialCommunication = new SerialCommunication(true,
+                SerialCommand.ECHO_BYTE,
+                BYTES);
+
+        SerialResponse serialResponse = SerialCommand.loadCommand(serialCommunication);
+
+        assertArrayEquals(BYTES, serialResponse.getMessage());
     }
 
 }

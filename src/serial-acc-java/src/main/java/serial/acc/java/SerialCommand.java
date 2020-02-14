@@ -124,4 +124,26 @@ public class SerialCommand extends SerialCommunication {
         return this.getSequence();
     }
 
+    // --------------------------------------------------------------------------- Static Components
+
+    /**
+     * Load command from Serial Communication.
+     *
+     * @param serialCommunication Serial communication.
+     * @return Serial response.
+     */
+    public static SerialResponse loadCommand(SerialCommunication serialCommunication) {
+
+        if (serialCommunication.getSequenceType() != SerialCommunication.COMMAND_INIT) {
+            return null;
+        }
+
+        switch (serialCommunication.getSequence()) {
+            case SerialCommand.ECHO_BYTE:
+                return new SerialEchoCommand(serialCommunication.getMessage()).response();
+        }
+
+        return SerialResponse.ERROR;
+    }
+
 }
