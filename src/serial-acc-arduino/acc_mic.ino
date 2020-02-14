@@ -1,7 +1,7 @@
-#define MIC_COMMAND 'm'
+#define MIC_COMMAND 109
 
 boolean isMicStatusChanged() {
-  return true;
+  return false;
 }
 
 int getMicValue() {

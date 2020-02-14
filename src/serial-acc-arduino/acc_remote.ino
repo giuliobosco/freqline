@@ -1,5 +1,5 @@
 boolean isRemoteStatusChanged() {
-  return true;
+  return false;
 }
 
 int getRemoteStatus() {
