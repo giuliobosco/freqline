@@ -21,58 +21,47 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
+ 
 package serial.acc.java;
 
-import org.junit.Test;
-
-import java.util.Arrays;
-
-import static org.junit.Assert.*;
-
 /**
- * Test Serial response.
- *
+ * 
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0 (2020-02-14 - 2020-02-14)
+ * @version 1.0 (2020-02-10 - 2020-02-14)
  */
-public class SerialResponseTest {
+public class SerialEchoCommand extends SerialCommand implements SerialInputCommand {
 
-    private static final byte[] ECHO_BYTES = {10, 20, 30};
-
-    private static final byte[] ECHO_BYTES_NULL = new byte[0];
+    // -------------------------------------------------------------------------------- Constructors
 
     /**
-     * Test response codes.
+     * Create Serial Echo command with message.
+     *
+     * @param message Echo message.
      */
-    @Test
-    public void testResponseCodes() {
-        assertEquals(SerialResponse.OK_BYTE, SerialResponse.OK.getResponse());
-        assertEquals(SerialResponse.ERROR_BYTE, SerialResponse.ERROR.getResponse());
+    public SerialEchoCommand(byte[] message) {
+        super(SerialCommand.ECHO_BYTE, message);
     }
 
     /**
-     * Test echo response.
+     * Create empty echo command.
      */
-    @Test
-    public void testEchoResponseOk() {
-        SerialInputCommand sc = new SerialEchoCommand(ECHO_BYTES);
-        SerialResponse sr = sc.response();
-
-        assertTrue(sr.isSame(sr));
-        assertArrayEquals(ECHO_BYTES, sr.getMessage());
+    public SerialEchoCommand(){
+        this(SerialCommand.EMPTY_BYTE_ARRAY);
     }
 
-    /**
-     * Test echo response not equals.
-     */
-    @Test
-    public void testEchoResponseNot() {
-        SerialInputCommand sc = new SerialEchoCommand(ECHO_BYTES);
-        SerialResponse sr = sc.response();
+    // ----------------------------------------------------------------------------- General Methods
 
-        assertTrue(sr.isSame(sr));
-        assertFalse(Arrays.equals(ECHO_BYTES_NULL, sr.getMessage()));
+    /**
+     * Build Serial Response.
+     *
+     * @return Serial Response.
+     */
+    @Override
+    public SerialResponse response() {
+        SerialResponse response = SerialResponse.OK;
+        response.setMessage(this.getMessage());
+
+        return response;
     }
 
 }
