@@ -1,8 +1,10 @@
 #define SERIAL_SPEED 9600                     // serial speed of communication (baud)
-#define SERIAL_INIT 42                        // serial initialized char
-#define SERIAL_END_OF_COMMAND '\n'            // End of the command char
+#define SERIAL_INIT 42                        // serial initialized byte
+#define COMMAND_INIT 43
+#define RESPONSE_INIT 45
+#define SERIAL_END_OF_COMMAND 10              // End of the command byte
 
-char instruction;                             // instruction variable
+byte instruction;                             // instruction variable
 String instructionValue;                      // instruction value variable
 
 /**
@@ -10,7 +12,7 @@ String instructionValue;                      // instruction value variable
  * 
  * @return Instruction.
  */
-char getInstruction() {
+byte getInstruction() {
   return instruction;
 }
 
@@ -29,21 +31,24 @@ String getInstructionValue() {
 void serialSetup() {
   // open serial channel
   Serial.begin(SERIAL_SPEED);
-  // send communication start char
+  // send communication start byte
   Serial.write(SERIAL_INIT);
 }
 
 /**
  * Read instruction from serial.
  */
-boolean serialRead() {
+boolean serialRead(byte sequenceType) {
+  Serial.readStringUntil(sequenceType);
+  
   // read from serial line
   String s = Serial.readStringUntil(SERIAL_END_OF_COMMAND);
 
   // if correctly read exists
   if (s.length() > 0) {
-    // set command char to instruction variable
-    instruction = s[0];
+    // set command byte to instruction variable
+    instruction = (byte) s[0];
+    
     // set command value to instruction value variable
     instructionValue = s.substring(1);
     return true;
@@ -56,7 +61,7 @@ boolean serialRead() {
  * Read command from serial.
  */
 void serialReadCommand() {
-  serialRead();
+  serialRead(COMMAND_INIT);
 }
 
 /**
@@ -65,7 +70,7 @@ void serialReadCommand() {
  * @return True if response is valid.
  */
 boolean serialReadResponse() {
-  return serialRead();
+  return serialRead(RESPONSE_INIT);
 }
 
 /**
@@ -74,40 +79,42 @@ boolean serialReadResponse() {
  * @param instruction Instruction.
  * @param value Instruction value.
  */
-void serialWrite(char instruction, String value) {
+void serialWrite(byte sequenceType, byte instruction, String value) {
+  // write sequence type to serial
+  Serial.write(sequenceType);
   // write instruction to serial
   Serial.write(instruction);
 
-  // write all chars of the value to serial
+  // write all bytes of the value to serial
   for (int i = 0; i < value.length(); i++) {
     Serial.write(value[i]);
   }
 
-  // write end of message char to serial
+  // write end of message byte to serial
   Serial.write(SERIAL_END_OF_COMMAND);
 }
 
 /**
  * Write response to serial.
  * 
- * @param response Response char to write to serial.
+ * @param response Response byte to write to serial.
  * @param value value of the response to write to serial.
  */
-void serialWriteResponse(char response, String value) {
-  serialWrite(response, value);
+void serialWriteResponse(byte response, String value) {
+  serialWrite(RESPONSE_INIT, response, value);
 }
 
 /**
  * Write command to serial.
  * 
- * @param command Command char to write to serial.
+ * @param command Command byte to write to serial.
  * @param value Value of the command to write to write.
  */
-void serialWriteCommand(char command, String value) {
+void serialWriteCommand(byte command, String value) {
   boolean commandSent = false;
 
   while (!commandSent) {
-    serialWrite(command, value);
+    serialWrite(COMMAND_INIT, command, value);
 
     commandSent = serialReadResponse();
   }

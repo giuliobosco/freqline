@@ -46,16 +46,13 @@ public class App {
             // wait until INIT char
             while ((read = input.read()) != INIT) { }
 
-            // wirte HelloWorld!\n on serial
-            output.write("HelloWorld!\n".getBytes());
+            SerialEchoCommand sc = new SerialEchoCommand("HelloWorld!".getBytes());
+            sc.write(output);
 
-            Thread.sleep(100);
-
-            // read and print on CLI all chars until return
-            while ((read = input.read()) != RETURN) {
-                byte c = (byte)(0x000000FF & read);
-                System.out.print((char)c);
-            }
+            SerialCommunication serialCommunication = new SerialCommunication();
+            serialCommunication.readUntilEnd(input);
+            System.out.println((char) serialCommunication.getSequence());
+            System.out.println(new String(serialCommunication.getMessage()));
 
             // close streams
             output.close();
@@ -63,8 +60,6 @@ public class App {
         } catch (IOException ioe) {
             ioe.printStackTrace();
             System.out.println(ioe.getMessage());
-        } catch (InterruptedException ie) {
-
         }
     }
 }
