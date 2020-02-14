@@ -34,14 +34,20 @@ public class SerialResponse extends SerialCommunication {
     // ------------------------------------------------------------------------------------ Costants
 
     /**
+     * Response byte.
+     */
+    public static final byte OK_BYTE = 111,
+            ERROR_BYTE = 101;
+
+    /**
      * Ok Response.
      */
-    public static final SerialResponse OK = new SerialResponse((byte) 111);
+    public static final SerialResponse OK = new SerialResponse(OK_BYTE);
 
     /**
      * Error Response.
      */
-    public static final SerialResponse ERROR = new SerialResponse((byte) 101);
+    public static final SerialResponse ERROR = new SerialResponse(ERROR_BYTE);
 
     // -------------------------------------------------------------------------------- Constructors
 
