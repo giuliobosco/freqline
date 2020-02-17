@@ -1,3 +1,10 @@
+/**
+ * ACC Remote module.
+ * 
+ * @author giuliobosco (giuliobva@gmail.com)
+ * @version 1.2 (2020-02-10 - 2020-02-17)
+ */
+
 #define REMOTE_PIN 5                          // input pin of the remote
 #define REMOTE_5V_PIN 3                       // pin used as Power (5V) for remote
 
