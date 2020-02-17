@@ -1,3 +1,10 @@
+/**
+ * ACC Serial communication module.
+ * 
+ * @author giuliobosco (giuliobva@gmail.com)
+ * @version 1.2 (2020-02-10 - 2020-02-17)
+ */
+
 #define SERIAL_SPEED 9600                     // serial speed of communication (baud)
 #define SERIAL_INIT 42                        // serial initialized byte
 #define COMMAND_INIT 43
