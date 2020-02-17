@@ -143,11 +143,6 @@ public class SerialThread extends Thread {
             serialCommunication.readUntilEnd(this.serialPort.getInputStream());
 
             if (serialCommunication.isSame(SerialResponse.OK)) {
-                System.out.println((char)serialCommunication.getSequence());
-                for (byte b : serialCommunication.getMessage()) {
-                    System.out.print((char) b);
-                }
-                System.out.println();
                 removeCommand(this.commands.get(0));
             }
         } else {
