@@ -65,7 +65,7 @@ public class SerialEchoCommand extends SerialCommand implements SerialInputComma
      * @return Serial Response.
      */
     @Override
-    public SerialResponse response() {
+    public SerialResponse buildResponse() {
         SerialResponse response = SerialResponse.OK;
         response.setMessage(this.getMessage());
 

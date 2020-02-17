@@ -49,7 +49,7 @@ public class SerialNullCommand extends SerialCommand implements SerialInputComma
      * @return Serial Response.
      */
     @Override
-    public SerialResponse response() {
+    public SerialResponse buildResponse() {
         return SerialResponse.OK;
     }
 }

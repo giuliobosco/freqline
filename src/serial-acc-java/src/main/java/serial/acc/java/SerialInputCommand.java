@@ -35,7 +35,7 @@ public interface SerialInputCommand {
     // ----------------------------------------------------------------------------- General Methods
 
     /**
-     * Create serial response.
+     * Build serial response.
      */
-    SerialResponse response();
+    SerialResponse buildResponse();
 }

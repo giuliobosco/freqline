@@ -140,9 +140,9 @@ public class SerialCommand extends SerialCommunication {
 
         switch (serialCommunication.getSequence()) {
             case SerialCommand.ECHO_BYTE:
-                return new SerialEchoCommand(serialCommunication.getMessage()).response();
+                return new SerialEchoCommand(serialCommunication.getMessage()).buildResponse();
             case NULL_BYTE:
-                return new SerialNullCommand().response();
+                return new SerialNullCommand().buildResponse();
         }
 
         return SerialResponse.ERROR;
