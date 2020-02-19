@@ -180,7 +180,7 @@ public class GeneratorMicServlet extends BaseServlet {
      * @return Path of the servlet.
      */
     @Override
-    protected String getPath() {
+    public String getPath() {
         return "action/generatorMicTimer";
     }
 }

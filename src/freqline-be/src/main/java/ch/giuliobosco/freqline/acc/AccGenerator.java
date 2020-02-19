@@ -24,10 +24,8 @@
 
 package ch.giuliobosco.freqline.acc;
 
-import ch.giuliobosco.freqline.help.HttpRequestor;
 import ch.giuliobosco.freqline.queries.GeneratorQuery;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -38,6 +36,12 @@ import java.sql.SQLException;
  * @version 1.0.2 (2019-11-18 - 2019-11-30)
  */
 public class AccGenerator {
+    // ------------------------------------------------------------------------------------ Costants
+
+    /**
+     * Default key.
+     */
+    public static final String KEY_C = "AAAAA";
 
     // --------------------------------------------------------------------------- Static Components
 
@@ -47,16 +51,10 @@ public class AccGenerator {
      * @param connection Connection to MySQL database.
      * @param keyC       Key of communication of the generator.
      * @throws SQLException Error with MySQL.
-     * @throws IOException  Error while sending message to generator.
      */
-    public static void turnGeneratorOn(Connection connection, String keyC) throws SQLException, IOException {
-        String ip = GeneratorQuery.getIp(connection, keyC);
-
+    public static void turnGeneratorOn(Connection connection, String keyC, SerialThread serialThread) throws SQLException {
         GeneratorQuery.setStatus(connection, keyC, true);
-
-        String url = buildUrl(connection, ip, keyC, true);
-
-        request(url);
+        serialThread.addCommand(SerialCommand.GENERATOR_ON);
     }
 
     /**
@@ -65,16 +63,10 @@ public class AccGenerator {
      * @param connection Connection to MySQL database.
      * @param keyC       Key of communication of the generator.
      * @throws SQLException Error with MySQL.
-     * @throws IOException  Error while sending message to generator.
      */
-    public static void turnGeneratorOff(Connection connection, String keyC) throws SQLException, IOException {
+    public static void turnGeneratorOff(Connection connection, String keyC, SerialThread serialThread) throws SQLException {
         GeneratorQuery.setStatus(connection, keyC, false);
-
-        String ip = GeneratorQuery.getIp(connection, keyC);
-
-        String url = buildUrl(connection, ip, keyC, false);
-
-        request(url);
+        serialThread.addCommand(SerialCommand.GENERATOR_OFF);
     }
 
     /**
@@ -84,16 +76,12 @@ public class AccGenerator {
      * @param keyC       Key of communication of the generator.
      * @param timer      Timer of the generator to turn off.
      * @throws SQLException Error with MySQL.
-     * @throws IOException  Error while sending message to generator.
      */
-    public static void turnGeneratorOn(Connection connection, String keyC, long timer) throws SQLException, IOException {
+    public static void turnGeneratorOn(Connection connection, String keyC, long timer, SerialThread serialThread) throws SQLException {
         GeneratorQuery.setStatus(connection, keyC, true);
+        serialThread.addCommand(SerialCommand.GENERATOR_ON);
 
-        String ip = GeneratorQuery.getIp(connection, keyC);
-
-        String url = buildUrl(connection, ip, keyC, timer);
-
-        request(url);
+        new MicThread(serialThread, timer).start();
     }
 
     /**
@@ -103,63 +91,28 @@ public class AccGenerator {
      * @param userId     User id.
      * @param decibel    Decibel value.
      * @throws SQLException Error with MySQL.
-     * @throws IOException  Error while sending message to generator.
      */
-    public static void updateDecibel(Connection connection, int userId, int decibel) throws SQLException, IOException {
+    public static void updateDecibel(Connection connection, int userId, int decibel, SerialThread serialThread) throws SQLException {
         GeneratorQuery.setDecibel(connection, userId, decibel);
 
-        String ip = GeneratorQuery.getIp(connection, userId);
-        String keyC = GeneratorQuery.getKeyByUserId(connection, userId);
-
-        String url = "http://" + ip + "/acc?key_c=" + keyC + "&decibel=" + decibel;
-
-        request(url);
+        SerialCommand sc = SerialCommand.DECIBEL;
+        sc.setMessage(String.valueOf(decibel).getBytes());
+        serialThread.addCommand(sc);
     }
 
     /**
-     * Execute request.
-     *
-     * @param url Url to request.
-     * @throws IOException Error while executing request.
-     */
-    private static void request(String url) throws IOException {
-        HttpRequestor requestor = new HttpRequestor(url);
-        requestor.executeRequest();
-    }
-
-    /**
-     * Build url for request.
-     *
-     * @param address Address of the generator.
-     * @param keyC    Key of communication of the generator.
-     * @param on      True for turn on  the generator, false for turn it off.
-     * @return Url for request.
-     */
-    private static String buildUrl(Connection connection, String address, String keyC, boolean on) throws SQLException {
-        int frequence = getFrequence(connection, keyC);
-        return "http://" + address + "/acc?key_c=" + keyC + "&generator=" + (on ? "1" : "0") + "&frequence=" + frequence;
-    }
-
-    /**
-     * Turn on the request with timer.
-     *
-     * @param address Address of the generator.
-     * @param keyC    Key of communication of the generator.
-     * @param timer   Timer to shutdown the generator.
-     * @return Url for request.
-     */
-    private static String buildUrl(Connection connection, String address, String keyC, long timer) throws SQLException {
-        return buildUrl(connection, address, keyC, true) + "&timer=" + timer;
-    }
-
-    /**
-     * Ge the frequence of the generator.
+     * Update frequence (in the database) and sends the frequence value to the ACC.
      *
      * @param connection Connection to MySQL database.
-     * @param keyC       Key of communication.
-     * @return Frequence of the genrator.
+     * @param userId     User id.
+     * @param frequence  Frequence value.
+     * @throws SQLException Error with MySQL.
      */
-    private static int getFrequence(Connection connection, String keyC) throws SQLException {
-        return GeneratorQuery.getGeneratorFrequence(connection, keyC);
+    public static void updateFrequence(Connection connection, int userId, int frequence, SerialThread serialThread) throws SQLException {
+        GeneratorQuery.setFrequence(connection, userId, frequence);
+
+        SerialCommand sc = SerialCommand.FREQUENCE;
+        sc.setMessage(String.valueOf(frequence).getBytes());
+        serialThread.addCommand(sc);
     }
 }

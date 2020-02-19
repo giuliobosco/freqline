@@ -25,6 +25,7 @@
 package ch.giuliobosco.freqline.servlets.action;
 
 import ch.giuliobosco.freqline.acc.AccGenerator;
+import ch.giuliobosco.freqline.acc.SerialThread;
 import ch.giuliobosco.freqline.auth.SessionManager;
 import ch.giuliobosco.freqline.help.ArrayHelper;
 import ch.giuliobosco.freqline.help.validators.IntValidator;
@@ -32,7 +33,6 @@ import ch.giuliobosco.freqline.jdbc.JapiConnector;
 import ch.giuliobosco.freqline.jdbc.JdbcConnector;
 import ch.giuliobosco.freqline.queries.GeneratorQuery;
 import ch.giuliobosco.freqline.queries.PermissionsUserQuery;
-import ch.giuliobosco.freqline.servlets.BaseServlet;
 import ch.giuliobosco.freqline.servlets.help.ServletRequestAnalyser;
 
 import javax.servlet.ServletException;
@@ -50,7 +50,7 @@ import java.sql.SQLException;
  * @version 1.0 (2019-11-30 - 2019-11-30)
  */
 @WebServlet(name = "GeneratorDecibelServlet", urlPatterns = {"action/generatorDecibel"}, loadOnStartup = 1)
-public class GeneratorDecibelServlet extends BaseServlet {
+public class GeneratorDecibelServlet extends SerialServlet {
     // ------------------------------------------------------------------------------------ Costants
 
     /**
@@ -73,6 +73,17 @@ public class GeneratorDecibelServlet extends BaseServlet {
      */
     private final String[] REQUIRED_POST_PARAMETERS = {DECIBEL};
 
+    // -------------------------------------------------------------------------------- Constructors
+
+    /**
+     * Create generator decibel servlet, with serial thread.
+     *
+     * @param serialThread Serial Thread.
+     */
+    public GeneratorDecibelServlet(SerialThread serialThread) {
+        super(serialThread);
+    }
+
     // -------------------------------------------------------------------------------- Help Methods
 
     /**
@@ -90,7 +101,7 @@ public class GeneratorDecibelServlet extends BaseServlet {
 
         int decibel = Integer.parseInt(decibelString);
 
-        AccGenerator.updateDecibel(connection, userId, decibel);
+        AccGenerator.updateDecibel(connection, userId, decibel, getSerialThread());
         ok(response, decibelString);
     }
 
@@ -182,7 +193,7 @@ public class GeneratorDecibelServlet extends BaseServlet {
      * @return Servlet path.
      */
     @Override
-    protected String getPath() {
+    public String getPath() {
         return "action/generatorDecibel";
     }
 

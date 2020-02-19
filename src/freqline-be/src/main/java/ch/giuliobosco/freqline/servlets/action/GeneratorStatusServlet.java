@@ -25,6 +25,7 @@
 package ch.giuliobosco.freqline.servlets.action;
 
 import ch.giuliobosco.freqline.acc.AccGenerator;
+import ch.giuliobosco.freqline.acc.SerialThread;
 import ch.giuliobosco.freqline.auth.SessionManager;
 import ch.giuliobosco.freqline.help.ArrayHelper;
 import ch.giuliobosco.freqline.help.validators.StringValidator;
@@ -32,7 +33,6 @@ import ch.giuliobosco.freqline.jdbc.JapiConnector;
 import ch.giuliobosco.freqline.jdbc.JdbcConnector;
 import ch.giuliobosco.freqline.queries.GeneratorQuery;
 import ch.giuliobosco.freqline.queries.PermissionsUserQuery;
-import ch.giuliobosco.freqline.servlets.BaseServlet;
 import ch.giuliobosco.freqline.servlets.help.ServletRequestAnalyser;
 
 import javax.servlet.ServletException;
@@ -50,7 +50,7 @@ import java.sql.SQLException;
  * @version 1.0.1 (2019-11-19 - 2019-11-20)
  */
 @WebServlet(name = "GeneratorStatusServlet", urlPatterns = {"action/generatorStatus"}, loadOnStartup = 1)
-public class GeneratorStatusServlet extends BaseServlet {
+public class GeneratorStatusServlet extends SerialServlet {
     // ------------------------------------------------------------------------------------ Costants
 
     /**
@@ -73,8 +73,12 @@ public class GeneratorStatusServlet extends BaseServlet {
      */
     private final String[] REQUIRED_POST_PARAMETERS = {STATUS};
 
-    // ---------------------------------------------------------------------------------- Attributes
     // -------------------------------------------------------------------------------- Constructors
+
+    public GeneratorStatusServlet(SerialThread serialThread) {
+        super(serialThread);
+    }
+
     // --------------------------------------------------------------------------- Getters & Setters
     // -------------------------------------------------------------------------------- Help Methods
     // ----------------------------------------------------------------------------- General Methods
@@ -179,9 +183,9 @@ public class GeneratorStatusServlet extends BaseServlet {
         String status = sra.getParameter(STATUS);
 
         if (status.equals("1")) {
-            AccGenerator.turnGeneratorOn(connection, keyC);
+            AccGenerator.turnGeneratorOn(connection, keyC, getSerialThread());
         } else if (status.equals("0")) {
-            AccGenerator.turnGeneratorOff(connection, keyC);
+            AccGenerator.turnGeneratorOff(connection, keyC, getSerialThread());
         }
 
         ok(response, "");
@@ -193,7 +197,7 @@ public class GeneratorStatusServlet extends BaseServlet {
      * @return Path of the servlet.
      */
     @Override
-    protected String getPath() {
+    public String getPath() {
         return "action/generatorStatus";
     }
 }

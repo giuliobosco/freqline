@@ -24,6 +24,8 @@
 
 package ch.giuliobosco.freqline.servlets.action;
 
+import ch.giuliobosco.freqline.acc.AccGenerator;
+import ch.giuliobosco.freqline.acc.SerialThread;
 import ch.giuliobosco.freqline.auth.SessionManager;
 import ch.giuliobosco.freqline.help.ArrayHelper;
 import ch.giuliobosco.freqline.help.validators.IntValidator;
@@ -49,7 +51,7 @@ import java.sql.SQLException;
  * @version 1.0.2 (2019-11-19 - 2019-11-30)
  */
 @WebServlet(name = "GeneratorFrequenceServlet", urlPatterns = {"action/generatorFrequence"}, loadOnStartup = 1)
-public class GeneratorFrequenceServlet extends BaseServlet {
+public class GeneratorFrequenceServlet extends SerialServlet {
     // ------------------------------------------------------------------------------------ Costants
 
     /**
@@ -72,6 +74,12 @@ public class GeneratorFrequenceServlet extends BaseServlet {
      */
     private final String[] REQUIRED_POST_PARAMETERS = {FREQUENCE};
 
+    // -------------------------------------------------------------------------------- Constructors
+
+    public GeneratorFrequenceServlet(SerialThread serialThread) {
+        super(serialThread);
+    }
+
     // -------------------------------------------------------------------------------- Help Methods
 
     /**
@@ -88,7 +96,7 @@ public class GeneratorFrequenceServlet extends BaseServlet {
 
         int frequence = Integer.parseInt(frequenceString);
 
-        GeneratorQuery.setFrequence(connection, userId, frequence);
+        AccGenerator.updateFrequence(connection, userId, frequence, getSerialThread());
         ok(response, frequenceString);
     }
 
@@ -181,7 +189,7 @@ public class GeneratorFrequenceServlet extends BaseServlet {
      * @return Path of the servlet.
      */
     @Override
-    protected String getPath() {
+    public String getPath() {
         return "action/generatorFrequence";
     }
 }
