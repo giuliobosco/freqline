@@ -118,12 +118,12 @@ void serialWriteResponse(byte response, String value) {
  * @param value Value of the command to write to write.
  */
 void serialWriteCommand(byte command, String value) {
-  boolean commandSent = false;
+  /*boolean commandSent = false;
 
-  while (!commandSent) {
+  while (!commandSent) {*/
     serialWrite(COMMAND_INIT, command, value);
-
+/*
     commandSent = serialReadResponse();
-  }
+  }*/
   
 }
