@@ -43,7 +43,7 @@ import java.util.Map;
  * @author giuliobosco (giuliobva@gmail.com)
  * @version 1.0.2 (2019-11-12 - 2020-02-19)
  */
-@WebServlet(name = "GroupPermissionServlet", urlPatterns = {"data/mic/*"}, loadOnStartup = 1)
+@WebServlet(name = "MicServlet", urlPatterns = {"data/mic/*"}, loadOnStartup = 1)
 public class MicServlet extends BaseDataServlet {
 
     /**
@@ -141,7 +141,7 @@ public class MicServlet extends BaseDataServlet {
      */
     @Override
     public String getPath() {
-        return "data/groupPermission";
+        return "data/mic";
     }
 
     /**

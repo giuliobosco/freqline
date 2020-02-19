@@ -116,7 +116,7 @@ public class UserGroupServlet extends BaseDataServlet {
      */
     @Override
     public String getPath() {
-        return "data/user";
+        return "data/userGroup";
     }
 
     /**
