@@ -32,7 +32,11 @@ dependencies {
     // This dependency is found on compile classpath of this component and consumers.
     implementation 'com.google.guava:guava:27.0.1-jre'
 
-	providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
+    // servlets
+    compile group: 'org.eclipse.jetty', name: 'jetty-server', version: '9.4.26.v20200117'
+    compile group: 'org.eclipse.jetty', name: 'jetty-http', version: '9.4.26.v20200117'
+    compile group: 'org.eclipse.jetty', name: 'jetty-util', version: '9.4.26.v20200117'
+    compile group: 'org.eclipse.jetty', name: 'jetty-servlet', version: '9.4.26.v20200117'
 
     // junit lib
     // Use JUnit test framework
