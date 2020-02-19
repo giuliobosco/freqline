@@ -84,11 +84,11 @@ void readCommand() {
       break;
     case GENERATOR_OFF_COMMAND:
       turnOff();
-      serialWriteResponse(OK_RESPONSE, "");
+      serialWriteResponse(OK_RESPONSE, String(getFrequence()));
       break;
     case GENERATOR_ON_COMMAND:
       turnOn();
-      serialWriteResponse(OK_RESPONSE, "");
+      serialWriteResponse(OK_RESPONSE, String(getFrequence()));
       break;
     default:
       serialWriteResponse(ERROR_RESPONSE, NOT_SUPPORTED_MESSAGE);
