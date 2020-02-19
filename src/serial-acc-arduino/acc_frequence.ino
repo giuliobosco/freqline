@@ -44,6 +44,10 @@ void setFrequence(String frequenceString) {
   frequence = atol(frequenceString.c_str());;
 }
 
+unsigned long getFrequence() {
+  return freq;
+}
+
 /**
  * Turn generator on.
  */
@@ -63,9 +67,9 @@ void turnOff() {
  */
 void frequencLoop() {
   freq = on?frequence:0;
-
+  
   if (freq <= freqoldmin){
-        Serial.println("passaggio");
+        //Serial.println("passaggio");
         AD9833reset();                                   // Reset AD9833 module after power-up.
         delay(50);
         AD9833setFrequency(freq, SINE);
@@ -73,7 +77,7 @@ void frequencLoop() {
     }
 
     if (freq >= freqoldmax){
-        Serial.println("passaggio");
+        //Serial.println("passaggio");
 
         AD9833reset();                                   // Reset AD9833 module after power-up.
         delay(50);
