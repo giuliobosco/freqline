@@ -47,7 +47,7 @@ import java.io.IOException;
  * Login action servlet.
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0.2 (2019-10-29 - 2019-11-23)
+ * @version 1.0.3 (2019-10-29 - 2020-02-19)
  */
 @WebServlet(name = "LoginServlet", urlPatterns = {"action/login/*"}, loadOnStartup = 1)
 public class LoginServlet extends BaseServlet {
@@ -181,7 +181,7 @@ public class LoginServlet extends BaseServlet {
      * @return Servlet path.
      */
     @Override
-    protected String getPath() {
+    public String getPath() {
         return "action/login";
     }
 }
