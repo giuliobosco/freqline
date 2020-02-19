@@ -13,7 +13,7 @@ import java.util.List;
  * Serial Thread, opens communication with thread and keep connections.
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0 (2020-02-10 - 2020-02-14)
+ * @version 1.0.1 (2020-02-10 - 2020-02-19)
  */
 public class SerialThread extends Thread {
 
@@ -147,6 +147,7 @@ public class SerialThread extends Thread {
             }
         } else {
             writeOnSerial(SerialCommand.NULL);
+            new SerialCommunication().readUntilEnd(this.serialPort.getInputStream());
         }
     }
 
