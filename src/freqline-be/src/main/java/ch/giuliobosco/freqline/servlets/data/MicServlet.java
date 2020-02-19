@@ -35,14 +35,13 @@ import ch.giuliobosco.freqline.modeljson.BaseJson;
 import ch.giuliobosco.freqline.modeljson.MicJson;
 
 import javax.servlet.annotation.WebServlet;
-import java.sql.Timestamp;
 import java.util.Map;
 
 /**
  * Mic Restful API Servlet.
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0.1 (2019-11-12 - 2019-11-14)
+ * @version 1.0.2 (2019-11-12 - 2020-02-19)
  */
 @WebServlet(name = "GroupPermissionServlet", urlPatterns = {"data/mic/*"}, loadOnStartup = 1)
 public class MicServlet extends BaseDataServlet {
@@ -141,7 +140,7 @@ public class MicServlet extends BaseDataServlet {
      * @return Servlet path.
      */
     @Override
-    protected String getPath() {
+    public String getPath() {
         return "data/groupPermission";
     }
 

@@ -43,7 +43,7 @@ import java.util.Map;
  * User group Restful API Servlet.
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0.1 (2019-10-29 - 2019-11-05)
+ * @version 1.0.2 (2019-10-29 - 2020-02-19)
  */
 @WebServlet(name = "UserGroupServlet", urlPatterns = {"data/userGroup/*"}, loadOnStartup = 1)
 public class UserGroupServlet extends BaseDataServlet {
@@ -115,7 +115,7 @@ public class UserGroupServlet extends BaseDataServlet {
      * @return Servlet path.
      */
     @Override
-    protected String getPath() {
+    public String getPath() {
         return "data/user";
     }
 

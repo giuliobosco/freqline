@@ -40,7 +40,7 @@ import java.util.Map;
  * Permission RestfulAPI Servlet.
  *
  * @author giuliobosco
- * @version 1.0.2 (2019-10-24 - 2019-10-26)
+ * @version 1.0.3 (2019-10-24 - 2020-02-19)
  */
 @WebServlet(name = "PermissionServlet", urlPatterns = {"data/permission/*"}, loadOnStartup = 1)
 public class PermissionServlet extends BaseDataServlet {
@@ -110,7 +110,7 @@ public class PermissionServlet extends BaseDataServlet {
      * @return Path of servlet.
      */
     @Override
-    protected String getPath() {
+    public String getPath() {
         return "data/permission/";
     }
 

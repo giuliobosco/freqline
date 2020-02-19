@@ -40,7 +40,7 @@ import java.util.Map;
  * Group RestfulAPI Servlet.
  *
  * @author giuliobosco
- * @version 1.0.1 (2019-10-24 - 2019-11-05)
+ * @version 1.0.2 (2019-10-24 - 2020-02-19)
  */
 @WebServlet(name = "GroupServlet", urlPatterns = {"data/group/*"}, loadOnStartup = 1)
 public class GroupServlet extends BaseDataServlet {
@@ -114,7 +114,7 @@ public class GroupServlet extends BaseDataServlet {
      * @return Servlet path.
      */
     @Override
-    protected String getPath() {
+    public String getPath() {
         return "data/group";
     }
 

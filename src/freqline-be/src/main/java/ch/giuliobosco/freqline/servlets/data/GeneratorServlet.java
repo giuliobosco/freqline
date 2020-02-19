@@ -39,7 +39,7 @@ import java.util.Map;
  * Generator Restful API servlet.
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0.1 (2019-11-12 - 2019-11-14)
+ * @version 1.0.2 (2019-11-12 - 2020-02-19)
  */
 @WebServlet(name = "GeneratorServlet", urlPatterns = {"data/generator/*"}, loadOnStartup = 1)
 public class GeneratorServlet extends BaseDataServlet {
@@ -133,9 +133,10 @@ public class GeneratorServlet extends BaseDataServlet {
      * @return Servlet path.
      */
     @Override
-    protected String getPath() {
+    public String getPath() {
         return "data/generator";
     }
+
     /**
      * Required get permission string.
      *

@@ -40,7 +40,7 @@ import java.util.Map;
 
 /**
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0.2 (2019-10-27 - 2019-11-23)
+ * @version 1.0.3 (2019-10-27 - 2020-02-19)
  */
 @WebServlet(name = "BaseServlet")
 public abstract class BaseServlet extends HttpServlet {
@@ -561,7 +561,7 @@ public abstract class BaseServlet extends HttpServlet {
      *
      * @return Request path.
      */
-    protected abstract String getPath();
+    public abstract String getPath();
 
     @Override
     protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

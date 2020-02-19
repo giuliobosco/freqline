@@ -42,7 +42,7 @@ import java.util.Map;
  * User RestfulAPI Servlet.
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0 (2019-10-29 - 2019-10-29)
+ * @version 1.0.1 (2019-10-29 - 2020-02-19)
  */
 @WebServlet(name = "UserServlet", urlPatterns = {"data/user/*"}, loadOnStartup = 1)
 public class UserServlet extends BaseDataServlet {
@@ -129,7 +129,7 @@ public class UserServlet extends BaseDataServlet {
      * @return Servlet path.
      */
     @Override
-    protected String getPath() {
+    public String getPath() {
         return "data/user";
     }
 
@@ -162,7 +162,7 @@ public class UserServlet extends BaseDataServlet {
      */
     @Override
     protected String requiredGetPermission() {
-        return "user";
+        return "admin";
     }
 
     /**
@@ -182,6 +182,6 @@ public class UserServlet extends BaseDataServlet {
      */
     @Override
     protected String requiredPutPermission() {
-        return "user";
+        return "admin";
     }
 }

@@ -41,7 +41,7 @@ import java.util.Map;
  * Remote Restful API Servlet.
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0.1 (2019-11-12 - 2019-11-14)
+ * @version 1.0.2 (2019-11-12 - 2020-02-19)
  */
 @WebServlet(name = "RemoteServlet", urlPatterns = {"data/remote/*"}, loadOnStartup = 1)
 public class RemoteServlet extends BaseDataServlet {
@@ -126,7 +126,7 @@ public class RemoteServlet extends BaseDataServlet {
      * @return Servlet path.
      */
     @Override
-    protected String getPath() {
+    public String getPath() {
         return "data/remote";
     }
 
