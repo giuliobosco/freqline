@@ -95,7 +95,7 @@ public class FreqlineServer {
      * @param baseServlet Servlet to add.
      */
     private void addServlet(ServletContextHandler context, BaseServlet baseServlet) {
-        context.addServlet(new ServletHolder(baseServlet), baseServlet.getPath());
+        context.addServlet(new ServletHolder(baseServlet), "/" + baseServlet.getPath());
     }
 
     // ----------------------------------------------------------------------------- General Methods
