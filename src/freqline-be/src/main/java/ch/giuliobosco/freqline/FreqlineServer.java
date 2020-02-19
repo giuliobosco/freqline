@@ -22,8 +22,12 @@
  * THE SOFTWARE.
  */
 
-package serial.acc.java;
+package ch.giuliobosco.freqline;
 
+import ch.giuliobosco.freqline.acc.SerialThread;
+import ch.giuliobosco.freqline.servlets.BaseServlet;
+import ch.giuliobosco.freqline.servlets.action.*;
+import ch.giuliobosco.freqline.servlets.data.*;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -32,9 +36,10 @@ import org.eclipse.jetty.servlet.ServletHolder;
  * Freqline server (test example).
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0 (2020-02-17 - 2020-02-17)
+ * @version 1.0.1 (2020-02-17 - 2020-02-19)
  */
 public class FreqlineServer {
+
     // ------------------------------------------------------------------------------------ Costants
 
     /**
@@ -49,8 +54,6 @@ public class FreqlineServer {
      */
     private SerialThread serialThread;
 
-    // -------------------------------------------------------------------------------- Constructors
-    // --------------------------------------------------------------------------- Getters & Setters
     // -------------------------------------------------------------------------------- Help Methods
 
     /**
@@ -59,6 +62,40 @@ public class FreqlineServer {
     private void startSerialThread() {
         this.serialThread = new SerialThread();
         this.serialThread.start();
+    }
+
+    /**
+     * Load project servlets.
+     *
+     * @param context Context.
+     */
+    private void loadServlets(ServletContextHandler context) {
+        // action servlets
+        addServlet(context, new GeneratorDecibelServlet(this.serialThread));
+        addServlet(context, new GeneratorFrequenceServlet(this.serialThread));
+        addServlet(context, new GeneratorMicServlet());
+        addServlet(context, new GeneratorStatusServlet(this.serialThread));
+        addServlet(context, new LoginServlet());
+
+        // data servlets
+        addServlet(context, new GeneratorServlet());
+        addServlet(context, new GroupPermissionServlet());
+        addServlet(context, new GroupServlet());
+        addServlet(context, new MicServlet());
+        addServlet(context, new PermissionServlet());
+        addServlet(context, new RemoteServlet());
+        addServlet(context, new UserGroupServlet());
+        addServlet(context, new UserServlet());
+    }
+
+    /**
+     * Add servlet to context, with servlet path.
+     *
+     * @param context     Context.
+     * @param baseServlet Servlet to add.
+     */
+    private void addServlet(ServletContextHandler context, BaseServlet baseServlet) {
+        context.addServlet(new ServletHolder(baseServlet), baseServlet.getPath());
     }
 
     // ----------------------------------------------------------------------------- General Methods
@@ -76,7 +113,7 @@ public class FreqlineServer {
 
         server.setHandler(context);
 
-        context.addServlet(new ServletHolder(new SerialServlet(this.serialThread)), "/");
+        loadServlets(context);
 
         server.start();
     }
