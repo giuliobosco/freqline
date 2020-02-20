@@ -1,13 +1,29 @@
 @startuml
 
-alt "do {} while(response!=ok)":
-    arduino -> raspberry : "command(command, value)"
-    raspberry --> arduino : "response"
-end
+participant "Server Thread" as server
+participant "Serial Thread" as serial
+participant "Mic Thread" as micT
+participant "Arduino" as arduino
+database "Database" as db
 
-alt "do {} while(response!=ok)":
-    raspberry -> arduino : "command(command, value)"
-    arduino --> raspberry : "response"
+server -> serial : addCommand(command, value)
+server -> db : update db
+
+alt while (true)
+    serial -> serial : loadCommand()
+    db --> serial : loadDataFromDB()
+    serial -> arduino : command(command, value)
+    arduino --> serial : response(type, value)
+    arduino -> serial : command(command, value)
+    serial --> arduino : response(type, value)
+
+    serial -> serial : runCommand()
+
+    alt command == mic
+        serial -> micT : start()
+        micT -> micT : wiatSeconds
+        micT -> serial : addCommand(command, value)
+    end
 end
 
 @enduml
