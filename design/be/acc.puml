@@ -1,17 +1,127 @@
 @startuml
 skinparam classAttributeIconSize 0
 
+class Thread {
+
+}
+
 package ch.giuliobosco.freqline.acc {
     class AccGenerator{
-        + {static} void turnGeneratorOn(Connection connection, String keyC)
-        + {static} void turnGeneratorOff(Connection connection, String keyC)
-        + {static} void turnGeneratorOn(Connection connection, String, long timer)
-        + {static} void updateDecibel(Connection connection, int userId, int decibel)
-        - {static} void request(String url)
-        - {static} String buildUrl(Connection connection, String address, String keyC, boolean on)
-        - {static} String buildUrl(Connection connection, String address, String keyC, long timer)
-        - {static} int getFrequence(Connection connection, String keyC)
+        + {static} String KEY_C = "AAAAA"
+        + {static} void turnGeneratorOn(Connection connection, String keyC, SerialThread serialThread)
+        + {static} void turnGeneratorOff(Connection connection, String keyC, SerialThread serialThread)
+        + {static} void turnGeneratorOn(Connection connection, String, long timer, SerialThread serialThread)
+        + {static} void updateDecibel(Connection connection, int userId, int decibel, SerialThread serialThread)
+        - {static} void updateFrequence(Connection connection, int userId, int frequence, SerialThread serialThread)
     }
+
+    class SerialCommunication {
+        + {static} byte[] EMPTY_BYTE_ARRAY
+        + {static} byte INIT 42
+        + {static} byte COMMAND_INIT 43
+        + {static} byte RESPONSE_INIT 45
+        + {static} byte END 10
+        + {static} byte TO_BYTE 0x000000FF
+        - byte sequenceType
+        - byte sequence
+        - byte[] message
+        + SerialCommunication(byte sequenceType, byte sequence, byte[] message)
+        + SerialCommunication(boolean command, byte sequence, byte[] message)
+        + SerialCommunication()
+        + byte getSequenceType()
+        + byte getSequence()
+        + byte[] getMessage()
+        + void setMessage(byte[] message)
+        # byte toByteUnsigned(int b)
+        # byte[] arrayPush(byte[] bytes, byte b)
+        # byte[] buildBytesToWrite()
+        + void readUntilEnd(InputStream in)
+        + void write(OutputStream out)
+        + boolean isSameSequence(SerialCommunication serialCommunication)
+        + boolean isSameSequenceType(SerialCommunication serialCommunication)
+        + boolean isSame(SerialCommunication serialCommunication)
+        + boolean equals(Object obj)
+    }
+
+    class SerialCommand {
+        + {static} byte NULL_BYTE 100, \n ECHO_BYTE 69, \n FREQUENCE_BYTE 102, \n GENERATOR_OFF_BYTE 103, \n GENERATOR_ON_BYTE 71, \n DECIBEL_BYTE 100, \n MIC_BYTE 109, \n REMOTE_BYTE 114
+        + {static} SerialCommand NULL
+        + {static} SerialCommand ECHO
+        + {static} SerialCommand FREQUENCE
+        + {static} SerialCommand GENERATOR_ON
+        + {static} SerialCommand GENERATOR_OFF
+        + {static} SerialCommand DECIBEL
+        + {static} SerialCommand MIC
+        + {static} SerialCommand REMOTE
+        + SerialCommand(byte command, byte[] message)
+        + SerialCommand(byte command)
+        + SerialCommand()
+        + byte getCommand()
+        + {static} SerialResponse loadCommand(SerialCommunication serialCommunication)
+    }
+    SerialCommunication <|-- SerialCommand
+
+    class SerialResponse {
+        + {static} byte OK_BYTE 111, ERROR_BYTE 101
+        + {static} SerialResponse OK, ERROR
+        + SerialResponse(byte response, byte[] message)
+        + SerialResponse(byte response)
+        + SerialResponse()
+        + byte getResponse()
+    }
+    SerialCommunication <|-- SerialResponse
+
+    interface SerialInputCommand {
+        SerialResponse buildResponse();
+    }
+
+    class SerialEchoCommand {
+        + SerialEchoCommand(byte[] message)
+        + SerialEchoCommand(String message)
+        + SerialEchoCommand()
+        + void setMessage(String message)
+    }
+    SerialCommand <|-- SerialEchoCommand
+    SerialInputCommand <|.. SerialEchoCommand
+
+    class SerialMicCommand {
+        + SerialMicCommand(SerialThread serialThread)
+    }
+    SerialCommand <|-- SerialMicCommand
+    SerialInputCommand <|.. SerialMicCommand
+    SerialMicCommand o-- SerialThread
+
+    class SerialNullCommand {
+        + SerialNullCommand()
+    }
+    SerialCommand <|-- SerialNullCommand
+    SerialInputCommand <|.. SerialNullCommand
+
+    class SerialThread {
+        + {static} String COM_NAME "Arduino"
+        + {static} int TIMEOUT 100000000
+        - SerialPort serialPort
+        + SerialThread()
+        - void searchArduino()
+        - void openSerialPort()
+        - void checkSerialCommunication()
+        - void readCommandWriteResponse()
+        - void writeCommandReadResponse()
+        - void writeOnSerial(SerialCommunication serialCommunication)
+        - void removeCommand(SerialCommand serialCommand)
+        + addCommand(SerialCommand serialCommand)
+        + run()
+    }
+    SerialThread "ArrayList" o-- SerialCommand
+    Thread <|-- SerialThread
+
+    class MicThread {
+        - long timer
+        + MicThread(SerialThread serialThread, long timer)
+        + void run()
+    }
+    Thread <|-- MicThread
+    MicThread o-- SerialThread
 }
 
 @enduml

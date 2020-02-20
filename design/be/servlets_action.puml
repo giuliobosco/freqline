@@ -7,6 +7,13 @@ package ch.giuliobosco.freqline.servlets {
     }
 
     package action {
+        abstract SerialServlet {
+            - SerialThread serialThread
+            + SerialServlet(SerialThread serialThread)
+            + SerialThread getSerialThread()
+        }
+        BaseServlet <|-- SerialServlet
+
         class LoginServlet {
             - String LOGGED_IN 
             - String WRONG_USERNAME_PASSWORD
@@ -26,7 +33,7 @@ package ch.giuliobosco.freqline.servlets {
             # void doGet(HttpServletRequest request, HttpServletResponse response)
             - void executePost(HttpServletResponse response, Connection connection, int userId, ServletRequestAnalyser sra)
         }
-        GeneratorStatusServlet --|> BaseServlet
+        GeneratorStatusServlet --|> SerialServlet
 
         class GeneratorMicServlet {
             - String SET_GENERATOR_MIC_PERM
@@ -48,7 +55,7 @@ package ch.giuliobosco.freqline.servlets {
             # void doPost(HttpServletRequest request, HttpServletResponse response)
             # void doGet(HttpServletRequest request, HttpServletResponse response)
         }
-        GeneratorFrequenceServlet --|> BaseServlet
+        GeneratorFrequenceServlet --|> SerialServlet
 
         class GeneratorDecibelServlet {
             - String SET_GENERATOR_DECIBEL_PERM
@@ -59,34 +66,7 @@ package ch.giuliobosco.freqline.servlets {
             # void doPost(HttpServletRequest request, HttpServletResponse response)
             # void doGet(HttpServletRequest request, HttpServletResponse response)
         }
-        GeneratorDecibelServlet --|> BaseServlet
-
-        class AccServlet {
-            - String KEY_C
-            - String ACTION
-            - String CONTENT
-            - String ACTION_MIC
-            - String ACTION_REMOTE
-            - String ACTION_REMOTE_TOGGLE
-            - String ACTION_REMOTE_ON
-            - String ACTION_REMOTE_OFF
-            - String ACTION_CONF
-            - String[] POST_REQUIRED_PARAMETERS
-            - Connection connection
-            - ServletRequestAnalyser sra
-            - Connection getConnection()
-            - ServletRequestAnalyser getSra()
-            - String getKeyC()
-            - String getAction()
-            - String getContent()
-            # void doPost(HttpServletRequest request, HttpServletResponse response)
-            - void executePost(HttpServletResponse response)
-            - void conf(HttpServletResponse response)
-            - void mic(HttpServletResponse response)
-            - void remote(HttpServletResponse response)
-            - void remoteToggle(HttpServletResponse response)
-            - boolean isValidKey()
-        }
+        GeneratorDecibelServlet --|> SerialServlet
     }
 }
 

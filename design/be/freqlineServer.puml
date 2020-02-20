@@ -1,0 +1,17 @@
+@startuml
+
+skinparam classAttributeIconSize 0
+
+package ch.giuliobosco.freqline {
+    class FreqlineServer {
+        - {static} int HTTP_PORT 8080
+        - SerialThread serialThread
+        - void startSerialThread()
+        - void loadServlets(ServletContextHandler context)
+        - void addServlet(ServletContextHandler context, BaseServlet baseServlet)
+        + void start()
+        + {static} void main()
+    }
+}
+
+@enduml
