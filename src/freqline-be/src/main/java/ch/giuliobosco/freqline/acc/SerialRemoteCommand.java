@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
- 
+
 package ch.giuliobosco.freqline.acc;
 
 import ch.giuliobosco.freqline.jdbc.JapiConnector;
@@ -32,7 +32,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 /**
- * 
+ * Serial Remote command.
+ *
  * @author giuliobosco (giuliobva@gmail.com)
  * @version 1.0 (2020-02-19 - 2020-02-19)
  */
@@ -40,10 +41,18 @@ public class SerialRemoteCommand extends SerialCommand implements SerialInputCom
 
     // ---------------------------------------------------------------------------------- Attributes
 
+    /**
+     * Serial Thread.
+     */
     private SerialThread serialThread;
 
     // -------------------------------------------------------------------------------- Constructors
 
+    /**
+     * Create serial remote command with serial thread.
+     *
+     * @param serialThread Serial thread.
+     */
     public SerialRemoteCommand(SerialThread serialThread) {
         super(REMOTE_BYTE, EMPTY_BYTE_ARRAY);
         this.serialThread = serialThread;
@@ -51,6 +60,12 @@ public class SerialRemoteCommand extends SerialCommand implements SerialInputCom
 
     // ----------------------------------------------------------------------------- General Methods
 
+    /**
+     * Build command response.
+     * Toggle generator status.
+     *
+     * @return Command response.
+     */
     @Override
     public SerialResponse buildResponse() {
         SerialResponse response = SerialResponse.OK;
@@ -74,8 +89,5 @@ public class SerialRemoteCommand extends SerialCommand implements SerialInputCom
 
         return response;
     }
-
-
-    // --------------------------------------------------------------------------- Static Components
 
 }

@@ -132,7 +132,7 @@ public class SerialCommand extends SerialCommunication {
      * @param serialCommunication Serial communication.
      * @return Serial response.
      */
-    public static SerialResponse loadCommand(SerialCommunication serialCommunication) {
+    public static SerialResponse loadCommand(SerialCommunication serialCommunication, SerialThread serialThread) {
 
         if (serialCommunication.getSequenceType() != SerialCommunication.COMMAND_INIT) {
             return null;
@@ -143,6 +143,10 @@ public class SerialCommand extends SerialCommunication {
                 return new SerialEchoCommand(serialCommunication.getMessage()).buildResponse();
             case NULL_BYTE:
                 return new SerialNullCommand().buildResponse();
+            case MIC_BYTE:
+                return new SerialMicCommand(serialThread).buildResponse();
+            case REMOTE_BYTE:
+                return new SerialRemoteCommand(serialThread).buildResponse();
         }
 
         return SerialResponse.ERROR;

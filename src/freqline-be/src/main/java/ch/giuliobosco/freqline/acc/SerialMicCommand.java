@@ -55,6 +55,7 @@ public class SerialMicCommand extends SerialCommand implements SerialInputComman
      */
     public SerialMicCommand(SerialThread serialThread) {
         super(MIC_BYTE, EMPTY_BYTE_ARRAY);
+        this.serialThread = serialThread;
     }
 
     // ----------------------------------------------------------------------------- General Methods

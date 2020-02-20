@@ -123,7 +123,7 @@ public class SerialThread extends Thread {
         SerialCommunication serialCommunication = new SerialCommunication();
         serialCommunication.readUntilEnd(this.serialPort.getInputStream());
 
-        SerialResponse serialResponse = SerialCommand.loadCommand(serialCommunication);
+        SerialResponse serialResponse = SerialCommand.loadCommand(serialCommunication, this);
 
         if (serialResponse != null) {
             serialResponse.write(this.serialPort.getOutputStream());
