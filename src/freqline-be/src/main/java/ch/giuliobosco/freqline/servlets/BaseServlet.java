@@ -583,9 +583,10 @@ public abstract class BaseServlet extends HttpServlet {
         // TODO Auto-generated method stub
         String origin = request.getHeader("origin");
         response.setHeader("Access-Control-Allow-Credentials", "true");
-        response.setHeader("Access-Control-Allow-Origin", origin);
+        response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
-        response.setHeader("Access-Control-Allow-Headers", "Content-Type");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type, 0, 1");
         response.setHeader("Access-Control-Max-Age", "86400");
+
     }
 }
