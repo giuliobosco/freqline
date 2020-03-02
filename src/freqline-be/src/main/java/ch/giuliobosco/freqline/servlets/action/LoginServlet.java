@@ -100,7 +100,7 @@ public class LoginServlet extends BaseServlet {
      *
      * @param request Http request.
      */
-    private void checkOldSession(HttpServletRequest request) {
+    public static void checkOldSession(HttpServletRequest request) {
         HttpSession oldSession = request.getSession(false);
         if (oldSession != null) {
             oldSession.invalidate();

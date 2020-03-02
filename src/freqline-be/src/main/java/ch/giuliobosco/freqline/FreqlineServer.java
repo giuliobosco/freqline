@@ -76,6 +76,7 @@ public class FreqlineServer {
         addServlet(context, new GeneratorMicServlet());
         addServlet(context, new GeneratorStatusServlet(this.serialThread));
         addServlet(context, new LoginServlet());
+        addServlet(context, new LogoutServlet());
 
         // data servlets
         addServlet(context, new GeneratorServlet());
