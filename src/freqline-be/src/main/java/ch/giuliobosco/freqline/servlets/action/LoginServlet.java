@@ -47,7 +47,7 @@ import java.io.IOException;
  * Login action servlet.
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0.3 (2019-10-29 - 2020-02-19)
+ * @version 1.0.3 (2019-10-29 - 2020-03-02)
  */
 @WebServlet(name = "LoginServlet", urlPatterns = {"action/login/*"}, loadOnStartup = 1)
 public class LoginServlet extends BaseServlet {
@@ -55,7 +55,7 @@ public class LoginServlet extends BaseServlet {
     /**
      * Logged in response message.
      */
-    private final String LOGGED_IN = "in";
+    private final String LOGGED_IN = "ok";
 
     /**
      * Wrong username or password response message;
@@ -132,10 +132,11 @@ public class LoginServlet extends BaseServlet {
 
         if (user != null) {
             sm.initSession(user);
-            ok(response, "ok");
+            ok(response, LOGGED_IN);
         } else {
             sm.destroySession();
-            ok(response, "else");
+
+            unauthorized(response, WRONG_USERNAME_PASSWORD);
         }
     }
 

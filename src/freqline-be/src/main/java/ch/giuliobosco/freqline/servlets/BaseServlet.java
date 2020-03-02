@@ -24,10 +24,10 @@
 
 package ch.giuliobosco.freqline.servlets;
 
-import org.json.JSONObject;
 import ch.giuliobosco.freqline.help.StringArrayHelper;
 import ch.giuliobosco.freqline.help.StringHelper;
 import ch.giuliobosco.freqline.jdbc.JdbcConnector;
+import org.json.JSONObject;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -40,7 +40,7 @@ import java.util.Map;
 
 /**
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0.3 (2019-10-27 - 2020-02-19)
+ * @version 1.0.3 (2019-10-27 - 2020-03-02)
  */
 @WebServlet(name = "BaseServlet")
 public abstract class BaseServlet extends HttpServlet {
@@ -286,6 +286,21 @@ public abstract class BaseServlet extends HttpServlet {
         JSONObject jo = new JSONObject();
         jo.put(S_PATH, getPath());
         jo.put(S_METHOD, request.getMethod());
+
+        writeStatus(response, response.SC_UNAUTHORIZED, S_401_UNAUTHORIZED, jo);
+    }
+
+    /**
+     * Return http status code 401 unauthorized with message.
+     *
+     * @param response Http response.
+     * @param message  Message.
+     * @throws IOException Error while writing response.
+     */
+    protected void unauthorized(HttpServletResponse response, String message) throws IOException {
+        JSONObject jo = new JSONObject();
+        jo.put(S_PATH, getPath());
+        jo.put(S_MESSAGE, message);
 
         writeStatus(response, response.SC_UNAUTHORIZED, S_401_UNAUTHORIZED, jo);
     }
@@ -568,7 +583,7 @@ public abstract class BaseServlet extends HttpServlet {
         // TODO Auto-generated method stub
         String origin = request.getHeader("origin");
         response.setHeader("Access-Control-Allow-Credentials", "true");
-        response.setHeader("Access-Control-Allow-Origin",origin);
+        response.setHeader("Access-Control-Allow-Origin", origin);
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type");
         response.setHeader("Access-Control-Max-Age", "86400");
