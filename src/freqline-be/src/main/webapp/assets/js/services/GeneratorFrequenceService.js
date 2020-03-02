@@ -5,7 +5,7 @@ app.factory('GeneratorFrequenceService', ['$http', 'baseUrl', function($http, ba
     $http.defaults.withCredentials = true;
     
     service.getGeneratorFrequence = function() {
-        let url = service + "?t=" + new Date().getTime();
+        let url = serviceUrl + "?t=" + new Date().getTime();
         
         let data = {};
         
@@ -23,7 +23,7 @@ app.factory('GeneratorFrequenceService', ['$http', 'baseUrl', function($http, ba
     };
     
     service.setGeneratorFrequence = function (frequence) { 
-        let url = service + "?frequence=" + frequence;
+        let url = serviceUrl + "?frequence=" + frequence;
         let data = 't=' + new Date().getTime();
         
         return $http.post(url, data, config).then(function (response){

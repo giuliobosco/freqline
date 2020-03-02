@@ -1,5 +1,5 @@
 app.factory('UserService', ['$http', '$location', 'baseUrl', '$rootScope', function($http, $location, baseUrl, $rootScope) {
-    let config = {headers: [{'Access-Control-Allow-Origin': ' *' },{'Access-Control-Allow-Credentials':'true'}, {'Content-Type': 'application/json'}]};
+    let config = {headers:[]};// [{'Access-Control-Allow-Origin': ' *' },{'Access-Control-Allow-Credentials':'true'}]};//, {'Content-Type': 'application/json'}]};
     var service = {};
     var serviceUrl = baseUrl + "/data/user";
     $http.defaults.withCredentials = true;

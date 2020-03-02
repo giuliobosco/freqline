@@ -39,8 +39,8 @@ app.controller('StatusController', ['$scope', '$location', 'GeneratorFrequenceSe
 
     $scope.save = function() {
         $scope.setTimer($scope.s.timer);
-        $scope.setFrequence($scope.frequence);
-        $scope.setDecibel($scope.decibel);
+        $scope.setFrequence($scope.s.frequence);
+        $scope.setDecibel($scope.s.decibel);
     }
 
     $scope.setTimer = function(timer) {
