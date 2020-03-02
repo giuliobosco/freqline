@@ -52,3 +52,4 @@ dependencies {
     compile group: 'com.fazecast', name: 'jSerialComm', version: '2.5.3'
 }
 
+mainClassName = 'ch.giuliobosco.freqline.FreqlineServer'
