@@ -36,7 +36,7 @@ import org.eclipse.jetty.servlet.ServletHolder;
  * Freqline server (test example).
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0.1 (2020-02-17 - 2020-02-19)
+ * @version 1.0.1 (2020-02-17 - 2020-03-02)
  */
 public class FreqlineServer {
 
@@ -95,7 +95,7 @@ public class FreqlineServer {
      * @param baseServlet Servlet to add.
      */
     private void addServlet(ServletContextHandler context, BaseServlet baseServlet) {
-        context.addServlet(new ServletHolder(baseServlet), "/" + baseServlet.getPath());
+        context.addServlet(new ServletHolder(baseServlet), "/" + baseServlet.getPath() + "/*");
     }
 
     // ----------------------------------------------------------------------------- General Methods
@@ -116,5 +116,16 @@ public class FreqlineServer {
         loadServlets(context);
 
         server.start();
+    }
+
+    /**
+     * Start freqline server.
+     * Create and start freqline server instance.
+     *
+     * @param args Command line arguments (unused).
+     * @throws Exception Error while executing server.
+     */
+    public static void main(String[] args) throws Exception {
+        new FreqlineServer().start();
     }
 }
