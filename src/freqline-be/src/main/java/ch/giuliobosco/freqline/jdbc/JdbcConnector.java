@@ -25,14 +25,16 @@
 package ch.giuliobosco.freqline.jdbc;
 
 import java.io.*;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Properties;
 
 /**
  * Manage connection to the databases with JDBC Driver.
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.1.4 (2019-04-05 - 2019-10-18)
+ * @version 1.1.4 (2019-04-05 - 2019-03-02)
  */
 public class JdbcConnector {
     // ------------------------------------------------------------------------------------ Costants
@@ -445,12 +447,14 @@ public class JdbcConnector {
     /**
      * Close the connection to the database.
      * Close the connection only if is open.
-     *
-     * @throws SQLException Error with mysql connection.
      */
-    public void close() throws SQLException {
+    public void close() {
         if (this.connection != null) {
-            this.connection.close();
+            try {
+                this.connection.close();
+            } catch (SQLException ignored) {
+
+            }
             this.connection = null;
         }
     }
