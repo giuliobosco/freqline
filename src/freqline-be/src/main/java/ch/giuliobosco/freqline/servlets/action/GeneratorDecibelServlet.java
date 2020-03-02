@@ -47,7 +47,7 @@ import java.sql.SQLException;
  * Generator decibel servlet.
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0 (2019-11-30 - 2019-11-30)
+ * @version 1.0 (2019-11-30 - 2020-02-03)
  */
 @WebServlet(name = "GeneratorDecibelServlet", urlPatterns = {"action/generatorDecibel"}, loadOnStartup = 1)
 public class GeneratorDecibelServlet extends SerialServlet {
@@ -118,8 +118,9 @@ public class GeneratorDecibelServlet extends SerialServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         SessionManager sm = new SessionManager(req.getSession());
+        JdbcConnector connector = null;
         try {
-            JdbcConnector connector = new JapiConnector();
+            connector = new JapiConnector();
             connector.openConnection();
 
             String[] perms = PermissionsUserQuery.getPermissions(connector, sm.getUserId());
@@ -152,6 +153,10 @@ public class GeneratorDecibelServlet extends SerialServlet {
             }
         } catch (Exception e) {
             internalServerError(resp, e.getMessage());
+        } finally {
+            if (connector != null) {
+                connector.close();
+            }
         }
     }
 
@@ -166,9 +171,10 @@ public class GeneratorDecibelServlet extends SerialServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         SessionManager sm = new SessionManager(req.getSession());
+        JdbcConnector connector = null;
 
         try {
-            JdbcConnector connector = new JapiConnector();
+            connector = new JapiConnector();
             connector.openConnection();
 
             String[] perms = PermissionsUserQuery.getPermissions(connector, sm.getUserId());
@@ -184,6 +190,10 @@ public class GeneratorDecibelServlet extends SerialServlet {
             }
         } catch (Exception e) {
             internalServerError(resp, e.getMessage());
+        } finally {
+            if (connector != null) {
+                connector.close();
+            }
         }
     }
 

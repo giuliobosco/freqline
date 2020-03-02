@@ -33,7 +33,6 @@ import ch.giuliobosco.freqline.jdbc.JapiConnector;
 import ch.giuliobosco.freqline.jdbc.JdbcConnector;
 import ch.giuliobosco.freqline.queries.GeneratorQuery;
 import ch.giuliobosco.freqline.queries.PermissionsUserQuery;
-import ch.giuliobosco.freqline.servlets.BaseServlet;
 import ch.giuliobosco.freqline.servlets.help.ServletRequestAnalyser;
 
 import javax.servlet.ServletException;
@@ -48,7 +47,7 @@ import java.sql.SQLException;
  * Change generator frequence API.
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0.2 (2019-11-19 - 2019-11-30)
+ * @version 1.0.2 (2019-11-19 - 2020-02-03)
  */
 @WebServlet(name = "GeneratorFrequenceServlet", urlPatterns = {"action/generatorFrequence"}, loadOnStartup = 1)
 public class GeneratorFrequenceServlet extends SerialServlet {
@@ -113,8 +112,10 @@ public class GeneratorFrequenceServlet extends SerialServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         SessionManager sm = new SessionManager(req.getSession());
+        JdbcConnector connector = null;
+
         try {
-            JdbcConnector connector = new JapiConnector();
+            connector = new JapiConnector();
             connector.openConnection();
 
             String[] perms = PermissionsUserQuery.getPermissions(connector, sm.getUserId());
@@ -148,6 +149,10 @@ public class GeneratorFrequenceServlet extends SerialServlet {
             }
         } catch (Exception e) {
             internalServerError(resp, e.getMessage());
+        } finally {
+            if (connector != null) {
+                connector.close();
+            }
         }
     }
 
@@ -162,9 +167,9 @@ public class GeneratorFrequenceServlet extends SerialServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         SessionManager sm = new SessionManager(req.getSession());
-
+        JdbcConnector connector = null;
         try {
-            JdbcConnector connector = new JapiConnector();
+            connector = new JapiConnector();
             connector.openConnection();
 
             String[] perms = PermissionsUserQuery.getPermissions(connector, sm.getUserId());
@@ -180,6 +185,10 @@ public class GeneratorFrequenceServlet extends SerialServlet {
             }
         } catch (Exception e) {
             internalServerError(resp, e.getMessage());
+        } finally {
+            if (connector != null) {
+                connector.close();
+            }
         }
     }
 

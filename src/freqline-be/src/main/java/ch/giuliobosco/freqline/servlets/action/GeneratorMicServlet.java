@@ -46,7 +46,7 @@ import java.sql.SQLException;
  * Change generator mic API.
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0.2 (2019-11-19 - 2019-11-26)
+ * @version 1.0.2 (2019-11-19 - 2020-02-03)
  */
 @WebServlet(name = "GeneratorMicServlet", urlPatterns = {"action/generatorMicTimer"}, loadOnStartup = 1)
 public class GeneratorMicServlet extends BaseServlet {
@@ -104,8 +104,10 @@ public class GeneratorMicServlet extends BaseServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         SessionManager sm = new SessionManager(req.getSession());
+        JdbcConnector connector = null;
+
         try {
-            JdbcConnector connector = new JapiConnector();
+            connector = new JapiConnector();
             connector.openConnection();
 
             String[] perms = PermissionsUserQuery.getPermissions(connector, sm.getUserId());
@@ -139,6 +141,10 @@ public class GeneratorMicServlet extends BaseServlet {
             }
         } catch (Exception e) {
             internalServerError(resp, e.getMessage());
+        } finally {
+            if (connector != null) {
+                connector.close();
+            }
         }
     }
 
@@ -153,8 +159,9 @@ public class GeneratorMicServlet extends BaseServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         SessionManager sm = new SessionManager(req.getSession());
+        JdbcConnector connector = null;
         try {
-            JdbcConnector connector = new JapiConnector();
+            connector = new JapiConnector();
             connector.openConnection();
 
             String[] perms = PermissionsUserQuery.getPermissions(connector, sm.getUserId());
@@ -171,6 +178,10 @@ public class GeneratorMicServlet extends BaseServlet {
             }
         } catch (Exception e) {
             internalServerError(resp, e.getMessage());
+        } finally {
+            if (connector != null) {
+                connector.close();
+            }
         }
     }
 

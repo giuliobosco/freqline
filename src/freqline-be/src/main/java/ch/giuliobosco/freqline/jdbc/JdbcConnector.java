@@ -34,7 +34,7 @@ import java.util.Properties;
  * Manage connection to the databases with JDBC Driver.
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.1.4 (2019-04-05 - 2019-03-02)
+ * @version 1.1.4 (2019-04-05 - 2020-02-03)
  */
 public class JdbcConnector {
     // ------------------------------------------------------------------------------------ Costants

@@ -42,12 +42,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.sql.SQLException;
 
 /**
  * Login action servlet.
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0.3 (2019-10-29 - 2020-03-02)
+ * @version 1.0.3 (2019-10-29 - 2020-02-03)
  */
 @WebServlet(name = "LoginServlet", urlPatterns = {"action/login/*"}, loadOnStartup = 1)
 public class LoginServlet extends BaseServlet {
@@ -116,39 +117,52 @@ public class LoginServlet extends BaseServlet {
      * @throws Exception Error.
      */
     private void executePost(HttpServletRequest request, HttpServletResponse response, ServletRequestAnalyser sra) throws Exception {
-        JdbcConnector connector = new JapiConnector();
-        connector.openConnection();
+        JdbcConnector connector = null;
 
-        DbUserDao dao = new DbUserDao(connector);
-        SqlAuthenticator sqla = new SqlAuthenticator(dao);
+        try {
+            connector = new JapiConnector();
+            connector.openConnection();
 
-        String username = firstValue(sra.getParameters(), UserJson.USERNAME);
-        String password = firstValue(sra.getParameters(), UserJson.PASSWORD);
+            DbUserDao dao = new DbUserDao(connector);
+            SqlAuthenticator sqla = new SqlAuthenticator(dao);
 
-        User user = sqla.authenticateUser(username, password);
+            String username = firstValue(sra.getParameters(), UserJson.USERNAME);
+            String password = firstValue(sra.getParameters(), UserJson.PASSWORD);
 
-        checkOldSession(request);
-        SessionManager sm = new SessionManager(request.getSession(true));
+            User user = sqla.authenticateUser(username, password);
 
-        if (user != null) {
-            sm.initSession(user);
-            ok(response, LOGGED_IN);
-        } else {
-            sm.destroySession();
+            checkOldSession(request);
+            SessionManager sm = new SessionManager(request.getSession(true));
 
-            unauthorized(response, WRONG_USERNAME_PASSWORD);
+            if (user != null) {
+                sm.initSession(user);
+                ok(response, LOGGED_IN);
+            } else {
+                sm.destroySession();
+
+                unauthorized(response, WRONG_USERNAME_PASSWORD);
+            }
+        } catch (SQLException sqle) {
+            internalServerError(response, sqle.getMessage());
+        } finally {
+            if (connector != null) {
+                connector.close();
+            }
         }
     }
 
     /**
      * Do get, execute http get request.
-     * @param req HTTP request.
+     *
+     * @param req  HTTP request.
      * @param resp HTTP response.
      * @throws ServletException Error with servlet.
-     * @throws IOException I/O Exception.
+     * @throws IOException      I/O Exception.
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        JdbcConnector connector = null;
+
         try {
             SessionManager sm = new SessionManager(req.getSession());
 
@@ -160,11 +174,12 @@ public class LoginServlet extends BaseServlet {
                 jo.put("isLoggedIn", true);
 
                 if (requestType.equals("permissions")) {
-                    JdbcConnector connector = new JapiConnector();
+                    connector = new JapiConnector();
                     connector.openConnection();
                     String[] perms = PermissionsUserQuery.getPermissions(connector.getConnection(), sm.getUserId());
 
                     jo.put("permissions", perms);
+                    connector.getConnection().close();
                 }
 
                 ok(resp, jo);
@@ -173,6 +188,10 @@ public class LoginServlet extends BaseServlet {
             }
         } catch (Exception e) {
             internalServerError(resp, e.getMessage());
+        } finally {
+            if (connector != null) {
+                connector.close();
+            }
         }
     }
 

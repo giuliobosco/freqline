@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
- 
+
 package ch.giuliobosco.freqline.servlets.data;
 
 import ch.giuliobosco.freqline.auth.SqlAuthenticator;
@@ -162,7 +162,7 @@ public class UserServlet extends BaseDataServlet {
      */
     @Override
     protected String requiredGetPermission() {
-        return "admin";
+        return "user";
     }
 
     /**

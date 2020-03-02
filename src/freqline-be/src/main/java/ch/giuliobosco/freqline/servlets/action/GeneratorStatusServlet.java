@@ -47,7 +47,7 @@ import java.sql.SQLException;
  * Change generator status API.
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0.1 (2019-11-19 - 2019-11-20)
+ * @version 1.0.1 (2019-11-19 - 2020-02-03)
  */
 @WebServlet(name = "GeneratorStatusServlet", urlPatterns = {"action/generatorStatus"}, loadOnStartup = 1)
 public class GeneratorStatusServlet extends SerialServlet {
@@ -94,8 +94,10 @@ public class GeneratorStatusServlet extends SerialServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         SessionManager sm = new SessionManager(request.getSession());
+        JdbcConnector connector = null;
+
         try {
-            JdbcConnector connector = new JapiConnector();
+            connector = new JapiConnector();
             connector.openConnection();
 
             String[] perms = PermissionsUserQuery.getPermissions(connector, sm.getUserId());
@@ -129,6 +131,10 @@ public class GeneratorStatusServlet extends SerialServlet {
             }
         } catch (Exception e) {
             internalServerError(response, e.getMessage());
+        } finally {
+            if (connector != null) {
+                connector.close();
+            }
         }
     }
 
@@ -143,8 +149,10 @@ public class GeneratorStatusServlet extends SerialServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         SessionManager sm = new SessionManager(req.getSession());
+        JdbcConnector connector = null;
+
         try {
-            JdbcConnector connector = new JapiConnector();
+            connector = new JapiConnector();
             connector.openConnection();
 
             String[] perms = PermissionsUserQuery.getPermissions(connector, sm.getUserId());
@@ -159,6 +167,10 @@ public class GeneratorStatusServlet extends SerialServlet {
             }
         } catch (Exception e) {
             internalServerError(resp, e.getMessage());
+        } finally {
+            if (connector != null) {
+                connector.close();
+            }
         }
     }
 

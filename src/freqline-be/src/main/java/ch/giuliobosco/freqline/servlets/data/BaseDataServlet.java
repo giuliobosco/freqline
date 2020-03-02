@@ -24,7 +24,6 @@
 
 package ch.giuliobosco.freqline.servlets.data;
 
-import org.json.JSONArray;
 import ch.giuliobosco.freqline.auth.SessionManager;
 import ch.giuliobosco.freqline.dbdao.DbDao;
 import ch.giuliobosco.freqline.help.ArrayHelper;
@@ -41,6 +40,7 @@ import ch.giuliobosco.freqline.queries.PermissionsUserQuery;
 import ch.giuliobosco.freqline.servlets.BaseServlet;
 import ch.giuliobosco.freqline.servlets.help.ServletNfe;
 import ch.giuliobosco.freqline.servlets.help.ServletRequestAnalyser;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.servlet.ServletException;
@@ -57,7 +57,7 @@ import java.util.stream.Stream;
  * Base servlet for japi.
  *
  * @author giuliobosco
- * @version 1.1.1 (2019-10-18 - 2019-11-23)
+ * @version 1.1.1 (2019-10-18 - 2020-02-03)
  */
 @WebServlet(name = "BaseDataServlet")
 public abstract class BaseDataServlet extends BaseServlet {
@@ -80,36 +80,38 @@ public abstract class BaseDataServlet extends BaseServlet {
         }
     }
 
-/**
- * Do get.
- *
- * @param request  Http request.
- * @param response Http response.
- * @throws ServletException Error in servlet.
- * @throws IOException      Input Output Error.
- */
-protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    SessionManager sm = new SessionManager(request.getSession());
-    try {
-        initConnector();
-        boolean hasP = hasRequiredPermission(sm.getUserId(), requiredGetPermission());
-        if (sm.isValidSession() && hasP) {
-            DbDao dao = getDao(sm.getUserId());
+    /**
+     * Do get.
+     *
+     * @param request  Http request.
+     * @param response Http response.
+     * @throws ServletException Error in servlet.
+     * @throws IOException      Input Output Error.
+     */
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        SessionManager sm = new SessionManager(request.getSession());
+        try {
+            initConnector();
+            boolean hasP = hasRequiredPermission(sm.getUserId(), requiredGetPermission());
+            if (sm.isValidSession() && hasP) {
+                DbDao dao = getDao(sm.getUserId());
 
-            try {
-                doGetById(request, response, dao);
-            } catch (ServletNfe snfe) {
-                doGetAll(response, dao);
+                try {
+                    doGetById(request, response, dao);
+                } catch (ServletNfe snfe) {
+                    doGetAll(response, dao);
+                }
+
+                closeConnector();
+            } else {
+                unauthorized(request, response);
             }
-
-            closeConnector();
-        } else {
-            unauthorized(request, response);
+        } catch (Exception e) {
+            internalServerError(response, e.getMessage());
+        } finally {
+            endConnector();
         }
-    } catch (Exception e) {
-        internalServerError(response, e.getMessage());
     }
-}
 
     /**
      * Do get get by id.
@@ -191,6 +193,8 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
             }
         } catch (Exception e) {
             internalServerError(response, e.getMessage());
+        } finally {
+            endConnector();
         }
     }
 
@@ -235,6 +239,8 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
             }
         } catch (Exception e) {
             internalServerError(response, e.getMessage());
+        } finally {
+            endConnector();
         }
     }
 
@@ -298,6 +304,8 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
             }
         } catch (Exception e) {
             internalServerError(response, e.getMessage());
+        } finally {
+            endConnector();
         }
     }
 
@@ -384,6 +392,15 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
         if (this.getConnector() == null || this.getConnector().getConnection() == null) {
             this.setConnector(new JapiConnector());
             this.getConnector().openConnection();
+        }
+    }
+
+    /**
+     * End connector (close).
+     */
+    private void endConnector() {
+        if (getConnector() != null) {
+            this.getConnector().close();
         }
     }
 
