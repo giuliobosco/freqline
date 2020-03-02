@@ -1,15 +1,11 @@
-app.factory('GroupService', ['$http', 'UserGroupService', function($http, userGroupService) {
+app.factory('GroupService', ['$http', 'baseUrl', 'UserGroupService', function($http, baseUrl, userGroupService) {
     var config = {headers: [{'Access-Control-Allow-Origin': ' *' },{'Access-Control-Allow-Credentials':'true'}]};
     var service = {};
-    var address = "localhost";
-    var port = 8080;
-    var baseApi = "/freqline-be"
-    var urlBase = "http://" + address + ":" + port + baseApi;
-    urlBase += "/data/group";
+    var serviceUrl = baseUrl + "/data/group";
     $http.defaults.withCredentials = true;
     
     service.getAll = function() {
-        let url = urlBase + "?t=" + new Date().getTime();
+        let url = serviceUrl + "?t=" + new Date().getTime();
         
         let data = {};
         
@@ -27,7 +23,7 @@ app.factory('GroupService', ['$http', 'UserGroupService', function($http, userGr
     };
     
     service.getById = function (id) { 
-        let url = urlBase + "/" + id;
+        let url = serviceUrl + "/" + id;
         let data = 't=' + new Date().getTime();
         
         return $http.get(url, data, config).then(function (response){

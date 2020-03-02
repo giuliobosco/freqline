@@ -38,3 +38,5 @@ app.config(function ($routeProvider) {
 }).run(function($rootScope, $route) {
     $rootScope.$route = $route;
 });
+
+app.value('baseUrl', 'http://localhost:8080');

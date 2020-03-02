@@ -1,15 +1,11 @@
-app.factory('UserGroupService', ['$http', function($http) {
+app.factory('UserGroupService', ['$http', 'baseUrl', function($http, baseUrl) {
     var config = {headers: [{'Access-Control-Allow-Origin': ' *' },{'Access-Control-Allow-Credentials':'true'}]};
     var service = {};
-	var address = "localhost";
-    var port = 8080;
-    var baseApi = "/freqline-be"
-    var urlBase = "http://" + address + ":" + port + baseApi;
-	urlBase += "/data/userGroup";
+    var serviceUrl = baseUrl + "/data/userGroup";
     $http.defaults.withCredentials = true;
 
     service.getAll = function() {
-        let url = urlBase + "?t=" + new Date().getTime();
+        let url = serviceUrl + "?t=" + new Date().getTime();
 
         let data = {};
 
@@ -27,7 +23,7 @@ app.factory('UserGroupService', ['$http', function($http) {
     };
     
     service.getById = function (id) { 
-        let url = urlBase + "/" + id;
+        let url = serviceUrl + "/" + id;
         let data = 't=' + new Date().getTime();
         
         return $http.get(url, data, config).then(function (response){
@@ -47,7 +43,7 @@ app.factory('UserGroupService', ['$http', function($http) {
     };
 
     service.insert = function(user, group) {
-        let url = urlBase + "?user=" + user + "&group=" + group;
+        let url = serviceUrl + "?user=" + user + "&group=" + group;
         let data = "t=" + new Date().getTime();
 
         return $http.post(url, data, config).then(function (response) {
@@ -58,7 +54,7 @@ app.factory('UserGroupService', ['$http', function($http) {
     }
 
     service.update = function(id, user, group) {
-        let url = urlBase + "?id=" + id + "&user=" + user + "&group=" + group;
+        let url = serviceUrl + "?id=" + id + "&user=" + user + "&group=" + group;
         let data = "t=" + new Date().getTime();
         
         return $http.put(url, data, config).then(function (response) {

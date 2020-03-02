@@ -1,15 +1,11 @@
-app.factory('UserService', ['$http', '$location', '$rootScope', function($http, $location, $rootScope) {
+app.factory('UserService', ['$http', '$location', 'baseUrl', '$rootScope', function($http, $location, baseUrl, $rootScope) {
     let config = {headers: [{'Access-Control-Allow-Origin': ' *' },{'Access-Control-Allow-Credentials':'true'}, {'Content-Type': 'application/json'}]};
     var service = {};
-    var address = "localhost";
-    var port = 8080;
-    var baseApi = "/freqline-be"
-    var urlBase = "http://" + address + ":" + port + baseApi;
-    urlBase += "/data/user";
+    var serviceUrl = baseUrl + "/data/user";
     $http.defaults.withCredentials = true;
     
     service.getById = function (id) { 
-        let url = urlBase + "/" + id;
+        let url = serviceUrl + "/" + id;
         let data = '';
         
         return $http.get(url, data, config).then(function (response){
@@ -30,7 +26,7 @@ app.factory('UserService', ['$http', '$location', '$rootScope', function($http, 
     
     service.getAll = function () { 
         let data = '';
-        return $http.get(urlBase, data, config).then(function (response){
+        return $http.get(serviceUrl, data, config).then(function (response){
             return response.data;
         },function (error){
             if (error.status == 401) {
@@ -44,7 +40,7 @@ app.factory('UserService', ['$http', '$location', '$rootScope', function($http, 
     };
     
     service.delete = function (id) { 
-        let url = urlBase + "/" + id;
+        let url = serviceUrl + "/" + id;
         let data = '';
         return $http.delete(url, data, config).then(function (response){
             return response.data;
@@ -60,7 +56,7 @@ app.factory('UserService', ['$http', '$location', '$rootScope', function($http, 
     };
     
     service.insert = function (user) { 
-        let url = urlBase + "?";
+        let url = serviceUrl + "?";
         
         if (user.username != null && user.username.length > 0) {
             url += "username=" + user.username + "&";
@@ -95,7 +91,7 @@ app.factory('UserService', ['$http', '$location', '$rootScope', function($http, 
     };
     
     service.update = function (user) { 
-        let url = urlBase + "?";
+        let url = serviceUrl + "?";
         
         url += "id=" + user.id + "&";
         if (user.username != null && user.username.length > 0) {

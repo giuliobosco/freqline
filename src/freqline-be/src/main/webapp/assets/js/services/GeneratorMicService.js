@@ -1,15 +1,11 @@
-app.factory('GeneratorMicService', ['$http', function($http) {
+app.factory('GeneratorMicService', ['$http', 'baseUrl', function($http, baseUrl) {
     var config = {headers: [{'Access-Control-Allow-Origin': ' *' },{'Access-Control-Allow-Credentials':'true'}]};
     var service = {};
-    var address = "localhost";
-    var port = 8080;
-    var baseApi = "/freqline-be"
-    var urlBase = "http://" + address + ":" + port + baseApi;
-    urlBase += "/action/generatorMicTimer";
+    var serviceUrl = baseUrl + "/action/generatorMicTimer";
     $http.defaults.withCredentials = true;
     
     service.getMicTimer = function() {
-        let url = urlBase + "?t=" + new Date().getTime();
+        let url = serviceUrl + "?t=" + new Date().getTime();
         
         let data = {};
         
@@ -27,7 +23,7 @@ app.factory('GeneratorMicService', ['$http', function($http) {
     };
     
     service.setMicTimer = function (timer) { 
-        let url = urlBase + "?timer=" + timer;
+        let url = serviceUrl + "?timer=" + timer;
         let data = 't=' + new Date().getTime();
         
         return $http.post(url, data, config).then(function (response){

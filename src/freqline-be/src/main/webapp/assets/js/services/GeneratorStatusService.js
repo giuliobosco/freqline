@@ -1,15 +1,11 @@
-app.factory('GeneratorStatusService', ['$http', function($http) {
+app.factory('GeneratorStatusService', ['$http', 'baseUrl', function($http, baseUrl) {
     var config = {headers: [{'Access-Control-Allow-Origin': ' *' },{'Access-Control-Allow-Credentials':'true'}]};
     var service = {};
-    var address = "localhost";
-    var port = 8080;
-    var baseApi = "/freqline-be"
-    var urlBase = "http://" + address + ":" + port + baseApi;
-    urlBase += "/action/generatorStatus";
+    var serviceUrl = baseUrl + "/action/generatorStatus";
     $http.defaults.withCredentials = true;
     
     service.getGeneratorStatus = function() {
-        let url = urlBase + "?t=" + new Date().getTime();
+        let url = serviceUrl + "?t=" + new Date().getTime();
         
         let data = {};
         
@@ -27,7 +23,7 @@ app.factory('GeneratorStatusService', ['$http', function($http) {
     };
     
     service.setGeneratorStatus = function (status) { 
-        let url = urlBase + "?status=" + status;
+        let url = serviceUrl + "?status=" + status;
         let data = 't=' + new Date().getTime();
         
         return $http.post(url, data, config).then(function (response){

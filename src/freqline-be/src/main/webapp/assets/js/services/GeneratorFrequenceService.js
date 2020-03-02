@@ -1,15 +1,11 @@
-app.factory('GeneratorFrequenceService', ['$http', function($http) {
+app.factory('GeneratorFrequenceService', ['$http', 'baseUrl', function($http, baseUrl) {
     var config = {headers: [{'Access-Control-Allow-Origin': ' *' },{'Access-Control-Allow-Credentials':'true'}]};
     var service = {};
-    var address = "localhost";
-    var port = 8080;
-    var baseApi = "/freqline-be"
-    var urlBase = "http://" + address + ":" + port + baseApi;
-    urlBase += "/action/generatorFrequence";
+    var serviceUrl = baseUrl + "/action/generatorFrequence";
     $http.defaults.withCredentials = true;
     
     service.getGeneratorFrequence = function() {
-        let url = urlBase + "?t=" + new Date().getTime();
+        let url = service + "?t=" + new Date().getTime();
         
         let data = {};
         
@@ -27,7 +23,7 @@ app.factory('GeneratorFrequenceService', ['$http', function($http) {
     };
     
     service.setGeneratorFrequence = function (frequence) { 
-        let url = urlBase + "?frequence=" + frequence;
+        let url = service + "?frequence=" + frequence;
         let data = 't=' + new Date().getTime();
         
         return $http.post(url, data, config).then(function (response){
