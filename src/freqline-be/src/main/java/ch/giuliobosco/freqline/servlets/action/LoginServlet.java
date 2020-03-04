@@ -48,7 +48,7 @@ import java.sql.SQLException;
  * Login action servlet.
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0.3 (2019-10-29 - 2020-02-03)
+ * @version 1.0.4 (2019-10-29 - 2020-02-04)
  */
 @WebServlet(name = "LoginServlet", urlPatterns = {"action/login/*"}, loadOnStartup = 1)
 public class LoginServlet extends BaseServlet {
@@ -179,7 +179,6 @@ public class LoginServlet extends BaseServlet {
                     String[] perms = PermissionsUserQuery.getPermissions(connector.getConnection(), sm.getUserId());
 
                     jo.put("permissions", perms);
-                    connector.getConnection().close();
                 }
 
                 ok(resp, jo);

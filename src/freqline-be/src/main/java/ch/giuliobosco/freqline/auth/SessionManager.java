@@ -32,7 +32,7 @@ import javax.servlet.http.HttpSession;
  * Session manager.
  *
  * @author giuliobosco
- * @version 1.0.1 (2019-10-16 - 2019-10-29)
+ * @version 1.1 (2019-10-16 - 2020-03-04)
  */
 public class SessionManager {
 
@@ -114,7 +114,7 @@ public class SessionManager {
             return false;
         }
 
-        return this.session.getAttribute(USER) != null;
+        return this.session.getAttribute(USER_ID) != null;
     }
 
     /**
