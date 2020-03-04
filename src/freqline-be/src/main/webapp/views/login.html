@@ -5,16 +5,16 @@
     <p>&nbsp;</p>
     <div class="user-input-wrp">
       <br/>
-      <input type="text" class="inputText" ng-model="login.username" required>
+      <input type="text" class="inputText" ng-model="loginData.username" required>
       <span class="floating-label">username</span>
     </div>
     <div class="user-input-wrp">
       <br/>
-      <input type="password" class="inputText" ng-model="login.password" required>
+      <input type="password" class="inputText" ng-model="loginData.password" required>
       <span class="floating-label">password</span>
     </div>
-    <label style="color:red; padding: 10px 10px 0 10px">{{message}}</label><br>
-    <input type="submit" ng-click="login(login)" value="Login" />
+    <p style="color:red; padding: 10px 10px 0 10px">{{message}}</p><br>
+    <input type="submit" ng-click="login(loginData)" value="Login" />
     <p style="padding: 15px 10px;">&copy; 2019 Giulio Bosco</p>
   </form>
 </div>

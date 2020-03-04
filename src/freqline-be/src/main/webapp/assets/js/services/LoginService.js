@@ -5,10 +5,10 @@ app.factory('LoginService', ['$http', 'baseUrl', function($http, baseUrl) {
     //$http.defaults.withCredentials = true;
     
     service.login = function (username, password) { 
-        let url = serviceUrl + "?t=" + new Date().getTime() + "&username=" + username + "&password=" + password;
+        let url = serviceUrl + "?username=" + username + "&password=" + password + "&t=" + new Date().getTime();
         let data = "username=" + username + "&password=" + password;
         return $http.post(url, data, config).then(function (response){
-            return response.data;
+            return response;
         },function (error){
             return error;
         });
