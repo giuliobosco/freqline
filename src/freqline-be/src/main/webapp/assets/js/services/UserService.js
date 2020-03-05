@@ -43,11 +43,11 @@ app.factory('UserService', ['$http', '$location', 'baseUrl', '$rootScope', funct
         let url = serviceUrl + "/" + id;
         let data = '';
         return $http.delete(url, data, config).then(function (response){
+            $.notify("Deleted correctly", "success");
             return response.data;
         },function (error){
             if (error.status == 401) {
-                $rootScope.error = error;
-                $location.path('/401');
+                $.notify("Operation not permitted", "error")
                 return error;
             } else {
                 return error;
@@ -78,11 +78,11 @@ app.factory('UserService', ['$http', '$location', 'baseUrl', '$rootScope', funct
         
         let data = '';
         return $http.post(url, data, config).then(function (response) {
+            $.notify("Created correctly", "success");
             return response.data;
         },function (error){
             if (error.status == 401) {
-                $rootScope.error = error;
-                $location.path('/401');
+                $.notify("Operation not permitted", "error")
                 return error;
             } else {
                 return error.data;
@@ -115,11 +115,11 @@ app.factory('UserService', ['$http', '$location', 'baseUrl', '$rootScope', funct
         let data = '';
         
         return $http.put(url, data, config).then(function (response){
+            $.notify("Uploaded correctly", "success");
             return response.data;
         },function (error){
             if (error.status == 401) {
-                $rootScope.error = error;
-                $location.path('/401');
+                $.notify("Operation not permitted", "error")
                 return error;
             } else {
                 return error.data;

@@ -13,9 +13,10 @@ app.factory('GeneratorDecibelService', ['$http', 'baseUrl', function($http, base
             return response.data;
         }, function(error) {
             if (error.status == 401) {
+                $.notify("Operation not permitted", "error")
+            } else if (error.status == 404) {
                 $rootScope.error = error;
-                $location.path('/401');
-                return error;
+                $location.path('/404')
             } else {
                 return error;
             }
@@ -30,9 +31,10 @@ app.factory('GeneratorDecibelService', ['$http', 'baseUrl', function($http, base
             return response.data;
         },function (error){
             if (error.status == 401) {
+                $.notify("Operation not permitted", "error")
+            } else if (error.status == 404) {
                 $rootScope.error = error;
-                $location.path('/401');
-                return error;
+                $location.path('/404')
             } else {
                 return error.data;
             }

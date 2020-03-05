@@ -49,7 +49,14 @@ app.factory('UserGroupService', ['$http', 'baseUrl', function($http, baseUrl) {
         return $http.post(url, data, config).then(function (response) {
             return response;
         }, function (error) {
-            return error;
+            if (error.status == 401) {
+                $.notify("Operation not permitted", "error")
+            } else if (error.status == 404) {
+                $rootScope.error = error;
+                $location.path('/404')
+            } else {
+                return error;
+            }
         })
     }
 
@@ -60,7 +67,14 @@ app.factory('UserGroupService', ['$http', 'baseUrl', function($http, baseUrl) {
         return $http.put(url, data, config).then(function (response) {
             return response;
         }, function (error) {
-            return error;
+            if (error.status == 401) {
+                $.notify("Operation not permitted", "error")
+            } else if (error.status == 404) {
+                $rootScope.error = error;
+                $location.path('/404')
+            } else {
+                return error;
+            }
         })
     }
 
