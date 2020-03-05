@@ -15,7 +15,9 @@
     
     <div class="float-left center">
         <p>frequence</p>
-        <input type="number" ng-model="s.frequence"><span class="measure-unit">MHz</span>
+        <input type="number" min="0" max="25000" ng-model="s.frequence"><span class="measure-unit">MHz</span>
+        <br><br><br>
+        <input type="range" min="0" max="25000" ng-model="s.frequence" class="w100">
     </div>
     
     <div class="clearfix"></div>
@@ -24,7 +26,7 @@
     
     <div class="float-left center">
         <p>timer for mic</p>
-        <input type="number" ng-model="s.timer"><span class="measure-unit">s</span>
+        <input type="number" min="0" ng-model="s.timer"><span class="measure-unit">s</span>
     </div>
     
     <div class="clearfix"></div>
@@ -33,7 +35,7 @@
     
     <div class="float-left center">
         <p>decibel for mic</p>
-        <input type="number" ng-model="s.decibel"><div class="measure-unit">db</div>
+        <input type="number" min="0" ng-model="s.decibel"><div class="measure-unit">db</div>
     </div>
     
     <div class="clearfix"></div>

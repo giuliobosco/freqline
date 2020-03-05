@@ -39,6 +39,12 @@ body {
     width: 33%;
 }
 
+.w100 {
+    padding: 0px 1px;
+    float: left;
+    width: 100%!important;
+}
+
 .c {
     background-color: blue;
 }
