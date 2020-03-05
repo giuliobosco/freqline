@@ -32,11 +32,11 @@ app.controller('UserController', ['$scope', '$route', '$sce', '$location', 'Grou
                         userGroupService.insert(data.id, user.group);
                         $location.path('/user/' + data.id);
                     } else {
-                        $scope.error = "Error";
+                        $.notify("Error", "error")
                     }
                 })
             } else {
-                $scope.error = "Password do not match";
+                $.notify("Password do not match", "warn");
             }
         } else {
             user.id = id;
@@ -44,7 +44,7 @@ app.controller('UserController', ['$scope', '$route', '$sce', '$location', 'Grou
                 if (user.passwordNew == user.passwordCheck) {
                     user.password = user.passwordNew;
                 } else {
-                    $scope.error = "Password do not match";
+                    $.notify("Password do not match", "warn");
                     return '';
                 }
             }
@@ -98,12 +98,15 @@ app.controller('UserController', ['$scope', '$route', '$sce', '$location', 'Grou
                 });
             })
         }
+
+        $.notify("Loaded data", "success");
     };
     
     $scope.delete = function() {
         if (id != 0) {
             userService.delete(id).then(function(data) {
-                $location.path('/users')
+                $location.path('/users');
+                $.notify("User Deleted", "success");
             })
         }
     }

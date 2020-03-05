@@ -5,7 +5,7 @@ app.controller('LoginController', ['$scope', '$location', 'LoginService', functi
             if (data.status === 200) {
                 $location.path('/users');
             } else {
-                $scope.message = data.data.message;
+                $.notify(data.data.message, "error");
             }
         });
     }
