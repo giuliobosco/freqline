@@ -81,7 +81,7 @@ public class AccGenerator {
         GeneratorQuery.setStatus(connection, keyC, true);
         serialThread.addCommand(SerialCommand.GENERATOR_ON);
 
-        new MicThread(serialThread, timer).start();
+        new MicThread(serialThread, connection, timer).start();
     }
 
     /**

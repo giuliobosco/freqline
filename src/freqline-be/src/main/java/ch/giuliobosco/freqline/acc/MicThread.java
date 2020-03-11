@@ -24,6 +24,10 @@
 
 package ch.giuliobosco.freqline.acc;
 
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
+
 /**
  * Mic thread, wait until timer then turn off generator.
  *
@@ -38,6 +42,8 @@ public class MicThread extends Thread {
      */
     private SerialThread serialThread;
 
+    private Connection connection;
+
     /**
      * Timer to turn off.
      */
@@ -51,9 +57,10 @@ public class MicThread extends Thread {
      * @param serialThread Serial thread.
      * @param timer        Timer to turn off.
      */
-    public MicThread(SerialThread serialThread, long timer) {
+    public MicThread(SerialThread serialThread, Connection connection, long timer) {
         this.serialThread = serialThread;
-        this.timer = timer;
+        this.timer = timer * 1000;
+        this.connection = connection;
     }
 
     // ----------------------------------------------------------------------------- General Methods
@@ -66,7 +73,7 @@ public class MicThread extends Thread {
         this.timer = System.currentTimeMillis() + timer;
 
         try {
-            while (System.currentTimeMillis() > this.timer && !interrupted()) {
+            while (this.timer > System.currentTimeMillis() && !interrupted()) {
                 Thread.sleep(900);
             }
         } catch (InterruptedException ignored) {
@@ -74,6 +81,13 @@ public class MicThread extends Thread {
         }
 
         this.serialThread.addCommand(SerialCommand.GENERATOR_OFF);
+        try {
+            AccGenerator.turnGeneratorOff(connection, AccGenerator.KEY_C, serialThread);
+            System.out.println("CIAOOOOOO");
+            connection.close();
+        } catch (SQLException ignored) {
+
+        }
     }
 
 }
