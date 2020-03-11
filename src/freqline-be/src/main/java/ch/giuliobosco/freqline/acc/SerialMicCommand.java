@@ -35,7 +35,7 @@ import java.sql.SQLException;
  * Serial mic command.
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0 (2020-02-19 - 2020-02-19)
+ * @version 1.0.1 (2020-02-19 - 2020-03-11)
  */
 public class SerialMicCommand extends SerialCommand implements SerialInputCommand {
 
@@ -76,9 +76,7 @@ public class SerialMicCommand extends SerialCommand implements SerialInputComman
 
             boolean status = GeneratorQuery.getGeneratorStatus(connector.getConnection(), AccGenerator.KEY_C);
 
-            if (status) {
-                AccGenerator.turnGeneratorOff(connector.getConnection(), AccGenerator.KEY_C, this.serialThread);
-            } else {
+            if (!status) {
                 long timer = GeneratorQuery.getMicTimer(connector.getConnection(), AccGenerator.KEY_C);
                 AccGenerator.turnGeneratorOn(connector.getConnection(), AccGenerator.KEY_C, timer, this.serialThread);
             }
