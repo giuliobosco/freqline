@@ -6,12 +6,14 @@
  */
 
 #define MIC_PIN A2                            // Microphone input data pin
+#define MIC_GND_PIN 8                         // Microphone GND pin
+#define MIC_5V_PIN 7                          // Microphone VCC (5V) pin
 
 #define MIC_COMMAND 109                       // Microphone command byte
-#define MEASURE_LENGTH 128                    // Measure length
+#define MEASURE_LENGTH 64                     // Measure length
 #define TOLLERANCE_VALUE 33                   // Tollerance value
 
-int decibel;                                  // decibels limit
+int decibel = 50;                                  // decibels limit
 int micStatus;                                // decibels of the microphone
 boolean micStatusChanged;                     // microphone status changed
 int soundSignal;                              // sound singal
@@ -43,12 +45,12 @@ void checkDecibel() {
   
   for (int i = 0; i < MEASURE_LENGTH; i++) {
     soundSignal = analogRead(MIC_PIN);
+    soundSignal = int(20 * log10(soundSignal));
     sum += soundSignal;
   }
 
-  int val = sum / MEASURE_LENGTH - TOLLERANCE_VALUE;
-  micStatusChanged = micStatus != val;
-
+  int val = sum / MEASURE_LENGTH;
+  micStatusChanged = val > decibel;
   micStatus = val;
 }
 

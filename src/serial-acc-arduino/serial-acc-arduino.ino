@@ -26,13 +26,6 @@
 #define GENERATOR_OFF_COMMAND 103           // generator turn off command byte
 #define GENERATOR_ON_COMMAND 71             // generator turn on command byte
 
-// send command control constants
-#define SENT_NULL 0                         // last sent null command
-#define SENT_MIC 1                          // last sent microphone command
-#define SENT_REMOTE 2                       // last sent remote command
-
-byte lastSent = 0;                          // last command sent
-
 /**
  * Setup arduino.
  * - serial
@@ -103,23 +96,12 @@ void sendCommand() {
   checkRemoteStatus();
   checkDecibel();
   
-  if (isMicStatusChanged() && isRemoteStatusChanged()) {
-    if (lastSent == SENT_MIC) {
-      sendRemote();
-      lastSent = SENT_REMOTE;
-    } else {
-      sendMic();
-      lastSent = SENT_MIC;
-    }
-  } else if (isMicStatusChanged()) {
+  if (isMicStatusChanged()) {
     sendMic();
-    lastSent = SENT_MIC;
   } else if (isRemoteStatusChanged()) {
     sendRemote();
-    lastSent = SENT_REMOTE;
   } else {
     sendNull();
-    lastSent = SENT_NULL;
   }
 }
 
