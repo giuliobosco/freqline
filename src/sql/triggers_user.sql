@@ -1,3 +1,4 @@
+/* on user insert, create audit */
 DELIMITER //
 
 CREATE TRIGGER `freqline`.`insert_user_audit`
@@ -43,6 +44,7 @@ CREATE TRIGGER `freqline`.`insert_user_audit`
   END;
 //
 
+/* on user update, create audit */
 DELIMITER //
 
 CREATE TRIGGER `freqline`.`update_user_audit`
@@ -88,6 +90,7 @@ CREATE TRIGGER `freqline`.`update_user_audit`
   END;
 //
 
+/* on user delete, create audit */
 DELIMITER //
 
 CREATE TRIGGER `freqline`.`delete_user_audit`

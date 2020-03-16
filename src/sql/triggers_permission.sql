@@ -1,3 +1,4 @@
+/* on permission insert, create audit */
 DELIMITER //
 
 CREATE TRIGGER `freqline`.`insert_permission_audit`
@@ -35,6 +36,7 @@ CREATE TRIGGER `freqline`.`insert_permission_audit`
   END;
 //
 
+/* on permission update, create audit */
 DELIMITER //
 
 CREATE TRIGGER `freqline`.`update_permission_audit`
@@ -72,6 +74,7 @@ CREATE TRIGGER `freqline`.`update_permission_audit`
   END;
 //
 
+/* on permission delete, create audit */
 DELIMITER //
 
 CREATE TRIGGER `freqline`.`delete_permission_audit`

@@ -1,3 +1,4 @@
+/* on mic insert, create audit */
 DELIMITER //
 
 CREATE TRIGGER `freqline`.`insert_mic_audit`
@@ -39,6 +40,7 @@ CREATE TRIGGER `freqline`.`insert_mic_audit`
     END;
 //
 
+/* on mic update, create audit */
 DELIMITER //
 
 CREATE TRIGGER `freqline`.`update_mic_audit`
@@ -80,6 +82,7 @@ CREATE TRIGGER `freqline`.`update_mic_audit`
     END;
 //
 
+/* on mic delete, create audit */
 DELIMITER //
 
 CREATE TRIGGER `freqline`.`delete_mic_audit`

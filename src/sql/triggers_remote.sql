@@ -1,3 +1,4 @@
+/* on remote insert, create audit */
 DELIMITER //
 
 CREATE TRIGGER `freqline`.`insert_remote_audit`
@@ -37,6 +38,7 @@ CREATE TRIGGER `freqline`.`insert_remote_audit`
     END;
 //
 
+/* on remote update, create audit */
 DELIMITER //
 
 CREATE TRIGGER `freqline`.`update_remote_audit`
@@ -76,6 +78,7 @@ CREATE TRIGGER `freqline`.`update_remote_audit`
     END;
 //
 
+/* on remote delete, create audit */
 DELIMITER //
 
 CREATE TRIGGER `freqline`.`delete_remote_audit`

@@ -28,6 +28,7 @@ CREATE TABLE `freqline`.`audit_action`
 # -----------------------------------------------
 # -----------------------------------------------
 
+/* create user table */
 CREATE TABLE `freqline`.`user` (
   `id`           INT AUTO_INCREMENT,
 
@@ -58,9 +59,7 @@ CREATE TABLE `freqline`.`user` (
     ON UPDATE CASCADE
 );
 
-# -----------------------------------------------
-# -----------------------------------------------
-
+/* create user audit table */
 CREATE TABLE `freqline`.`user_audit`
 (
   `id`                 INT AUTO_INCREMENT,
@@ -91,6 +90,7 @@ CREATE TABLE `freqline`.`user_audit`
 # -----------------------------------------------
 # -----------------------------------------------
 
+/* create permission table */
 CREATE TABLE `freqline`.`permission`
 (
   `id`           INT AUTO_INCREMENT,
@@ -109,9 +109,7 @@ CREATE TABLE `freqline`.`permission`
   PRIMARY KEY (`id`)
 );
 
-# -----------------------------------------------
-# -----------------------------------------------
-
+/* create permission audit table */
 CREATE TABLE `freqline`.`permission_audit`
 (
   `id`                 INT AUTO_INCREMENT,
@@ -138,6 +136,7 @@ CREATE TABLE `freqline`.`permission_audit`
 # -----------------------------------------------
 # -----------------------------------------------
 
+/* create group table */
 CREATE TABLE `freqline`.`group`
 (
   `id`           INT AUTO_INCREMENT,
@@ -158,9 +157,7 @@ CREATE TABLE `freqline`.`group`
     ON UPDATE CASCADE
 );
 
-# -----------------------------------------------
-# -----------------------------------------------
-
+/* create group audit table */
 CREATE TABLE `freqline`.`group_audit`
 (
   `id`                 INT AUTO_INCREMENT,
@@ -186,6 +183,7 @@ CREATE TABLE `freqline`.`group_audit`
 # -----------------------------------------------
 # -----------------------------------------------
 
+/* create group permission table */
 CREATE TABLE `freqline`.`group_permission`
 (
   `id`               INT AUTO_INCREMENT,
@@ -209,9 +207,7 @@ CREATE TABLE `freqline`.`group_permission`
     ON UPDATE CASCADE
 );
 
-# -----------------------------------------------
-# -----------------------------------------------
-
+/* create group permission audit table */
 CREATE TABLE `freqline`.`group_permission_audit`
 (
   `id`                     INT AUTO_INCREMENT,
@@ -237,6 +233,7 @@ CREATE TABLE `freqline`.`group_permission_audit`
 # -----------------------------------------------
 # -----------------------------------------------
 
+/* create user group table */
 CREATE TABLE `freqline`.`user_group` (
   `id`           INT AUTO_INCREMENT,
 
@@ -255,9 +252,7 @@ CREATE TABLE `freqline`.`user_group` (
   FOREIGN KEY (`user`) REFERENCES `freqline`.`user`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-# -----------------------------------------------
-# -----------------------------------------------
-
+/* create user group audit table */
 CREATE TABLE `freqline`.`user_group_audit`
 (
   `id`                 INT AUTO_INCREMENT,
@@ -283,6 +278,7 @@ CREATE TABLE `freqline`.`user_group_audit`
 # -----------------------------------------------
 # -----------------------------------------------
 
+/* create generator table */
 CREATE TABLE `freqline`.`generator` (
   `id`           INT AUTO_INCREMENT,
 
@@ -311,9 +307,7 @@ CREATE TABLE `freqline`.`generator` (
         ON UPDATE CASCADE
 );
 
-# -----------------------------------------------
-# -----------------------------------------------
-
+/* create generator audit table */
 CREATE TABLE `freqline`.`generator_audit` (
     `id`                 INT AUTO_INCREMENT,
     `action`             INT         NOT NULL,
@@ -341,6 +335,7 @@ CREATE TABLE `freqline`.`generator_audit` (
 # -----------------------------------------------
 # -----------------------------------------------
 
+/* create remote table */
 CREATE TABLE `freqline`.`remote` (
     `id`           INT AUTO_INCREMENT,
 
@@ -371,9 +366,7 @@ CREATE TABLE `freqline`.`remote` (
         ON UPDATE CASCADE
 );
 
-# -----------------------------------------------
-# -----------------------------------------------
-
+/* create remote audit table */
 CREATE TABLE `freqline`.`remote_audit` (
     `id`                 INT AUTO_INCREMENT,
     `action`             INT         NOT NULL,
@@ -400,6 +393,7 @@ CREATE TABLE `freqline`.`remote_audit` (
 # -----------------------------------------------
 # -----------------------------------------------
 
+/* create mic table */
 CREATE TABLE `freqline`.`mic` (
     `id`           INT AUTO_INCREMENT,
 
@@ -431,9 +425,7 @@ CREATE TABLE `freqline`.`mic` (
         ON UPDATE CASCADE
 );
 
-# -----------------------------------------------
-# -----------------------------------------------
-
+/* create mic audit table */
 CREATE TABLE `freqline`.`mic_audit` (
     `id`                 INT AUTO_INCREMENT,
     `action`             INT         NOT NULL,
@@ -461,6 +453,7 @@ CREATE TABLE `freqline`.`mic_audit` (
 # -----------------------------------------------
 # -----------------------------------------------
 
+/* add favorite_generator foreign key to user table */
 ALTER TABLE `freqline`.`user`
     ADD FOREIGN KEY (`favorite_generator`) REFERENCES `freqline`.`generator` (`id`)
     ON DELETE NO ACTION
@@ -472,11 +465,13 @@ ALTER TABLE `freqline`.`user`
 #
 # -----------------------------------------------
 
+/* audit base actions, create, update, delete */
 INSERT INTO `freqline`.`audit_action` (`name`)
 VALUES ('created'),
        ('updated'),
        ('deleted');
 
+/* insert permissions type */
 INSERT INTO `freqline`.`permission` (
   created_by, 
   created_date, 
@@ -489,6 +484,7 @@ VALUES (1, NOW(), 1, NOW(), 'db', 'db', 'Database Permissions'),
        (1, NOW(), 1, NOW(), 'admin', 'admin', 'Administration Permissions'),
        (1, NOW(), 1, NOW(), 'user', 'user', 'Basic User Permissions');
 
+/* insert groups */
 INSERT INTO freqline.`group` (
   created_by, 
   created_date, 
@@ -499,6 +495,7 @@ INSERT INTO freqline.`group` (
 VALUES (1, NOW(), 1, NOW(), 'admin', null),
        (1, NOW(), 1, NOW(), 'user', null);
 
+/* add permissions to groups */
 INSERT INTO freqline.group_permission (
   created_by, 
   created_date, 
@@ -510,6 +507,7 @@ VALUES (1, NOW(), 1, NOW(), 2, 1),
        (1, NOW(), 1, NOW(), 3, 1),
        (1, NOW(), 1, NOW(), 3, 2);
 
+/* insert base users */
 INSERT INTO freqline.user (
   created_by, created_date, updated_by, updated_date, 
   username, 
@@ -531,6 +529,7 @@ VALUES (
   'User', 'Database', 'user@db', 
   NULL);
 
+/* create default generator */
 INSERT INTO freqline.generator(
   created_by, 
   created_date, 
@@ -543,8 +542,10 @@ INSERT INTO freqline.generator(
   key_c) 
 VALUES (1, NOW(), 1, NOW(), 'Generator', 10000, 1, '127.0.0.1', 'AAAA');
 
+/* add to all users generator 1 as favorite generator */
 UPDATE freqline.user SET favorite_generator=1;
 
+/* insert default microphone */
 INSERT INTO freqline.mic(
   created_by, 
   created_date, 
@@ -557,6 +558,7 @@ INSERT INTO freqline.mic(
   key_c)
 VALUES (1, NOW(), 1, NOW(), 1, 80, 30000, '127.0.0.1', 'AAAA');
 
+/* insert default remote */
 INSERT INTO freqline.remote(
   created_by, 
   created_date, 
@@ -568,6 +570,7 @@ INSERT INTO freqline.remote(
   key_c)
 VALUES (1, NOW(), 1, NOW(), 1, 'AAAA', '127.0.0.1', 'AAAA');
 
+/* add groups to users */
 INSERT INTO freqline.user_group (
   created_by, 
   created_date, 

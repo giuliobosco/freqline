@@ -1,3 +1,4 @@
+/* on group permission insert, create audit */
 DELIMITER //
 
 CREATE TRIGGER `freqline`.`insert_group_permission_audit`
@@ -33,7 +34,7 @@ CREATE TRIGGER `freqline`.`insert_group_permission_audit`
   END;
 //
 
-
+/* on group permission update, create audit */
 DELIMITER //
 
 CREATE TRIGGER `freqline`.`update_group_permission_audit`
@@ -69,7 +70,7 @@ CREATE TRIGGER `freqline`.`update_group_permission_audit`
   END;
 //
 
-
+/* on group permission delete, create audit audit */
 DELIMITER //
 
 CREATE TRIGGER `freqline`.`delete_group_permission_audit`

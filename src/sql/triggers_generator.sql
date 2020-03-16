@@ -1,3 +1,5 @@
+
+/* on generator insert, create audit */
 DELIMITER //
 
 CREATE TRIGGER `freqline`.`insert_generator_audit`
@@ -39,6 +41,7 @@ CREATE TRIGGER `freqline`.`insert_generator_audit`
     END;
 //
 
+/* on generator update, create audit */
 DELIMITER //
 
 CREATE TRIGGER `freqline`.`update_generator_audit`
@@ -80,6 +83,7 @@ CREATE TRIGGER `freqline`.`update_generator_audit`
     END;
 //
 
+/* on generator delete, create audit */
 DELIMITER //
 
 CREATE TRIGGER `freqline`.`delete_generator_audit`
