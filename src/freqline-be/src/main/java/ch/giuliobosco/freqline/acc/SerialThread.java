@@ -183,6 +183,9 @@ public class SerialThread extends Thread {
         this.commands.add(command);
     }
 
+    /**
+     * Setup initial commands.
+     */
     private void setupInitCommands() {
         JdbcConnector connector = null;
         try {
@@ -213,6 +216,7 @@ public class SerialThread extends Thread {
             this.searchArduino();
             this.openSerialPort();
             this.checkSerialCommunication();
+            this.setupInitCommands();
 
             while (!interrupted()) {
                 readCommandWriteResponse();
