@@ -30,7 +30,7 @@ import java.sql.*;
  * Queries for status of generator.
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0.5 (2019-11-14 - 2019-11-30)
+ * @version 1.0.6 (2019-11-14 - 2019-03-16)
  */
 public class GeneratorQuery {
 
@@ -105,6 +105,11 @@ public class GeneratorQuery {
      * Get he decibels from the user.
      */
     private static final String GET_DECIBEL_USER_ID = "SELECT mic.decibel FROM mic JOIN generator g on mic.generator = g.id JOIN user u on g.id = u.favorite_generator WHERE u.id=?";
+
+    /**
+     * Get he decibels from the generator keyc.
+     */
+    private static final String GET_DECIBEL_KEY_C = "SELECT mic.decibel FROM mic JOIN generator g on mic.generator = g.id WHERE g.key_c=?";
 
     /**
      * Status string.
@@ -420,6 +425,27 @@ public class GeneratorQuery {
     public static int getDecibel(Connection connection, int userId) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(GET_DECIBEL_USER_ID);
         statement.setInt(1, userId);
+
+        ResultSet resultSet = statement.executeQuery();
+
+        if (!resultSet.next()) {
+            return -1;
+        }
+
+        return resultSet.getInt(1);
+    }
+
+    /**
+     * Get the decibels of the favorite generator via keyc.
+     *
+     * @param connection Connection  to MySQL database.
+     * @param keyC Generator key of communication.
+     * @return Decibels.
+     * @throws SQLException Error with MySQL database.
+     */
+    public static int getDecibel(Connection connection, String keyC) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(GET_DECIBEL_KEY_C);
+        statement.setString(1, keyC);
 
         ResultSet resultSet = statement.executeQuery();
 

@@ -1,10 +1,14 @@
 package ch.giuliobosco.freqline.acc;
 
+import ch.giuliobosco.freqline.jdbc.JapiConnector;
+import ch.giuliobosco.freqline.jdbc.JdbcConnector;
 import com.fazecast.jSerialComm.SerialPort;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -13,7 +17,7 @@ import java.util.List;
  * Serial Thread, opens communication with thread and keep connections.
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0.1 (2020-02-10 - 2020-02-19)
+ * @version 1.0.2 (2020-02-10 - 2020-03-16)
  */
 public class SerialThread extends Thread {
 
@@ -177,6 +181,24 @@ public class SerialThread extends Thread {
      */
     public void addCommand(SerialCommand command) {
         this.commands.add(command);
+    }
+
+    private void setupInitCommands() {
+        JdbcConnector connector = null;
+        try {
+            connector = new JapiConnector();
+            connector.openConnection();
+            Connection connection = connector.getConnection();
+
+            AccGenerator.initAcc(connection, this);
+
+        } catch (IOException | ClassNotFoundException | SQLException ignored) {
+
+        } finally {
+            if (connector != null) {
+                connector.close();
+            }
+        }
     }
 
     // ----------------------------------------------------------------------------- General Methods

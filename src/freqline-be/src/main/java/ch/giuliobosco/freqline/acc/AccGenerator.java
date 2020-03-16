@@ -33,7 +33,7 @@ import java.sql.SQLException;
  * Send message to Generator (ACC Protocol).
  *
  * @author giuliobosco (giuliobva@gmail.com)
- * @version 1.0.2 (2019-11-18 - 2019-11-30)
+ * @version 1.0.3 (2019-11-18 - 2019-03-16)
  */
 public class AccGenerator {
     // ------------------------------------------------------------------------------------ Costants
@@ -114,5 +114,70 @@ public class AccGenerator {
         SerialCommand sc = SerialCommand.FREQUENCE;
         sc.setMessage(String.valueOf(frequence).getBytes());
         serialThread.addCommand(sc);
+    }
+
+    /**
+     * Initialize Acc connection status of the generator.
+     *
+     * @param connection Connection to MySQL Database.
+     * @param serialThread Serial thread of communication with Arduino.
+     * @throws SQLException Error with MySQL server.
+     */
+    private static void initAccStatus(Connection connection, SerialThread serialThread) throws SQLException {
+        boolean status = GeneratorQuery.getGeneratorStatus(connection, AccGenerator.KEY_C);
+        if (status) {
+            AccGenerator.turnGeneratorOn(connection, AccGenerator.KEY_C, serialThread);
+        } else {
+            AccGenerator.turnGeneratorOff(connection, AccGenerator.KEY_C,  serialThread);
+        }
+    }
+
+    /**
+     * Load decibels and add command to serial thread.
+     *
+     * @param connection Connection to MySQL Database.
+     * @param serialThread Serial thread of communication with Arduino.
+     * @throws SQLException Error with MySQL server.
+     */
+    private static void initAccDecibels(Connection connection, SerialThread serialThread) throws SQLException {
+        int decibel = GeneratorQuery.getDecibel(connection, AccGenerator.KEY_C);
+
+        SerialCommand sc = SerialCommand.DECIBEL;
+        sc.setMessage(String.valueOf(decibel).getBytes());
+        serialThread.addCommand(sc);
+    }
+
+    /**
+     * Load frequence and add command to serial thread.
+     *
+     * @param connection Connection to MySQL Database.
+     * @param serialThread Serial thread of communication with Arduino.
+     * @throws SQLException Error with MySQL server.
+     */
+    private static void initAccFrequence(Connection connection, SerialThread serialThread) throws SQLException {
+        int frequence = GeneratorQuery.getGeneratorFrequence(connection, AccGenerator.KEY_C);
+
+        SerialCommand sc = SerialCommand.FREQUENCE;
+        sc.setMessage(String.valueOf(frequence).getBytes());
+        serialThread.addCommand(sc);
+    }
+
+    /**
+     * Initialize acc communication, send database data to Arduino.
+     * Initialize:
+     * <ul>
+     *     <li>status</li>
+     *     <li>frequence</li>
+     *     <li>decibels</li>
+     * </ul>
+     *
+     * @param connection Connection to MySQL database.
+     * @param serialThread Serial Thread of communication.
+     * @throws SQLException Error with MySQL server.
+     */
+    public static void initAcc(Connection connection, SerialThread serialThread) throws SQLException {
+        initAccStatus(connection, serialThread);
+        initAccFrequence(connection, serialThread);
+        initAccDecibels(connection, serialThread);
     }
 }
