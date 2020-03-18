@@ -2,8 +2,8 @@
 db.legacyDatetime=false
 db.useSsl=false
 db.username=root
-db.password=123qwe
-db.database=dbe
+db.password=1234qwer
+db.database=freqline
 db.port=3306
 db.jdbcTimezoneShift=true
 db.serverTimezone=UTC
