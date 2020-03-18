@@ -39,4 +39,4 @@ app.config(function ($routeProvider) {
     $rootScope.$route = $route;
 });
 
-app.value('baseUrl', 'http://localhost:8080');
+app.value('baseUrl', 'http://192.168.0.1:8080');
