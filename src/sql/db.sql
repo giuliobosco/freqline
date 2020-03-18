@@ -540,7 +540,7 @@ INSERT INTO freqline.generator(
   status,
   ip,
   key_c) 
-VALUES (1, NOW(), 1, NOW(), 'Generator', 10000, 1, '127.0.0.1', 'AAAA');
+VALUES (1, NOW(), 1, NOW(), 'Generator', 10000, 1, '127.0.0.1', 'AAAAA');
 
 /* add to all users generator 1 as favorite generator */
 UPDATE freqline.user SET favorite_generator=1;
@@ -556,7 +556,7 @@ INSERT INTO freqline.mic(
   timer,
   ip,
   key_c)
-VALUES (1, NOW(), 1, NOW(), 1, 80, 30000, '127.0.0.1', 'AAAA');
+VALUES (1, NOW(), 1, NOW(), 1, 80, 30000, '127.0.0.1', 'AAAAA');
 
 /* insert default remote */
 INSERT INTO freqline.remote(
@@ -568,7 +568,7 @@ INSERT INTO freqline.remote(
   command,
   ip,
   key_c)
-VALUES (1, NOW(), 1, NOW(), 1, 'AAAA', '127.0.0.1', 'AAAA');
+VALUES (1, NOW(), 1, NOW(), 1, 'AAAAA', '127.0.0.1', 'AAAAA');
 
 /* add groups to users */
 INSERT INTO freqline.user_group (
