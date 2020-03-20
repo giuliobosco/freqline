@@ -13,6 +13,10 @@ package ch.giuliobosco.freqline.acc {
         + {static} void turnGeneratorOn(Connection connection, String, long timer, SerialThread serialThread)
         + {static} void updateDecibel(Connection connection, int userId, int decibel, SerialThread serialThread)
         - {static} void updateFrequence(Connection connection, int userId, int frequence, SerialThread serialThread)
+        - {static} void initAccStatus(Connection connection, SerialThread serailThread)
+        - {static} void initAccDecibels(Connection connection, SerialThread serialThread)
+        - {static} void initAccFrequence(Connection connection, SerialThread serialThread)
+        + {static} void initAcc(Connection connection, SerialThread)
     }
 
     class SerialCommunication {
@@ -91,6 +95,13 @@ package ch.giuliobosco.freqline.acc {
     SerialInputCommand <|.. SerialMicCommand
     SerialMicCommand o-- SerialThread
 
+    class SerialRemoteCommand {
+        + SerialRemoteCommand(SerialThread serialThread)
+    }
+    SerialCommand <|-- SerialRemoteCommand
+    SerialInputCommand <|.. SerialRemoteCommand
+    SerialRemoteCommand o-- SerialThread
+
     class SerialNullCommand {
         + SerialNullCommand()
     }
@@ -110,6 +121,7 @@ package ch.giuliobosco.freqline.acc {
         - void writeOnSerial(SerialCommunication serialCommunication)
         - void removeCommand(SerialCommand serialCommand)
         + addCommand(SerialCommand serialCommand)
+        - void setupInitCommands()
         + run()
     }
     SerialThread "ArrayList" o-- SerialCommand
@@ -117,7 +129,8 @@ package ch.giuliobosco.freqline.acc {
 
     class MicThread {
         - long timer
-        + MicThread(SerialThread serialThread, long timer)
+        - Connection connection
+        + MicThread(SerialThread serialThread, Connection connection, long timer)
         + void run()
     }
     Thread <|-- MicThread
