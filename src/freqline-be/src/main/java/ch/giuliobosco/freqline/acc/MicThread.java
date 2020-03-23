@@ -42,6 +42,9 @@ public class MicThread extends Thread {
      */
     private SerialThread serialThread;
 
+    /**
+     * Connection to MySQL database.
+     */
     private Connection connection;
 
     /**

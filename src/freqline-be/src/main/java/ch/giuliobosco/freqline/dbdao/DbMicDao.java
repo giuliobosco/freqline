@@ -92,6 +92,13 @@ public class DbMicDao extends DbDao {
         );
     }
 
+    /**
+     * Fill prepared statement with mic object.
+     *
+     * @param base      Base element.
+     * @param statement Statement to fill.
+     * @throws Exception Error in MySQL.
+     */
     @Override
     protected void fillStatement(Base base, PreparedStatement statement) throws Exception {
         Mic mic = (Mic) base;
