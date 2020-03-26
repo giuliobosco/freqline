@@ -109,5 +109,5 @@ void sendCommand() {
  * Send null command.
  */
 void sendNull() {
-  serialWriteCommand(NULL_COMMAND, NULL_COMMAND_VALUE);
+  serialWriteCommand(NULL_COMMAND, String(isRemoteStatusChanged()));
 }
